@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class PlayerLogic : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer { get; private set; }
+    public WeaponLogic weapon;
 
     public new Collider2D collider { get; private set; }
     public BoxCollider2D boxCollider { get; private set; }
@@ -14,10 +15,14 @@ public class PlayerLogic : MonoBehaviour
     
     public Rigidbody2D rigidBody;
     public float speed = 5f;
+    public float jumpStrength;
+    private float nextFire = 0f;
+    private bool faceRight = true;
     
     public Vector2 moveDirection { get; private set; }
     public PlayerControls inputControls;
     private InputAction move;
+    private InputAction fire;
 
     public AnimatedSprite normal;
     public AnimatedSprite death;
@@ -32,6 +37,15 @@ public class PlayerLogic : MonoBehaviour
         this.inputControls = new PlayerControls();
     }
 
+    private void Update()
+    {
+        if(this.fire.ReadValue<float>() == 1 && Time.time > this.nextFire)
+        {
+            nextFire = Time.time + this.weapon.fireRate;
+            this.weapon.ShootBullet();
+        }
+    }
+
     private void FixedUpdate()
     {
         this.moveDirection = move.ReadValue<Vector2>();
@@ -39,19 +53,34 @@ public class PlayerLogic : MonoBehaviour
         //Horizontal Movement
         this.rigidBody.velocity = new Vector2(this.moveDirection.x * speed, 0);
 
+        //Face direction
+        if (this.rigidBody.velocity.x > 0 && !this.faceRight)
+        {
+            Flip();
+        } else if (this.rigidBody.velocity.x < 0 && this.faceRight)
+        {
+            Flip();
+        }
+
         if(this.moveDirection.y >= 0.5f && checkIfGrounded())
         {
             //Vertical Movement (Gravity is always on --> only jumping)
-            this.rigidBody.velocity = new Vector2(this.moveDirection.x * speed, this.moveDirection.y * 1000f);
+            this.rigidBody.velocity = new Vector2(this.moveDirection.x * speed, this.moveDirection.y * jumpStrength);
         } else if(this.moveDirection.y <= -0.5f)
         {
             //Crouch
         }
     }
 
+    private void Flip()
+    {
+        this.faceRight = !this.faceRight;
+        this.transform.Rotate(0f, 180f, 0f);
+    }
+
     private bool checkIfGrounded()
     {
-        return Physics2D.BoxCast(this.transform.position, new Vector2(4, 2), 0f, Vector2.down, 2f, this.wallLayer);
+        return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, 2f, this.wallLayer);
     }
 
     public void ResetState()
@@ -91,11 +120,14 @@ public class PlayerLogic : MonoBehaviour
     private void OnEnable()
     {
         this.move = this.inputControls.Player.Move;
+        this.fire = this.inputControls.Player.Fire;
         this.move.Enable();
+        this.fire.Enable();
     }
 
     private void OnDisable()
     {
         this.move.Disable();
+        this.fire.Disable();
     }
 }
