@@ -5,6 +5,7 @@ using UnityEngine;
 public class BulletLogic : MonoBehaviour
 {
     public float speed;
+    public float damage;
     public float lifeSpan;
     public Rigidbody2D rigidBody;
     public GameObject Bullet;
@@ -20,9 +21,11 @@ public class BulletLogic : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private void OnCollisionEnter2D(Collision2D col)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (col.gameObject.layer == LayerMask.NameToLayer("walls"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("walls") ||
+            other.gameObject.layer == LayerMask.NameToLayer("player") ||
+            other.gameObject.layer == LayerMask.NameToLayer("enemy"))
         {
             destroySelf();
         }
