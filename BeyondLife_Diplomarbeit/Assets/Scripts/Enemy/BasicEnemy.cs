@@ -9,7 +9,7 @@ public class BasicEnemy : EnemyLogic
     public WeaponLogic weapon;
 
 
-    private void Update()
+    private void FixedUpdate()
     {
         //Check Health Status
         if(this.health <= 0)

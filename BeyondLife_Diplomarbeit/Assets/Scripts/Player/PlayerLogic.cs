@@ -12,6 +12,7 @@ public class PlayerLogic : MonoBehaviour
     public new Collider2D collider { get; private set; }
     public BoxCollider2D boxCollider { get; private set; }
     public LayerMask wallLayer;
+    public LayerMask enemyLayer;
     public Rigidbody2D rigidBody;
 
     public float health;
@@ -92,7 +93,7 @@ public class PlayerLogic : MonoBehaviour
             Flip();
         }
 
-        if(this.moveDirection.y >= 0.5f && checkIfGrounded())
+        if(this.moveDirection.y >= 0.5f && (checkIfGrounded() || checkIfEnemyBelow()))
         {
             //Vertical Movement (Gravity is always on --> only jumping)
             this.rigidBody.velocity = new Vector2(this.moveDirection.x * speed, jumpStrength);
@@ -111,6 +112,11 @@ public class PlayerLogic : MonoBehaviour
     private bool checkIfGrounded()
     {
         return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, 2f, this.wallLayer);
+    }
+
+    private bool checkIfEnemyBelow()
+    {
+        return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, 2f, this.enemyLayer);
     }
 
     public void ResetState()
