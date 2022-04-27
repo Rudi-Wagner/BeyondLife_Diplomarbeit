@@ -28,7 +28,7 @@ public class BasicEnemy : EnemyLogic
     private bool RayCastToPlayer()
     {
         //Debug.DrawRay(this.weapon.BulletSpawn.transform.position, Vector2.right * 50f, Color.green);
-        RaycastHit2D hit = Physics2D.Raycast(this.weapon.BulletSpawn.transform.position, Vector2.right, 50f);
+        RaycastHit2D hit = Physics2D.Raycast(this.weapon.BulletSpawn.transform.position, this.weapon.BulletSpawn.transform.right, 50f);
         if (hit.collider != null)
 	    {
             if(hit.collider.gameObject.CompareTag("Player"))

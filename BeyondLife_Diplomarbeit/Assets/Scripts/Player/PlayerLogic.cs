@@ -18,6 +18,8 @@ public class PlayerLogic : MonoBehaviour
     public float health;
     public float speed = 5f;
     public float sprintMult;
+    public float wallJumpDelay;
+    private float nextWallJump = 0f;
     public float jumpStrength;
     private float nextFire = 0f;
     private bool faceRight = true;
@@ -46,7 +48,7 @@ public class PlayerLogic : MonoBehaviour
         //Shooting
         if(this.fire.ReadValue<float>() == 1 && Time.time > this.nextFire)
         {
-            nextFire = Time.time + this.weapon.fireRate;
+            this.nextFire = Time.time + this.weapon.fireRate;
             this.weapon.ShootBullet();
         }
 
@@ -57,16 +59,6 @@ public class PlayerLogic : MonoBehaviour
         }
     }
 
-    public void ReadMouseInput(InputAction.CallbackContext context)
-    {//Weapon rotating
-        Vector2 mousePosition = context.ReadValue<Vector2>();
-        Vector2 objectPosition = (Vector2) Camera.main.WorldToScreenPoint(this.weapon.transform.position);
-        Vector2 direction = (mousePosition - objectPosition).normalized;
- 
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        this.weapon.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-    }
-
     private void FixedUpdate()
     {
         this.moveDirection = move.ReadValue<Vector2>();
@@ -74,15 +66,15 @@ public class PlayerLogic : MonoBehaviour
         //Check if sprinting
         if (this.sprint.ReadValue<float>() == 1)
         {
-            this.sprintMult = 1.5f;
+            this.sprintMult = 2f;
         }
-        else
+        else if(this.sprint.ReadValue<float>() == 0 && this.moveDirection.y >= 0f)
         {
             this.sprintMult = 1;
         }
 
         //Horizontal Movement
-        this.rigidBody.velocity = new Vector2(this.moveDirection.x * speed * sprintMult, this.rigidBody.velocity.y);
+        this.rigidBody.velocity = new Vector2(this.moveDirection.x * this.speed * this.sprintMult, this.rigidBody.velocity.y);
 
         //Face direction
         if (this.rigidBody.velocity.x > 0 && !this.faceRight)
@@ -94,12 +86,14 @@ public class PlayerLogic : MonoBehaviour
         }
 
         if(this.moveDirection.y >= 0.5f && (checkIfGrounded() || checkIfEnemyBelow()))
-        {
-            //Vertical Movement (Gravity is always on --> only jumping)
-            this.rigidBody.velocity = new Vector2(this.moveDirection.x * speed, jumpStrength);
+        {//Vertical Movement (only jumping)
+            //Enable jumping when 1. Player Input, 2. On Groudn or on an Enemy
+            //3. When doing a Walljump
+            this.rigidBody.velocity = new Vector2(this.moveDirection.x * this.speed, this.jumpStrength);
         } else if(this.moveDirection.y <= -0.5f)
         {
             //Crouch
+            this.sprintMult = 0.5f;
         }
     }
 
@@ -136,6 +130,20 @@ public class PlayerLogic : MonoBehaviour
         }
     }
 
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        if (!checkIfGrounded() && other.gameObject.layer == LayerMask.NameToLayer("walls") && this.moveDirection.y >= 0.5f  && Time.time > this.nextWallJump) 
+        {
+            this.nextWallJump = Time.time + this.wallJumpDelay;
+            this.rigidBody.velocity = new Vector2(this.moveDirection.x * this.speed, this.jumpStrength);
+        }
+    }    
+
+    public void ReadMouseInput(InputAction.CallbackContext context)
+    {//Weapon rotating
+        
+    }
+
     private void destroySelf(GameObject other)
     {
         if (this.health >= 0)
@@ -167,11 +175,6 @@ public class PlayerLogic : MonoBehaviour
         this.normal.doLoop = true;
         this.death.enabled = false;
         this.death.doLoop = false;
-    }
-
-    private float AngleBetweenTwoPoints(Vector3 a, Vector3 b) 
-    {
-        return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
     }
 
     private void OnEnable()
