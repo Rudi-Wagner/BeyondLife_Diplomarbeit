@@ -14,6 +14,7 @@ public class PlayerLogic : MonoBehaviour
     public LayerMask wallLayer;
     public LayerMask enemyLayer;
     public Rigidbody2D rigidBody;
+    public bool InputAllowed = true;
 
     public float health;
     public float speed = 5f;
@@ -61,40 +62,44 @@ public class PlayerLogic : MonoBehaviour
 
     private void FixedUpdate()
     {
-        this.moveDirection = move.ReadValue<Vector2>();
+        if (this.InputAllowed)
+        {
+            this.moveDirection = move.ReadValue<Vector2>();
+            
+            //Check if sprinting
+            if (this.sprint.ReadValue<float>() == 1)
+            {
+                this.sprintMult = 2f;
+            }
+            else if(this.sprint.ReadValue<float>() == 0 && this.moveDirection.y >= 0f)
+            {
+                this.sprintMult = 1;
+            }
+
+            //Horizontal Movement
+            this.rigidBody.velocity = new Vector2(this.moveDirection.x * this.speed * this.sprintMult, this.rigidBody.velocity.y);
+
+            //Face direction
+            if (this.rigidBody.velocity.x > 0 && !this.faceRight)
+            {
+                Flip();
+            } else if (this.rigidBody.velocity.x < 0 && this.faceRight)
+            {
+                Flip();
+            }
+
+            if(this.moveDirection.y >= 0.5f && (checkIfGrounded() || checkIfEnemyBelow()))
+            {//Vertical Movement (only jumping)
+                //Enable jumping when 1. Player Input, 2. On Groudn or on an Enemy
+                //3. When doing a Walljump --> Direkt Collision
+                this.rigidBody.velocity = new Vector2(this.moveDirection.x * this.speed, this.jumpStrength);
+            } else if(this.moveDirection.y <= -0.5f)
+            {
+                //Crouch
+                this.sprintMult = 0.5f;
+            }
+        }
         
-        //Check if sprinting
-        if (this.sprint.ReadValue<float>() == 1)
-        {
-            this.sprintMult = 2f;
-        }
-        else if(this.sprint.ReadValue<float>() == 0 && this.moveDirection.y >= 0f)
-        {
-            this.sprintMult = 1;
-        }
-
-        //Horizontal Movement
-        this.rigidBody.velocity = new Vector2(this.moveDirection.x * this.speed * this.sprintMult, this.rigidBody.velocity.y);
-
-        //Face direction
-        if (this.rigidBody.velocity.x > 0 && !this.faceRight)
-        {
-            Flip();
-        } else if (this.rigidBody.velocity.x < 0 && this.faceRight)
-        {
-            Flip();
-        }
-
-        if(this.moveDirection.y >= 0.5f && (checkIfGrounded() || checkIfEnemyBelow()))
-        {//Vertical Movement (only jumping)
-            //Enable jumping when 1. Player Input, 2. On Groudn or on an Enemy
-            //3. When doing a Walljump
-            this.rigidBody.velocity = new Vector2(this.moveDirection.x * this.speed, this.jumpStrength);
-        } else if(this.moveDirection.y <= -0.5f)
-        {
-            //Crouch
-            this.sprintMult = 0.5f;
-        }
     }
 
     private void Flip()
@@ -105,22 +110,12 @@ public class PlayerLogic : MonoBehaviour
 
     private bool checkIfGrounded()
     {
-        return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, 2f, this.wallLayer);
+        return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, 3f, this.wallLayer);
     }
 
     private bool checkIfEnemyBelow()
     {
-        return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, 2f, this.enemyLayer);
-    }
-
-    public void ResetState()
-    {
-        //Reset pacman to a "normal" state
-        this.enabled = true;
-        this.spriteRenderer.enabled = true;
-        this.collider.enabled = true;
-        this.gameObject.SetActive(true);
-        this.gameObject.transform.position = new Vector3(0, 0, 0);
+        return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, 3f, this.enemyLayer);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -132,16 +127,42 @@ public class PlayerLogic : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D other)
     {
-        if (!checkIfGrounded() && other.gameObject.layer == LayerMask.NameToLayer("walls") && this.moveDirection.y >= 0.5f  && Time.time > this.nextWallJump) 
+        if (!checkIfGrounded() && other.gameObject.layer == LayerMask.NameToLayer("walls")  //In Air but touching a wall
+        && this.moveDirection.y >= 0.5f  && Time.time > this.nextWallJump                   //Jump button pressed and right jumptime
+        && (bool) !Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.up, 3f, this.wallLayer)) //Test if ther is a wall over the player
         {
+            this.InputAllowed = false;
+            Invoke(nameof(ActivateInput), 0.2f);
             this.nextWallJump = Time.time + this.wallJumpDelay;
-            this.rigidBody.velocity = new Vector2(this.moveDirection.x * this.speed, this.jumpStrength);
+
+            float jumpDirection = -1; //set left
+            if (this.faceRight)
+            {
+                jumpDirection = 1;    //set right
+            }
+            this.rigidBody.velocity = new Vector2(jumpDirection * this.speed * -2, this.jumpStrength);
+            Flip();
         }
     }    
+
+    public void ActivateInput()
+    {
+        this.InputAllowed = true;
+    }
 
     public void ReadMouseInput(InputAction.CallbackContext context)
     {//Weapon rotating
         
+    }
+
+    public void ResetState()
+    {
+        //Reset pacman to a "normal" state
+        this.enabled = true;
+        this.spriteRenderer.enabled = true;
+        this.collider.enabled = true;
+        this.gameObject.SetActive(true);
+        this.gameObject.transform.position = new Vector3(0, 0, 0);
     }
 
     private void destroySelf(GameObject other)
