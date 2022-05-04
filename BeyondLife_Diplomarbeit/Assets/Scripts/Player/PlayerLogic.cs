@@ -90,9 +90,14 @@ public class PlayerLogic : MonoBehaviour
 
             if(this.moveDirection.y >= 0.5f && (checkIfGrounded() || checkIfEnemyBelow()))
             {//Vertical Movement (only jumping)
-                //Enable jumping when 1. Player Input, 2. On Groudn or on an Enemy
-                //3. When doing a Walljump --> Direkt Collision
-                this.rigidBody.velocity = new Vector2(this.moveDirection.x * this.speed, this.jumpStrength);
+                /*Only do a normal jump when:
+                    1. The player presses the jump Button
+                    2. The player is touching the ground or an enemy
+                */
+                //Do normal jump
+                this.rigidBody.velocity = new Vector2(this.moveDirection.x * this.speed, this.jumpStrength);    
+                //Set WallJumpDelay so that the player doesn't do a walljump immidiatly after the normal jump
+                this.nextWallJump = Time.time + this.wallJumpDelay;     
             } else if(this.moveDirection.y <= -0.5f)
             {
                 //Crouch
@@ -104,44 +109,70 @@ public class PlayerLogic : MonoBehaviour
 
     private void Flip()
     {
+        //Flip the player
         this.faceRight = !this.faceRight;
         this.transform.Rotate(0f, 180f, 0f);
     }
 
     private bool checkIfGrounded()
     {
+        //Check if the player is on the ground
         return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, 3f, this.wallLayer);
     }
 
     private bool checkIfEnemyBelow()
     {
+        //Check if the player is on an enemy to allow a jump
         return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, 3f, this.enemyLayer);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        //Take bullet damage
         if (other.gameObject.layer == LayerMask.NameToLayer("bullet")) {
-            destroySelf(other.gameObject);
+            takeBullet(other.gameObject);
         }
     }
 
     private void OnCollisionStay2D(Collision2D other)
     {
-        if (!checkIfGrounded() && other.gameObject.layer == LayerMask.NameToLayer("walls")  //In Air but touching a wall
-        && this.moveDirection.y >= 0.5f  && Time.time > this.nextWallJump                   //Jump button pressed and right jumptime
-        && (bool) !Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.up, 3f, this.wallLayer)) //Test if ther is a wall over the player
+        //Walljump
+        /*Only do the Walljump if:
+            1. The player is not touching the ground
+            2. The player is touching a wall
+            3. The player presses the Jump Button
+            4. The delay for the next Walljump is over
+            5. There is no wall above the player
+        */
+        if (!checkIfGrounded() && other.gameObject.layer == LayerMask.NameToLayer("walls") && other.gameObject.CompareTag("wallJumpEnabled")
+        && this.moveDirection.y >= 0.5f  && Time.time > this.nextWallJump
+        && (bool) !Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.up, 3f, this.wallLayer))
         {
+            //Disable player control for 0.2 seconds
             this.InputAllowed = false;
             Invoke(nameof(ActivateInput), 0.2f);
+
+            //Set the WallJumpDelay to disable another WallJump in a given time
             this.nextWallJump = Time.time + this.wallJumpDelay;
 
+            //Move the player in the opposit diretion from the wall
             float jumpDirection = -1; //set left
             if (this.faceRight)
             {
                 jumpDirection = 1;    //set right
             }
+
+            //Do a Walljump
             this.rigidBody.velocity = new Vector2(jumpDirection * this.speed * -2, this.jumpStrength);
             Flip();
+            return;
+        }
+
+        //Death layer
+        //Kill the player if he touches this layer
+        if(other.gameObject.layer == LayerMask.NameToLayer("walls") && other.gameObject.CompareTag("deathLayer"))
+        {
+            this.health = -999f;
         }
     }    
 
@@ -155,47 +186,13 @@ public class PlayerLogic : MonoBehaviour
         
     }
 
-    public void ResetState()
-    {
-        //Reset pacman to a "normal" state
-        this.enabled = true;
-        this.spriteRenderer.enabled = true;
-        this.collider.enabled = true;
-        this.gameObject.SetActive(true);
-        this.gameObject.transform.position = new Vector3(0, 0, 0);
-    }
-
-    private void destroySelf(GameObject other)
+    private void takeBullet(GameObject other)
     {
         if (this.health >= 0)
         {
             BulletLogic bullet = other.gameObject.GetComponent<BulletLogic>();
             this.health -= bullet.damage;
         }
-    }
-
-    public void deathAnimation()
-    {
-        //Play death animation after collision with a ghost
-        this.collider.enabled = false;
-        this.transform.rotation = Quaternion.AngleAxis(90 * Mathf.Rad2Deg, Vector3.forward);
-        this.normal.enabled = false;
-        this.normal.doLoop = false;
-        this.death.enabled = true;
-        this.death.Restart();
-        this.death.doLoop = false;
-        Invoke(nameof(die), 1.0f);
-    }
-
-    private void die()
-    {
-        //Disable player controls
-        this.gameObject.SetActive(false);
-        this.collider.enabled = true;
-        this.normal.enabled = true;
-        this.normal.doLoop = true;
-        this.death.enabled = false;
-        this.death.doLoop = false;
     }
 
     private void OnEnable()
