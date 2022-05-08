@@ -7,9 +7,10 @@ using System.Collections.Generic;
 public class PlayerLogic : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer { get; private set; }
+    public Sprite standing;
+    public Sprite crouching;
+    public Sprite jumping;
     public WeaponLogic weapon;
-
-    public new Collider2D collider { get; private set; }
     public BoxCollider2D boxCollider { get; private set; }
     public LayerMask wallLayer;
     public LayerMask enemyLayer;
@@ -39,7 +40,6 @@ public class PlayerLogic : MonoBehaviour
     private void Awake()
     {
         this.spriteRenderer = GetComponent<SpriteRenderer>();
-        this.collider = GetComponent<Collider2D>();
         this.boxCollider = GetComponent<BoxCollider2D>();
         this.inputControls = new PlayerControls();
     }
@@ -94,15 +94,31 @@ public class PlayerLogic : MonoBehaviour
                     1. The player presses the jump Button
                     2. The player is touching the ground or an enemy
                 */
+                //Change to Jump Sprite
+                this.spriteRenderer.sprite = this.jumping;
                 //Do normal jump
                 this.rigidBody.velocity = new Vector2(this.moveDirection.x * this.speed, this.jumpStrength);    
                 //Set WallJumpDelay so that the player doesn't do a walljump immidiatly after the normal jump
                 this.nextWallJump = Time.time + this.wallJumpDelay;     
             } else if(this.moveDirection.y <= -0.5f)
-            {
+            {//Crouching
+                //Change to crouch sprite
+                this.spriteRenderer.sprite = this.crouching;
                 //Crouch
                 this.sprintMult = 0.5f;
+                this.boxCollider.size = new Vector2(3, 1.9f);
+                this.boxCollider.offset = new Vector2(0, -1);
             }
+            else
+            {//Reset sprite
+                if((bool) !Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.up, 3f, this.wallLayer))
+                {
+                    this.spriteRenderer.sprite = this.standing;
+                    this.boxCollider.size = new Vector2(3, 3.8f);
+                    this.boxCollider.offset = new Vector2(0, -0.1f);
+                }
+            }
+
         }
         
     }
