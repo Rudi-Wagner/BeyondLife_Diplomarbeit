@@ -15,22 +15,23 @@ public class PlayerLogic : MonoBehaviour
     public LayerMask wallLayer;
     public LayerMask enemyLayer;
     public Rigidbody2D rigidBody;
+    
+    public String state;
     public bool InputAllowed = true;
-
     public float health;
     public float speed = 5f;
     public float sprintMult;
     public float wallJumpDelay;
-    private float nextWallJump = 0f;
+    public float nextWallJump = 0f;
     public float jumpStrength;
-    private float nextFire = 0f;
-    private bool faceRight = true;
+    public float nextFire  { get; private set; } = 0f;
+    public bool faceRight { get; private set; }  = true;
     
-    public Vector2 moveDirection { get; private set; }
+    public Vector2 moveDirection;
     public PlayerControls inputControls;
-    private InputAction move;
-    private InputAction fire;
-    private InputAction sprint;
+    public InputAction move{ get; private set; }
+    public InputAction fire{ get; private set; }
+    public InputAction sprint{ get; private set; }
 
     public AnimatedSprite normal;
     public AnimatedSprite death;
@@ -60,83 +61,20 @@ public class PlayerLogic : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        if (this.InputAllowed)
-        {
-            this.moveDirection = move.ReadValue<Vector2>();
-            
-            //Check if sprinting
-            if (this.sprint.ReadValue<float>() == 1)
-            {
-                this.sprintMult = 2f;
-            }
-            else if(this.sprint.ReadValue<float>() == 0 && this.moveDirection.y >= 0f)
-            {
-                this.sprintMult = 1;
-            }
-
-            //Horizontal Movement
-            this.rigidBody.velocity = new Vector2(this.moveDirection.x * this.speed * this.sprintMult, this.rigidBody.velocity.y);
-
-            //Face direction
-            if (this.rigidBody.velocity.x > 0 && !this.faceRight)
-            {
-                Flip();
-            } else if (this.rigidBody.velocity.x < 0 && this.faceRight)
-            {
-                Flip();
-            }
-
-            if(this.moveDirection.y >= 0.5f && (checkIfGrounded() || checkIfEnemyBelow()))
-            {//Vertical Movement (only jumping)
-                /*Only do a normal jump when:
-                    1. The player presses the jump Button
-                    2. The player is touching the ground or an enemy
-                */
-                //Change to Jump Sprite
-                this.spriteRenderer.sprite = this.jumping;
-                //Do normal jump
-                this.rigidBody.velocity = new Vector2(this.moveDirection.x * this.speed, this.jumpStrength);    
-                //Set WallJumpDelay so that the player doesn't do a walljump immidiatly after the normal jump
-                this.nextWallJump = Time.time + this.wallJumpDelay;     
-            } else if(this.moveDirection.y <= -0.5f)
-            {//Crouching
-                //Change to crouch sprite
-                this.spriteRenderer.sprite = this.crouching;
-                //Crouch
-                this.sprintMult = 0.5f;
-                this.boxCollider.size = new Vector2(3, 1.9f);
-                this.boxCollider.offset = new Vector2(0, -1);
-            }
-            else
-            {//Reset sprite
-                if((bool) !Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.up, 3f, this.wallLayer))
-                {
-                    this.spriteRenderer.sprite = this.standing;
-                    this.boxCollider.size = new Vector2(3, 3.8f);
-                    this.boxCollider.offset = new Vector2(0, -0.1f);
-                }
-            }
-
-        }
-        
-    }
-
-    private void Flip()
+    public void Flip()
     {
         //Flip the player
         this.faceRight = !this.faceRight;
         this.transform.Rotate(0f, 180f, 0f);
     }
 
-    private bool checkIfGrounded()
+    public bool checkIfGrounded()
     {
         //Check if the player is on the ground
         return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, 3f, this.wallLayer);
     }
 
-    private bool checkIfEnemyBelow()
+    public bool checkIfEnemyBelow()
     {
         //Check if the player is on an enemy to allow a jump
         return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, 3f, this.enemyLayer);

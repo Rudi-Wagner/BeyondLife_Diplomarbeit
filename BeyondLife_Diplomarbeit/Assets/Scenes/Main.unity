@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 297395242}
   - component: {fileID: 297395241}
   - component: {fileID: 297395244}
+  - component: {fileID: 297395246}
   - component: {fileID: 297395245}
   m_Layer: 6
   m_Name: Player
@@ -283,12 +284,15 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   rigidBody: {fileID: 297395242}
+  state: Standing
   InputAllowed: 1
   health: 100
   speed: 15
   sprintMult: 1
   wallJumpDelay: 0.5
+  nextWallJump: 0
   jumpStrength: 60
+  moveDirection: {x: 0, y: 0}
   normal: {fileID: 0}
   death: {fileID: 0}
 --- !u!114 &297395245
@@ -321,6 +325,20 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 520102419}
+--- !u!114 &297395246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 297395238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dddc09cef9513347a31d3552627cb1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerlogic: {fileID: 297395244}
+  state: STANDING
 --- !u!1 &320658638
 GameObject:
   m_ObjectHideFlags: 0
