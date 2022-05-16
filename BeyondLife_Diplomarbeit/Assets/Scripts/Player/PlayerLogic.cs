@@ -10,17 +10,21 @@ public class PlayerLogic : MonoBehaviour
     public Sprite standing;
     public Sprite crouching;
     public Sprite jumping;
+    public Sprite sliding;
     public WeaponLogic weapon;
     public BoxCollider2D boxCollider { get; private set; }
     public LayerMask wallLayer;
     public LayerMask enemyLayer;
     public Rigidbody2D rigidBody;
     
-    public String state;
     public bool InputAllowed = true;
+    public bool isSliding = false;
     public float health;
     public float speed = 5f;
-    public float sprintMult;
+    public float slideSpeed = 10f;
+    public float slideDuration = 1f;
+    public float sprintMultValue { get; private set; } = 2f;
+    public float sneakMultValue { get; private set; } = 0.5f;
     public float wallJumpDelay;
     public float nextWallJump = 0f;
     public float jumpStrength;
@@ -68,16 +72,21 @@ public class PlayerLogic : MonoBehaviour
         this.transform.Rotate(0f, 180f, 0f);
     }
 
-    public bool checkIfGrounded()
+    public bool checkIfGrounded(float length)
     {
         //Check if the player is on the ground
-        return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, 3f, this.wallLayer);
+        return Physics2D.BoxCast(this.transform.position, new Vector2(3, 0.5f), 0f, Vector2.down, length, this.wallLayer);
     }
 
-    public bool checkIfEnemyBelow()
+    public bool checkIfEnemyBelow(float length)
     {
         //Check if the player is on an enemy to allow a jump
-        return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, 3f, this.enemyLayer);
+        return Physics2D.BoxCast(this.transform.position, new Vector2(3, 0.5f), 0f, Vector2.down, length, this.enemyLayer);
+    }
+
+    public bool checkIfWallOnTop(float length)
+    {
+        return Physics2D.BoxCast(this.transform.position, new Vector2(3, 0.5f), 0f, Vector2.up, length, this.wallLayer);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -88,40 +97,8 @@ public class PlayerLogic : MonoBehaviour
         }
     }
 
-    private void OnCollisionStay2D(Collision2D other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        //Walljump
-        /*Only do the Walljump if:
-            1. The player is not touching the ground
-            2. The player is touching a wall
-            3. The player presses the Jump Button
-            4. The delay for the next Walljump is over
-            5. There is no wall above the player
-        */
-        if (!checkIfGrounded() && other.gameObject.layer == LayerMask.NameToLayer("walls") && other.gameObject.CompareTag("wallJumpEnabled")
-        && this.moveDirection.y >= 0.5f  && Time.time > this.nextWallJump
-        && (bool) !Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.up, 3f, this.wallLayer))
-        {
-            //Disable player control for 0.2 seconds
-            this.InputAllowed = false;
-            Invoke(nameof(ActivateInput), 0.2f);
-
-            //Set the WallJumpDelay to disable another WallJump in a given time
-            this.nextWallJump = Time.time + this.wallJumpDelay;
-
-            //Move the player in the opposit diretion from the wall
-            float jumpDirection = -1; //set left
-            if (this.faceRight)
-            {
-                jumpDirection = 1;    //set right
-            }
-
-            //Do a Walljump
-            this.rigidBody.velocity = new Vector2(jumpDirection * this.speed * -2, this.jumpStrength);
-            Flip();
-            return;
-        }
-
         //Death layer
         //Kill the player if he touches this layer
         if(other.gameObject.layer == LayerMask.NameToLayer("walls") && other.gameObject.CompareTag("deathLayer"))
@@ -129,11 +106,6 @@ public class PlayerLogic : MonoBehaviour
             this.health = -999f;
         }
     }    
-
-    public void ActivateInput()
-    {
-        this.InputAllowed = true;
-    }
 
     public void ReadMouseInput(InputAction.CallbackContext context)
     {//Weapon rotating
