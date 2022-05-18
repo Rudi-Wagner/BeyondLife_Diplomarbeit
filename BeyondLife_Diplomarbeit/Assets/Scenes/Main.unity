@@ -285,12 +285,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   rigidBody: {fileID: 297395242}
-  InputAllowed: 1
-  isSliding: 0
   health: 100
+  InputAllowed: 1
   speed: 15
+  isSliding: 0
   slideSpeed: 35
   slideDuration: 0.5
+  nextSlide: 0
+  slideDelay: 2
   wallJumpDelay: 0.5
   nextWallJump: 0
   jumpStrength: 60

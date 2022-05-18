@@ -17,17 +17,31 @@ public class PlayerLogic : MonoBehaviour
     public LayerMask enemyLayer;
     public Rigidbody2D rigidBody;
     
-    public bool InputAllowed = true;
-    public bool isSliding = false;
+    //Player Values
     public float health;
+
+    //Movement Values
+    public bool InputAllowed = true;
     public float speed = 5f;
+
+    //Sliding
+    public bool isSliding = false;
     public float slideSpeed = 10f;
     public float slideDuration = 1f;
+    [HideInInspector]
+    public float nextSlide;
+    public float slideDelay;
+
+    //Sprinting & Sneaking
     public float sprintMultValue { get; private set; } = 2f;
     public float sneakMultValue { get; private set; } = 0.5f;
+
+    //Jumping
     public float wallJumpDelay;
+    [HideInInspector]
     public float nextWallJump = 0f;
     public float jumpStrength;
+
     public float nextFire  { get; private set; } = 0f;
     public bool faceRight { get; private set; }  = true;
     
@@ -36,6 +50,7 @@ public class PlayerLogic : MonoBehaviour
     public InputAction move{ get; private set; }
     public InputAction fire{ get; private set; }
     public InputAction sprint{ get; private set; }
+    public InputAction look{ get; private set; }
 
     public AnimatedSprite normal;
     public AnimatedSprite death;
@@ -63,6 +78,20 @@ public class PlayerLogic : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void LateUpdate () 
+    {
+        //rotation
+        Vector2 mousePos = this.look.ReadValue<Vector2>();
+        Debug.Log(mousePos);
+
+        Vector3 weaponPos = this.weapon.transform.position;
+        
+
+        var dir = Camera.main.ScreenToWorldPoint(mousePos) - weaponPos;
+        var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     public void Flip()
@@ -107,11 +136,6 @@ public class PlayerLogic : MonoBehaviour
         }
     }    
 
-    public void ReadMouseInput(InputAction.CallbackContext context)
-    {//Weapon rotating
-        
-    }
-
     private void takeBullet(GameObject other)
     {
         if (this.health >= 0)
@@ -126,14 +150,18 @@ public class PlayerLogic : MonoBehaviour
         this.move = this.inputControls.Player.Move;
         this.fire = this.inputControls.Player.Fire;
         this.sprint = this.inputControls.Player.Sprint;
+        this.look = this.inputControls.Player.Look;
         this.move.Enable();
         this.fire.Enable();
         this.sprint.Enable();
+        this.look.Enable();
     }
 
     private void OnDisable()
     {
         this.move.Disable();
         this.fire.Disable();
+        this.sprint.Disable();
+        this.look.Disable();
     }
 }

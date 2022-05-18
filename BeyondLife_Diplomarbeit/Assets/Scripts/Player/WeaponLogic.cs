@@ -10,7 +10,8 @@ public class WeaponLogic : MonoBehaviour
     public float fireRate;
     public void ShootBullet()
     {
-
         Instantiate(this.Bullet, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
     }
+
+    
 }

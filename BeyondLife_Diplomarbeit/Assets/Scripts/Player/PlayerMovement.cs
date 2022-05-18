@@ -57,7 +57,6 @@ public class PlayerMovement : MonoBehaviour
 
             if(this.playerlogic.moveDirection.y <= -0.5f && this.playerlogic.sprint.ReadValue<float>() == 1)
             {//Start SlideLogic
-            Debug.Log("slide");
                 doSlide();
             }
         }
@@ -70,6 +69,7 @@ public class PlayerMovement : MonoBehaviour
             doWallJump();
         }
     }
+
     public void doWallJump()
     {
         //Walljump
@@ -138,8 +138,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void doSlide()
     {//Sliding
-        if (!this.playerlogic.isSliding)
+        if (!this.playerlogic.isSliding && Time.time > this.playerlogic.nextSlide)
         {
+            //Set the WallJumpDelay to disable another WallJump in a given time
+            this.playerlogic.nextSlide = Time.time + this.playerlogic.slideDelay;
             //Set state
             this.playerlogic.isSliding = true;
             this.playerlogic.InputAllowed = false;
