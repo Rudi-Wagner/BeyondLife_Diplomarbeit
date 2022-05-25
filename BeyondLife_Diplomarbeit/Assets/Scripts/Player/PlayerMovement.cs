@@ -31,10 +31,11 @@ public class PlayerMovement : MonoBehaviour
             }
 
             //Face direction
-            if (this.playerlogic.rigidBody.velocity.x > 0 && !this.playerlogic.faceRight)
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(this.playerlogic.look.ReadValue<Vector2>()) - this.playerlogic.transform.position;
+            if (mousePos.x > 0 && !this.playerlogic.faceRight)
             {
                 this.playerlogic.Flip();
-            } else if (this.playerlogic.rigidBody.velocity.x < 0 && this.playerlogic.faceRight)
+            } else if (mousePos.x < 0 && this.playerlogic.faceRight)
             {
                 this.playerlogic.Flip();
             }
@@ -47,10 +48,9 @@ public class PlayerMovement : MonoBehaviour
 
             if(this.playerlogic.moveDirection.y <= -0.5f && this.playerlogic.sprint.ReadValue<float>() == 0)
             {//Start CrouchLogic
-            Debug.Log("crouch");
                 doCrouch();
             }
-            else if(!(this.playerlogic.checkIfWallOnTop(1)))
+            else if(!(this.playerlogic.checkIfWall(1, Vector2.up)))
             {//Reset to StandLogic
                 doStand();
             }
@@ -82,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
         */
         
         if (!this.playerlogic.checkIfGrounded(3) && this.playerlogic.moveDirection.y >= 0.5f  
-        && Time.time > this.playerlogic.nextWallJump && !this.playerlogic.checkIfWallOnTop(2))
+        && Time.time > this.playerlogic.nextWallJump && !this.playerlogic.checkIfWall(2, Vector2.up))
         {
             //Disable player control for 0.2 seconds
             this.playerlogic.InputAllowed = false;
@@ -93,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
 
             //Move the player in the opposit diretion from the wall
             float jumpDirection = -1; //set left
-            if (this.playerlogic.faceRight)
+            if (this.playerlogic.checkIfWall(2, Vector2.right))
             {
                 jumpDirection = 1;    //set right
             }
@@ -112,7 +112,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void doJump()
     {
-        if((this.playerlogic.checkIfGrounded(2) || this.playerlogic.checkIfEnemyBelow(2)) && !(this.playerlogic.checkIfWallOnTop(1)))
+        if((this.playerlogic.checkIfGrounded(2) || this.playerlogic.checkIfEnemyBelow(2)) && !(this.playerlogic.checkIfWall(1, Vector2.up)))
         {//Vertical Movement (only jumping)
             /*Only do a normal jump when:
                 1. The player presses the jump Button

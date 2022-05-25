@@ -82,15 +82,40 @@ public class PlayerLogic : MonoBehaviour
 
     private void LateUpdate () 
     {
-        //rotation
+        //Get angle from mouse position and player positiont
         Vector2 mousePos = this.look.ReadValue<Vector2>();
-        Debug.Log(mousePos);
-
         Vector3 weaponPos = this.weapon.transform.position;
-        
 
+        //Caluclate the angle
         var dir = Camera.main.ScreenToWorldPoint(mousePos) - weaponPos;
         var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        //Lock angle
+        //Dont allow the weapon to move above a certain angle (to prevent shooting yourself)
+
+        if (this.faceRight)
+        {
+            if (angle >= 45.0f)
+            {
+                angle = 45.0f;
+            } else if (angle <= -45.0f)
+            {
+                angle = -45.0f;
+            }
+        }
+        else
+        {
+            if (angle <= 135.0f && angle >= 0.0f)  //Needs the extra 'angle >= 0.0f' because the angle isn't measured in 360°, it is in 180° and -180°
+            {
+                angle = 135.0f;
+            } else if (angle >= -135.0f && angle <= 0.0f)
+            {
+                angle = -135.0f;
+            }
+        }
+        
+
+        //Rotate the wapon
         this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
@@ -113,9 +138,9 @@ public class PlayerLogic : MonoBehaviour
         return Physics2D.BoxCast(this.transform.position, new Vector2(3, 0.5f), 0f, Vector2.down, length, this.enemyLayer);
     }
 
-    public bool checkIfWallOnTop(float length)
+    public bool checkIfWall(float length, Vector2 direction)
     {
-        return Physics2D.BoxCast(this.transform.position, new Vector2(3, 0.5f), 0f, Vector2.up, length, this.wallLayer);
+        return Physics2D.BoxCast(this.transform.position, new Vector2(3, 0.5f), 0f, direction, length, this.wallLayer);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
