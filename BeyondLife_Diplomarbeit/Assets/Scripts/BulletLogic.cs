@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class BulletLogic : MonoBehaviour
 {
+    [Header("Stats")]
     public float speed;
     public float damage;
     public float lifeSpan;
+
+    [Header("Other")]
     public Rigidbody2D rigidBody;
     public GameObject Bullet;
 

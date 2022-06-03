@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class BasicEnemy : EnemyLogic
 {
+    //Stats
+    [Header("Stats")]
     public float health;
     private float nextFire = 0f;
+
+    //Other
+    [Header("Other")]
     public WeaponLogic weapon;
 
 

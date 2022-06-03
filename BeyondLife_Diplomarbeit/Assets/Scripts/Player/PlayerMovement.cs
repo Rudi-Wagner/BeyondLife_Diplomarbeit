@@ -59,6 +59,14 @@ public class PlayerMovement : MonoBehaviour
             {//Start SlideLogic
                 doSlide();
             }
+
+            if (this.playerlogic.dash.ReadValue<float>() == 1)
+            {//Dash
+                doDash();
+            } else if (this.playerlogic.checkIfGrounded(2))
+            {//Reset dash on grounded
+                this.playerlogic.alreadyDashed = false;
+            }
         }
     }
 
@@ -124,6 +132,24 @@ public class PlayerMovement : MonoBehaviour
             this.playerlogic.rigidBody.velocity = new Vector2(this.playerlogic.moveDirection.x * this.playerlogic.speed, this.playerlogic.jumpStrength);    
             //Set WallJumpDelay so that the player doesn't do a walljump immidiatly after the normal jump
             this.playerlogic.nextWallJump = Time.time + this.playerlogic.wallJumpDelay;     
+        }
+    }
+
+    public void doDash()
+    {
+        if(!this.playerlogic.checkIfGrounded(2) && !this.playerlogic.alreadyDashed)
+        {//Dash
+            this.playerlogic.InputAllowed = false;
+            this.playerlogic.alreadyDashed = true;
+            //Change to Dash Sprite
+            this.playerlogic.spriteRenderer.sprite = this.playerlogic.dashing;
+            //Caluclate dash-direction
+            Vector2 mousePos = this.playerlogic.look.ReadValue<Vector2>();
+            var dir = Camera.main.ScreenToWorldPoint(mousePos) - this.playerlogic.transform.position;
+            dir *= this.playerlogic.dashLength;
+            //Do normal dash
+            this.playerlogic.rigidBody.velocity = Vector3.ClampMagnitude(dir, 100f);    
+            Invoke(nameof(this.ActivateInput), 0.4f);  
         }
     }
 

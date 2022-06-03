@@ -7,10 +7,14 @@ using System.Collections.Generic;
 public class PlayerLogic : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer { get; private set; }
+    [Header("Sprites")]
     public Sprite standing;
     public Sprite crouching;
     public Sprite jumping;
+    public Sprite dashing;
     public Sprite sliding;
+
+    [Header("Other")]
     public WeaponLogic weapon;
     public BoxCollider2D boxCollider { get; private set; }
     public LayerMask wallLayer;
@@ -18,44 +22,51 @@ public class PlayerLogic : MonoBehaviour
     public Rigidbody2D rigidBody;
     
     //Player Values
+    [Header("Health")]
     public float health;
 
     //Movement Values
+    [Header("Movement")]
     public bool InputAllowed = true;
     public float speed = 5f;
 
     //Sliding
+    [Header("Sliding")]
     public bool isSliding = false;
     public float slideSpeed = 10f;
     public float slideDuration = 1f;
-    [HideInInspector]
-    public float nextSlide;
+    [HideInInspector] public float nextSlide;
     public float slideDelay;
 
-    //Sprinting & Sneaking
+    //Sprinting
     public float sprintMultValue { get; private set; } = 2f;
+
+    //Sneaking
     public float sneakMultValue { get; private set; } = 0.5f;
 
     //Jumping
+    [Header("Jumping")]
     public float wallJumpDelay;
-    [HideInInspector]
-    public float nextWallJump = 0f;
+    [HideInInspector] public float nextWallJump = 0f;
     public float jumpStrength;
+
+    //Dash
+    [Header("Dashing")]
+    public bool alreadyDashed = false;
+    public float dashLength;
 
     public float nextFire  { get; private set; } = 0f;
     public bool faceRight { get; private set; }  = true;
     
+    //Input & MoveDirection
+    [Header("Direction")]
     public Vector2 moveDirection;
     public PlayerControls inputControls;
     public InputAction move{ get; private set; }
     public InputAction fire{ get; private set; }
     public InputAction sprint{ get; private set; }
     public InputAction look{ get; private set; }
-
-    public AnimatedSprite normal;
-    public AnimatedSprite death;
-
-    
+    public InputAction dash{ get; private set; }
 
     private void Awake()
     {
@@ -176,10 +187,12 @@ public class PlayerLogic : MonoBehaviour
         this.fire = this.inputControls.Player.Fire;
         this.sprint = this.inputControls.Player.Sprint;
         this.look = this.inputControls.Player.Look;
+        this.dash = this.inputControls.Player.Dash;
         this.move.Enable();
         this.fire.Enable();
         this.sprint.Enable();
         this.look.Enable();
+        this.dash.Enable();
     }
 
     private void OnDisable()
@@ -188,5 +201,6 @@ public class PlayerLogic : MonoBehaviour
         this.fire.Disable();
         this.sprint.Disable();
         this.look.Disable();
+        this.dash.Disable();
     }
 }
