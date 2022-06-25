@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 public class PlayerLogic : MonoBehaviour
 {
+    [Header("GameManager")]
+    public GameManager manager;
+
     public SpriteRenderer spriteRenderer { get; private set; }
     [Header("Sprites")]
     public Sprite standing;
@@ -24,6 +27,7 @@ public class PlayerLogic : MonoBehaviour
     //Player Values
     [Header("Health")]
     public float health;
+    public float maxHealth;
 
     //Movement Values
     [Header("Movement")]
@@ -77,57 +81,65 @@ public class PlayerLogic : MonoBehaviour
 
     private void Update()
     {
-        //Shooting
-        if(this.fire.ReadValue<float>() == 1 && Time.time > this.nextFire)
+        if (this.InputAllowed)
         {
-            this.nextFire = Time.time + this.weapon.fireRate;
-            this.weapon.ShootBullet();
+            //Shooting
+            if(this.fire.ReadValue<float>() == 1 && Time.time > this.nextFire)
+            {
+                this.nextFire = Time.time + this.weapon.fireRate;
+                this.weapon.ShootBullet();
+            }
         }
 
         //Check Health Status
         if(this.health <= 0)
         {
-            Destroy(gameObject);
+            this.manager.ShowDeathScreen();
+            //Destroy(gameObject);
         }
     }
 
     private void LateUpdate () 
     {
-        //Get angle from mouse position and player positiont
-        Vector2 mousePos = this.look.ReadValue<Vector2>();
-        Vector3 weaponPos = this.weapon.transform.position;
-
-        //Caluclate the angle
-        var dir = Camera.main.ScreenToWorldPoint(mousePos) - weaponPos;
-        var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-        //Lock angle
-        //Dont allow the weapon to move above a certain angle (to prevent shooting yourself)
-
-        if (this.faceRight)
+        if (this.InputAllowed)
         {
-            if (angle >= 45.0f)
+            //Get angle from mouse position and player positiont
+            Vector2 mousePos = this.look.ReadValue<Vector2>();
+            Vector3 weaponPos = this.weapon.transform.position;
+
+            //Caluclate the angle
+            var dir = Camera.main.ScreenToWorldPoint(mousePos) - weaponPos;
+            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+            //Lock angle
+            //Dont allow the weapon to move above a certain angle (to prevent shooting yourself)
+
+            if (this.faceRight)
             {
-                angle = 45.0f;
-            } else if (angle <= -45.0f)
-            {
-                angle = -45.0f;
+                if (angle >= 45.0f)
+                {
+                    angle = 45.0f;
+                } else if (angle <= -45.0f)
+                {
+                    angle = -45.0f;
+                }
             }
-        }
-        else
-        {
-            if (angle <= 135.0f && angle >= 0.0f)  //Needs the extra 'angle >= 0.0f' because the angle isn't measured in 360°, it is in 180° and -180°
+            else
             {
-                angle = 135.0f;
-            } else if (angle >= -135.0f && angle <= 0.0f)
-            {
-                angle = -135.0f;
+                if (angle <= 135.0f && angle >= 0.0f)  //Needs the extra 'angle >= 0.0f' because the angle isn't measured in 360°, it is in 180° and -180°
+                {
+                    angle = 135.0f;
+                } else if (angle >= -135.0f && angle <= 0.0f)
+                {
+                    angle = -135.0f;
+                }
             }
+            
+
+            //Rotate the wapon
+            this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward); 
         }
         
-
-        //Rotate the wapon
-        this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     public void Flip()
@@ -202,5 +214,12 @@ public class PlayerLogic : MonoBehaviour
         this.sprint.Disable();
         this.look.Disable();
         this.dash.Disable();
+    }
+
+    public void ResetState()
+    {
+        this.gameObject.transform.position = this.manager.playerSpawn;
+        this.InputAllowed = true;
+        this.health = this.maxHealth;
     }
 }
