@@ -28,6 +28,7 @@ public class PlayerLogic : MonoBehaviour
     [Header("Health")]
     public float health;
     public float maxHealth;
+    public bool immortal;
 
     //Movement Values
     [Header("Movement")]
@@ -77,6 +78,14 @@ public class PlayerLogic : MonoBehaviour
         this.spriteRenderer = GetComponent<SpriteRenderer>();
         this.boxCollider = GetComponent<BoxCollider2D>();
         this.inputControls = new PlayerControls();
+
+        foreach (Transform t in GetComponentsInChildren<Transform>())
+        {
+            if (t.CompareTag("weapon")) 
+            {
+                this.weapon = t.gameObject.GetComponent<WeaponLogic>();
+            }
+        }
     }
 
     private void Update()
@@ -92,7 +101,7 @@ public class PlayerLogic : MonoBehaviour
         }
 
         //Check Health Status
-        if(this.health <= 0)
+        if(this.health <= 0 && !this.immortal)
         {
             this.manager.ShowDeathScreen();
             //Destroy(gameObject);

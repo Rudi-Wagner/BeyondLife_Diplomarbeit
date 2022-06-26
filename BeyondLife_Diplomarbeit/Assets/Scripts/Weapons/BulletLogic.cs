@@ -15,7 +15,7 @@ public class BulletLogic : MonoBehaviour
 
     private void Start()
     {
-        this.rigidBody.velocity = this.transform.right * speed;
+        //this.rigidBody.velocity = this.transform.right * speed;
         Invoke(nameof(destroySelf), lifeSpan);
     }
 

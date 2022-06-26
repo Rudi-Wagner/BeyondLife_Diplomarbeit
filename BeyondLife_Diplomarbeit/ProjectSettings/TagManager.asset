@@ -9,6 +9,7 @@ TagManager:
   - wallJumpEnabled
   - wallJumpDisabled
   - UI
+  - weapon
   layers:
   - Default
   - TransparentFX
