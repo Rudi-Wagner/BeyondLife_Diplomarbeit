@@ -7,12 +7,24 @@ public class BasicEnemy : EnemyLogic
     //Stats
     [Header("Stats")]
     public float health;
+    public float maxHealth;
     private float nextFire = 0f;
+    public Vector2 startPos;
 
     //Other
     [Header("Other")]
     public WeaponLogic weapon;
 
+    private void Awake()
+    {
+        foreach (Transform t in GetComponentsInChildren<Transform>())
+        {
+            if (t.CompareTag("weapon")) 
+            {
+                this.weapon = t.gameObject.GetComponent<WeaponLogic>();
+            }
+        }
+    }
 
     private void FixedUpdate()
     {
@@ -27,6 +39,7 @@ public class BasicEnemy : EnemyLogic
         {
             nextFire = Time.time + this.weapon.fireRate;
             this.weapon.ShootBullet();
+            
         }
     }
 
@@ -43,6 +56,7 @@ public class BasicEnemy : EnemyLogic
 	    }
         return false;
     }
+
     protected override void destroySelf(GameObject other)
     {
         if (this.health >= 0)
@@ -50,5 +64,11 @@ public class BasicEnemy : EnemyLogic
             BulletLogic bullet = other.gameObject.GetComponent<BulletLogic>();
             this.health -= bullet.damage;
         }
+    }
+
+    public void ResetState()
+    {
+        this.health = this.maxHealth;
+        this.transform.position = this.startPos;
     }
 }

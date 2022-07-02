@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < this.enemys.Length; i++)
         {
             this.enemys[i].SetActive(true);
+            this.enemys[i].BroadcastMessage("ResetState");      //Reset Enemy without script name
         }
 
         //Enable player movement
@@ -62,6 +63,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < this.enemys.Length; i++)
         {
             this.enemys[i].SetActive(true);
+            this.enemys[i].BroadcastMessage("ResetState");      //Reset Enemy without script name
         }
 
         //Reset player
