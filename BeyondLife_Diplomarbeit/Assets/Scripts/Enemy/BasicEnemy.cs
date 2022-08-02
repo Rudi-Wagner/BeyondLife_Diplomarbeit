@@ -74,6 +74,13 @@ public class BasicEnemy : EnemyLogic
                 this.health -= rocket.damage;
                 return;
             }
+
+            AOEDamage aoeDamage = other.gameObject.GetComponent<AOEDamage>();
+            if (aoeDamage != null)
+            {
+                this.health -= aoeDamage.damage;
+                return;
+            }
         }
     }
 

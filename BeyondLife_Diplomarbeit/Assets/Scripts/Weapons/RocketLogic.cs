@@ -15,6 +15,7 @@ public class RocketLogic : MonoBehaviour
     public GameObject Bullet;
     public GameObject Explosion;
     public GameObject smokeTrail;
+    public GameObject aoeDamageSphere;
 
     private void Start()
     {
@@ -28,6 +29,7 @@ public class RocketLogic : MonoBehaviour
         this.Explosion.SetActive(true);
         this.smokeTrail.SetActive(false);
         this.rigidBody.velocity = Vector2.zero;
+        Instantiate(this.aoeDamageSphere, this.transform.position, Quaternion.identity);
         yield return new WaitForSeconds(explosionLifeSpan);
         Destroy(gameObject);
     }

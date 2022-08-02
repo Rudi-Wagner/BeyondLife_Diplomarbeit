@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
 
         //Disable player movement
         this.player.InputAllowed = false;
+        this.player.rigidBody.velocity = Vector2.zero;
 
         this.DeathCanvas.SetActive(true);
     }

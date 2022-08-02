@@ -19595,10 +19595,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 30
-  damage: 30
+  damage: 0
   lifeSpan: 2
   explosionLifeSpan: 0.5
   rigidBody: {fileID: -1499912249613489502}
   Bullet: {fileID: 7540261990294607220}
   Explosion: {fileID: 6705502548513030662}
   smokeTrail: {fileID: 5874458009634873852}
+  aoeDamageSphere: {fileID: 2601979301821159426, guid: 5f9ceb58b92bc6c43863c23bb9b1671d, type: 3}
