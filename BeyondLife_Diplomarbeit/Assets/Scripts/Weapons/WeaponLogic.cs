@@ -11,6 +11,7 @@ public class WeaponLogic : MonoBehaviour
     public GameObject Bullet;
     public GameObject BulletSpawn;
     private BulletLogic bulletLogic;
+    private RocketLogic rocketLogic;
     private GameObject spawnedBullet;
     private Rigidbody2D rigidBody;
 
@@ -22,9 +23,13 @@ public class WeaponLogic : MonoBehaviour
     public int pelletAmount;
     public float spreadAngle;
 
+    [Header("Rocket Launcher")]
+    public float explosionRange;
+
     public void Start()
     {
         bulletLogic = Bullet.GetComponent<BulletLogic>();
+        rocketLogic = Bullet.GetComponent<RocketLogic>();
     }
     
     public void ShootBullet()
@@ -35,6 +40,12 @@ public class WeaponLogic : MonoBehaviour
                 spawnedBullet = Instantiate(this.Bullet, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
                 rigidBody = spawnedBullet.GetComponent<Rigidbody2D>();
                 rigidBody.velocity = BulletSpawn.transform.right * this.bulletLogic.speed;
+                break;
+
+            case "RocketLauncherWeapon": 
+                spawnedBullet = Instantiate(this.Bullet, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
+                rigidBody = spawnedBullet.GetComponent<Rigidbody2D>();
+                rigidBody.velocity = BulletSpawn.transform.right * this.rocketLogic.speed;
                 break;
 
             case "RifleWeapon": 

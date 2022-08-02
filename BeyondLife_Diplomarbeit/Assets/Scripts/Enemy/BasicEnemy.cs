@@ -62,7 +62,18 @@ public class BasicEnemy : EnemyLogic
         if (this.health >= 0)
         {
             BulletLogic bullet = other.gameObject.GetComponent<BulletLogic>();
-            this.health -= bullet.damage;
+            if (bullet != null)
+            {
+                this.health -= bullet.damage;
+                return;
+            }
+            
+            RocketLogic rocket = other.gameObject.GetComponent<RocketLogic>();
+            if (rocket != null)
+            {
+                this.health -= rocket.damage;
+                return;
+            }
         }
     }
 
