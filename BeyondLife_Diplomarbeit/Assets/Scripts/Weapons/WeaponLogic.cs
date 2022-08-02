@@ -11,6 +11,12 @@ public class WeaponLogic : MonoBehaviour
     public GameObject Bullet;
     public GameObject BulletSpawn;
     private BulletLogic bulletLogic;
+    private GameObject spawnedBullet;
+    private Rigidbody2D rigidBody;
+
+    [Header("Rifle burst")]
+    public float burstDelay;
+    public float burstAmount;
 
     [Header("Shotgun spread")]
     public int pelletAmount;
@@ -20,19 +26,19 @@ public class WeaponLogic : MonoBehaviour
     {
         bulletLogic = Bullet.GetComponent<BulletLogic>();
     }
-
     
     public void ShootBullet()
     {
-        GameObject spawnedBullet;
-        Rigidbody2D rigidBody;
-
         switch (this.gameObject.name)
         {
-            case "ClassicWeapon": 
+            case "PistolWeapon": 
                 spawnedBullet = Instantiate(this.Bullet, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
                 rigidBody = spawnedBullet.GetComponent<Rigidbody2D>();
                 rigidBody.velocity = BulletSpawn.transform.right * this.bulletLogic.speed;
+                break;
+
+            case "RifleWeapon": 
+                StartCoroutine(doRifle());
                 break;
             
             case "ShotgunWeapon": 
@@ -46,5 +52,17 @@ public class WeaponLogic : MonoBehaviour
                 break;
         }
         
+    }
+
+    public IEnumerator doRifle()
+    {
+        for (int i = 0; i < burstAmount; i++)
+        {
+            spawnedBullet = Instantiate(this.Bullet, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
+            rigidBody = spawnedBullet.GetComponent<Rigidbody2D>();
+            rigidBody.velocity = BulletSpawn.transform.right * this.bulletLogic.speed;
+            
+            yield return new WaitForSeconds(burstDelay);
+        }
     }
 }
