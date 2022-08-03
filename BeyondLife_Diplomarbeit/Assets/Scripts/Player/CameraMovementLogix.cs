@@ -6,7 +6,7 @@ public class CameraMovementLogix : MonoBehaviour
 {
     public GameObject player;
 
-    private Vector3 offset;
+    public Vector3 offset;
 
     void Start () 
     {

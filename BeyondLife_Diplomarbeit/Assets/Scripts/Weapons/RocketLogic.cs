@@ -10,22 +10,33 @@ public class RocketLogic : MonoBehaviour
     public float lifeSpan;
     public float explosionLifeSpan;
 
-    [Header("Other")]
-    public Rigidbody2D rigidBody;
+    [Header("Bullet Particel")]
     public GameObject Bullet;
     public GameObject Explosion;
     public GameObject smokeTrail;
     public GameObject aoeDamageSphere;
 
+    [Header("Other")]
+    public Rigidbody2D rigidBody;
+    private ScreenShaker camShake;
+
     private void Start()
     {
-        //this.rigidBody.velocity = this.transform.right * speed;
-        Invoke(nameof(destroySelf), lifeSpan);
+        camShake = Camera.main.GetComponent<ScreenShaker>();
+        StartCoroutine(destroySelfAfterDelay());
+    }
+
+    private IEnumerator destroySelfAfterDelay()
+    {
+        yield return new WaitForSeconds(lifeSpan);
+        camShake.start = true;
+        StartCoroutine(destroySelf());
     }
 
     private IEnumerator destroySelf()
     {
         //Explode
+        
         this.Explosion.SetActive(true);
         this.smokeTrail.SetActive(false);
         this.rigidBody.velocity = Vector2.zero;
@@ -40,6 +51,8 @@ public class RocketLogic : MonoBehaviour
             other.gameObject.layer == LayerMask.NameToLayer("player") ||
             other.gameObject.layer == LayerMask.NameToLayer("enemy"))
         {
+            camShake.start = true;
+            StopAllCoroutines();
             StartCoroutine(destroySelf());
         }
     }
