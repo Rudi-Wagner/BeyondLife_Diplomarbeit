@@ -136,9 +136,6 @@ public class GameManager : MonoBehaviour
         this.player.ResetState();
     }
 
-    private void OnEnable()
-    {
-    }
 
     private void OnDisable()
     {

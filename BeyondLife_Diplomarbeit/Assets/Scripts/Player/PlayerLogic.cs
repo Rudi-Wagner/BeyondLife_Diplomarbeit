@@ -6,8 +6,9 @@ using System.Collections.Generic;
 
 public class PlayerLogic : MonoBehaviour
 {
-    [Header("GameManager")]
+    [Header("Player")]
     public GameManager manager;
+    public PlayerControls inputControls;
 
     public SpriteRenderer spriteRenderer { get; private set; }
     [Header("Sprites")]
@@ -17,12 +18,18 @@ public class PlayerLogic : MonoBehaviour
     public Sprite dashing;
     public Sprite sliding;
 
+    [Header("Weapons")]
+    public WeaponLogic[] weapons;
+    public WeaponLogic startWeapon;
+    public bool weaponSwitchingAllowed = true;
+    public WeaponLogic weapon{ get; private set; }
+    public InputAction weaponSelect{ get; private set; }
+
     [Header("Other")]
-    public WeaponLogic weapon;
-    public BoxCollider2D boxCollider { get; private set; }
     public LayerMask wallLayer;
     public LayerMask enemyLayer;
     public Rigidbody2D rigidBody;
+    public BoxCollider2D boxCollider { get; private set; }
     
     //Player Values
     [Header("Health")]
@@ -66,7 +73,6 @@ public class PlayerLogic : MonoBehaviour
     //Input & MoveDirection
     [Header("Direction")]
     public Vector2 moveDirection;
-    public PlayerControls inputControls;
     public InputAction move{ get; private set; }
     public InputAction fire{ get; private set; }
     public InputAction sprint{ get; private set; }
@@ -79,19 +85,15 @@ public class PlayerLogic : MonoBehaviour
         this.boxCollider = GetComponent<BoxCollider2D>();
         this.inputControls = new PlayerControls();
 
-        foreach (Transform t in GetComponentsInChildren<Transform>())
-        {
-            if (t.CompareTag("weapon")) 
-            {
-                this.weapon = t.gameObject.GetComponent<WeaponLogic>();
-            }
-        }
+        this.weapon = this.startWeapon;
     }
 
     private void Update()
     {
         if (this.InputAllowed)
         {
+            //Check for weapon switch ('-1' --> keine Vorgabe)
+            SwitchWeapon(-1);
             //Shooting
             if(this.fire.ReadValue<float>() == 1 && Time.time > this.nextFire)
             {
@@ -220,6 +222,55 @@ public class PlayerLogic : MonoBehaviour
         }
     }
 
+    public void SwitchWeapon(int weaponType)
+    {
+        if (this.weaponSwitchingAllowed)
+        {
+            if (this.weaponSelect.ReadValue<Vector2>() != Vector2.zero || weaponType != -1)
+            {
+                /*
+                    1: 0 | 1    Pistol
+                    2: 0 |-1    Rifle
+                    3:-1 | 0    Shotgun
+                    4: 1 | 0    Rocket Launcher
+                */
+
+                foreach (Transform t in this.GetComponentsInChildren<Transform>())
+                {
+                    if (t.CompareTag("weapon")) 
+                    {
+                        t.gameObject.SetActive(false);
+                    }
+                }
+
+                Vector2 weaponSelection = this.weaponSelect.ReadValue<Vector2>();
+                if (weaponSelection == new Vector2(0, 1) || weaponType == 0)
+                {
+                    this.weapon = this.weapons[0];
+                    Transform weapon = this.gameObject.transform.Find(this.weapons[0].name);
+                    weapon.gameObject.SetActive(true);
+                } else if (weaponSelection == new Vector2(0, -1) || weaponType == 1)
+                {
+                    this.weapon = this.weapons[1];
+                    Transform weapon = this.gameObject.transform.Find(this.weapons[1].name);
+                    weapon.gameObject.SetActive(true);
+                } else if (weaponSelection == new Vector2(-1, 0) || weaponType == 2)
+                {
+                    this.weapon = this.weapons[2];
+                    Transform weapon = this.gameObject.transform.Find(this.weapons[2].name);
+                    weapon.gameObject.SetActive(true);
+                } else if (weaponSelection == new Vector2(1, 0) || weaponType == 3)
+                {
+                    this.weapon = this.weapons[3];
+                    Transform weapon = this.gameObject.transform.Find(this.weapons[3].name);
+                    weapon.gameObject.SetActive(true);
+                }
+
+                this.nextFire = Time.time + 0.2f;
+            }
+        }
+    }
+
     private void OnEnable()
     {
         this.move = this.inputControls.Player.Move;
@@ -227,11 +278,13 @@ public class PlayerLogic : MonoBehaviour
         this.sprint = this.inputControls.Player.Sprint;
         this.look = this.inputControls.Player.Look;
         this.dash = this.inputControls.Player.Dash;
+        this.weaponSelect = this.inputControls.Toolbar.WeaponSelect;
         this.move.Enable();
         this.fire.Enable();
         this.sprint.Enable();
         this.look.Enable();
         this.dash.Enable();
+        this.weaponSelect.Enable();
     }
 
     private void OnDisable()
@@ -241,6 +294,7 @@ public class PlayerLogic : MonoBehaviour
         this.sprint.Disable();
         this.look.Disable();
         this.dash.Disable();
+        this.weaponSelect.Disable();
     }
 
     public void ResetState()

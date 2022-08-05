@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 2536784384917038116}
   - component: {fileID: 5121008593407443075}
   m_Layer: 6
-  m_Name: RifleWeapon
+  m_Name: RocketLauncherWeapon
   m_TagString: weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,7 +56,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2536784384917038118}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.9253135, w: 0.3792031}
   m_LocalPosition: {x: 1, y: -0.5, z: -1}
   m_LocalScale: {x: 1, y: 0.25, z: 0}
   m_ConstrainProportionsScale: 0
@@ -107,7 +107,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: a3a23dc801e10614791d7f86114a3a78, type: 3}
-  m_Color: {r: 0.5754717, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -129,10 +129,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6536c2ceab45c2645b34251afd227501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireRate: 2
-  Bullet: {fileID: 7540261990294607220, guid: aecf8526a21a8c644a0522a3ecc4f556, type: 3}
+  fireRate: 3
+  Bullet: {fileID: 7540261990294607220, guid: 6e89871bb80e4ea40b0c668882f41f4d, type: 3}
   BulletSpawn: {fileID: 2536784384486975272}
-  burstDelay: 0.1
-  burstAmount: 3
+  burstDelay: 0
+  burstAmount: 0
   pelletAmount: 0
   spreadAngle: 0
+  explosionRange: 0

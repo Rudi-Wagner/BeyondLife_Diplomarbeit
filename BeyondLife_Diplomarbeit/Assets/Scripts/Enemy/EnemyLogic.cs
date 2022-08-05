@@ -13,6 +13,7 @@ public class EnemyLogic : MonoBehaviour
 
     protected virtual void destroySelf(GameObject other)
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);  //Fürs erste später wsl wieder sinnvoll
+        this.gameObject.SetActive(false);
     }
 }

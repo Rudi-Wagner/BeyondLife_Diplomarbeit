@@ -31,7 +31,8 @@ public class BasicEnemy : EnemyLogic
         //Check Health Status
         if(this.health <= 0)
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);  //Fürs erste später wsl wieder sinnvoll
+            this.gameObject.SetActive(false);
         }
 
         //Firing

@@ -328,6 +328,78 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Toolbar"",
+            ""id"": ""95b2ff16-8977-451c-93ec-c97ea8493c5a"",
+            ""actions"": [
+                {
+                    ""name"": ""WeaponSelect"",
+                    ""type"": ""Value"",
+                    ""id"": ""a5ad8975-19fb-4e19-ac81-01d3762e075f"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""bfd728bf-d5e8-41ef-a8a1-78375d477182"",
+                    ""path"": ""Dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WeaponSelect"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""78a3f344-cc2e-4b74-a10a-06a5c4131f35"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""WeaponSelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""df2c2647-fce9-4ec7-89fb-ddaf83b37b61"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""WeaponSelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""ac759881-a8ff-4f4b-a72e-9d8b043399e9"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""WeaponSelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""7dc09d55-2c22-47e5-93a0-988766b76afd"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""WeaponSelect"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -400,6 +472,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+        // Toolbar
+        m_Toolbar = asset.FindActionMap("Toolbar", throwIfNotFound: true);
+        m_Toolbar_WeaponSelect = m_Toolbar.FindAction("WeaponSelect", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -520,6 +595,39 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // Toolbar
+    private readonly InputActionMap m_Toolbar;
+    private IToolbarActions m_ToolbarActionsCallbackInterface;
+    private readonly InputAction m_Toolbar_WeaponSelect;
+    public struct ToolbarActions
+    {
+        private @PlayerControls m_Wrapper;
+        public ToolbarActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @WeaponSelect => m_Wrapper.m_Toolbar_WeaponSelect;
+        public InputActionMap Get() { return m_Wrapper.m_Toolbar; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(ToolbarActions set) { return set.Get(); }
+        public void SetCallbacks(IToolbarActions instance)
+        {
+            if (m_Wrapper.m_ToolbarActionsCallbackInterface != null)
+            {
+                @WeaponSelect.started -= m_Wrapper.m_ToolbarActionsCallbackInterface.OnWeaponSelect;
+                @WeaponSelect.performed -= m_Wrapper.m_ToolbarActionsCallbackInterface.OnWeaponSelect;
+                @WeaponSelect.canceled -= m_Wrapper.m_ToolbarActionsCallbackInterface.OnWeaponSelect;
+            }
+            m_Wrapper.m_ToolbarActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @WeaponSelect.started += instance.OnWeaponSelect;
+                @WeaponSelect.performed += instance.OnWeaponSelect;
+                @WeaponSelect.canceled += instance.OnWeaponSelect;
+            }
+        }
+    }
+    public ToolbarActions @Toolbar => new ToolbarActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -572,5 +680,9 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnFire(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+    }
+    public interface IToolbarActions
+    {
+        void OnWeaponSelect(InputAction.CallbackContext context);
     }
 }
