@@ -13,12 +13,23 @@ public class PlayerMovement : MonoBehaviour
     {
         if (this.playerlogic.InputAllowed)
         {
-            //Horizontal Movement
-            this.playerlogic.rigidBody.velocity = new Vector2(this.playerlogic.moveDirection.x * this.playerlogic.speed * this.sprintMult, this.playerlogic.rigidBody.velocity.y);
 
             // Movement and round the Vector to the nearest Int
             this.playerlogic.moveDirection = this.playerlogic.move.ReadValue<Vector2>();
             this.playerlogic.moveDirection = new Vector2Int((int) Math.Round(this.playerlogic.moveDirection.x, 0), (int) Math.Round(this.playerlogic.moveDirection.y, 0));
+            if (this.playerlogic.moveDirection.x != 0)
+            {
+                //Horizontal Movement
+                this.playerlogic.rigidBody.velocity = new Vector2(this.playerlogic.moveDirection.x * this.playerlogic.speed * this.sprintMult, this.playerlogic.rigidBody.velocity.y);
+            }
+            else
+            {
+                if (!this.playerlogic.alreadyDashed)
+                {
+                    //If no input is given player slowly stops moving
+                    this.playerlogic.rigidBody.velocity = new Vector2(this.playerlogic.rigidBody.velocity.x / 1.5f, this.playerlogic.rigidBody.velocity.y);
+                }
+            }
 
             //Check if sprinting
             if (this.playerlogic.sprint.ReadValue<float>() == 1)
@@ -149,7 +160,7 @@ public class PlayerMovement : MonoBehaviour
             dir *= this.playerlogic.dashLength;
             //Do normal dash
             this.playerlogic.rigidBody.velocity = Vector3.ClampMagnitude(dir, 100f);    
-            Invoke(nameof(this.ActivateInput), 0.4f);  
+            Invoke(nameof(this.ActivateInput), 0.2f);  
         }
     }
 
