@@ -10,6 +10,10 @@ public class AOEDamage : MonoBehaviour
 
     private void OnEnable()
     {
+        if(lifeSpan == -1)
+        {
+            return;     //Never Kill this AOEDamageSphere
+        }
         Invoke(nameof(disable), lifeSpan);
     }
 

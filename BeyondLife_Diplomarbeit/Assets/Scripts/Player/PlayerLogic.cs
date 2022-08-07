@@ -22,6 +22,7 @@ public class PlayerLogic : MonoBehaviour
     public WeaponLogic[] weapons;
     public WeaponLogic startWeapon;
     public bool weaponSwitchingAllowed = true;
+    private bool switched = false;
     public WeaponLogic weapon{ get; private set; }
     public InputAction weaponSelect{ get; private set; }
 
@@ -94,6 +95,7 @@ public class PlayerLogic : MonoBehaviour
         {
             //Check for weapon switch ('-1' --> keine Vorgabe)
             SwitchWeapon(-1);
+
             //Shooting
             if(this.fire.ReadValue<float>() == 1 && Time.time > this.nextFire)
             {
@@ -226,15 +228,22 @@ public class PlayerLogic : MonoBehaviour
     {
         if (this.weaponSwitchingAllowed)
         {
-            if (this.weaponSelect.ReadValue<Vector2>() != Vector2.zero || weaponType != -1)
+            if (this.weaponSelect.ReadValue<float>() != 0 || weaponType != -1)
             {
                 /*
-                    1: 0 | 1    Pistol
-                    2: 0 |-1    Rifle
-                    3:-1 | 0    Shotgun
-                    4: 1 | 0    Rocket Launcher
+                    0: Melee
+                    1: Pistol
+                    2: Rifle
+                    3: Shotgun
+                    4: Rocket Launcher
                 */
 
+                float weaponSelection = this.weaponSelect.ReadValue<float>();
+                if (weaponType != -1)
+                {
+                    weaponSelection = -1f;
+                }
+                
                 foreach (Transform t in this.GetComponentsInChildren<Transform>())
                 {
                     if (t.CompareTag("weapon")) 
@@ -242,27 +251,30 @@ public class PlayerLogic : MonoBehaviour
                         t.gameObject.SetActive(false);
                     }
                 }
-
-                Vector2 weaponSelection = this.weaponSelect.ReadValue<Vector2>();
-                if (weaponSelection == new Vector2(0, 1) || weaponType == 0)
+                if (weaponSelection == 1f || weaponType == 1)
                 {
                     this.weapon = this.weapons[0];
                     Transform weapon = this.gameObject.transform.Find(this.weapons[0].name);
                     weapon.gameObject.SetActive(true);
-                } else if (weaponSelection == new Vector2(0, -1) || weaponType == 1)
+                } else if (weaponSelection == 2f || weaponType == 2)
                 {
                     this.weapon = this.weapons[1];
                     Transform weapon = this.gameObject.transform.Find(this.weapons[1].name);
                     weapon.gameObject.SetActive(true);
-                } else if (weaponSelection == new Vector2(-1, 0) || weaponType == 2)
+                } else if (weaponSelection == 3f || weaponType == 3)
                 {
                     this.weapon = this.weapons[2];
                     Transform weapon = this.gameObject.transform.Find(this.weapons[2].name);
                     weapon.gameObject.SetActive(true);
-                } else if (weaponSelection == new Vector2(1, 0) || weaponType == 3)
+                } else if (weaponSelection == 4f || weaponType == 4)
                 {
                     this.weapon = this.weapons[3];
                     Transform weapon = this.gameObject.transform.Find(this.weapons[3].name);
+                    weapon.gameObject.SetActive(true);
+                } else if (weaponSelection == 5f || weaponType == 5)
+                {
+                    this.weapon = this.weapons[4];
+                    Transform weapon = this.gameObject.transform.Find(this.weapons[4].name);
                     weapon.gameObject.SetActive(true);
                 }
 

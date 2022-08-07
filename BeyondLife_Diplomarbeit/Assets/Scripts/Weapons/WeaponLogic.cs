@@ -6,14 +6,17 @@ public class WeaponLogic : MonoBehaviour
 {
     [Header("Stats")]
     public float fireRate;
-
-    [Header("Other")]
-    public GameObject Bullet;
-    public GameObject BulletSpawn;
     private BulletLogic bulletLogic;
     private RocketLogic rocketLogic;
+
+    [Header("Other")]
+    public GameObject Bullet = null;
+    public GameObject BulletSpawn = null;
     private GameObject spawnedBullet;
     private Rigidbody2D rigidBody;
+
+    [Header("Melee Knife")]
+    public GameObject aoeDamageSphere;
 
     [Header("Rifle burst")]
     public float burstDelay;
@@ -61,8 +64,25 @@ public class WeaponLogic : MonoBehaviour
                     rigidBody.velocity = BulletSpawn.transform.right * this.bulletLogic.speed + new Vector3(0, angle, 0);
                 }
                 break;
+            
+            case "MeleeWeapon": 
+                StartCoroutine(doMelee());
+                break;
         }
         
+    }
+
+    public IEnumerator doMelee()
+    {
+        //Start Stabbing
+        yield return new WaitForSeconds(0.2f);
+
+        //Spawn Damage Sphere
+        GameObject sphere = Instantiate(this.aoeDamageSphere, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
+        sphere.SetActive(true);
+
+        //End Stabbing
+        yield return new WaitForSeconds(0.2f);
     }
 
     public IEnumerator doRifle()

@@ -315,7 +315,7 @@
                     "name": "WeaponSelect",
                     "type": "Value",
                     "id": "a5ad8975-19fb-4e19-ac81-01d3762e075f",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Double",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -323,59 +323,59 @@
             ],
             "bindings": [
                 {
-                    "name": "WASD",
-                    "id": "bfd728bf-d5e8-41ef-a8a1-78375d477182",
-                    "path": "Dpad",
+                    "name": "",
+                    "id": "45c7b0b1-df59-4e6e-9dda-c53e336b4fbe",
+                    "path": "<Keyboard>/1",
                     "interactions": "",
-                    "processors": "",
-                    "groups": "",
+                    "processors": "Scale",
+                    "groups": "Keyboard&Mouse",
                     "action": "WeaponSelect",
-                    "isComposite": true,
+                    "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "up",
-                    "id": "78a3f344-cc2e-4b74-a10a-06a5c4131f35",
-                    "path": "<Keyboard>/1",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "WeaponSelect",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "df2c2647-fce9-4ec7-89fb-ddaf83b37b61",
+                    "name": "",
+                    "id": "9531870e-254c-48db-b803-d6c72c3624ea",
                     "path": "<Keyboard>/2",
                     "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "processors": "Scale(factor=2)",
+                    "groups": "Keyboard&Mouse",
                     "action": "WeaponSelect",
                     "isComposite": false,
-                    "isPartOfComposite": true
+                    "isPartOfComposite": false
                 },
                 {
-                    "name": "left",
-                    "id": "ac759881-a8ff-4f4b-a72e-9d8b043399e9",
+                    "name": "",
+                    "id": "9349fd18-a1ce-4ffd-acb0-defcd9044558",
                     "path": "<Keyboard>/3",
                     "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "processors": "Scale(factor=3)",
+                    "groups": "Keyboard&Mouse",
                     "action": "WeaponSelect",
                     "isComposite": false,
-                    "isPartOfComposite": true
+                    "isPartOfComposite": false
                 },
                 {
-                    "name": "right",
-                    "id": "7dc09d55-2c22-47e5-93a0-988766b76afd",
+                    "name": "",
+                    "id": "abc8aa56-b84d-43ff-8e8c-6cf9c29f20d3",
                     "path": "<Keyboard>/4",
                     "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "processors": "Scale(factor=4)",
+                    "groups": "Keyboard&Mouse",
                     "action": "WeaponSelect",
                     "isComposite": false,
-                    "isPartOfComposite": true
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "74e44a1a-2670-4d3b-bc13-be6e0f471854",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "Scale(factor=5)",
+                    "groups": "Keyboard&Mouse",
+                    "action": "WeaponSelect",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
