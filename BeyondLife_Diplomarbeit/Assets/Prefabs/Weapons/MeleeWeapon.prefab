@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 2536784384917038116}
   - component: {fileID: 5121008593407443075}
   m_Layer: 6
-  m_Name: 'MeleeWeapon '
+  m_Name: MeleeWeapon
   m_TagString: weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6536c2ceab45c2645b34251afd227501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireRate: 2
+  fireRate: 0.5
   Bullet: {fileID: 9169911938534704593}
   BulletSpawn: {fileID: 2536784384486975272}
   aoeDamageSphere: {fileID: 9169911938534704593}

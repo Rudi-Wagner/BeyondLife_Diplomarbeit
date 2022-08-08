@@ -129,9 +129,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6536c2ceab45c2645b34251afd227501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireRate: 2
+  fireRate: 1.5
   Bullet: {fileID: 7540261990294607220, guid: 2c6b2076bd09edb4ca268ecfb0a442a4, type: 3}
   BulletSpawn: {fileID: 2536784384486975272}
+  aoeDamageSphere: {fileID: 0}
   burstDelay: 0
   burstAmount: 0
   pelletAmount: 0

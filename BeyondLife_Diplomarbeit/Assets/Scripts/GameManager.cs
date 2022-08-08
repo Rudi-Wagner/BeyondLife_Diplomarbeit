@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
     [Header("Canvas")]
     public GameObject DeathCanvas;
     public GameObject PauseCanvas;
+    public GameObject toolbar;
 
     [Header("Level Stats")]
     public GameObject[] enemys;
@@ -117,6 +119,25 @@ public class GameManager : MonoBehaviour
 
             //Disable Canvas
             this.PauseCanvas.SetActive(false);
+        }
+    }
+
+    public void updateToolbar(float selection)
+    {
+        //Set the color of each toolbar Weapon
+        foreach (Transform t in this.toolbar.GetComponentsInChildren<Transform>())
+        {
+            if (t.gameObject.name.StartsWith("Weapon_")) 
+            {
+                if (t.gameObject.name == "Weapon_" + selection)
+                {
+                    t.gameObject.GetComponent<Image>().color = new Color32(0x41, 0x41, 0x41, 0xFF);
+                }
+                else
+                {
+                    t.gameObject.GetComponent<Image>().color = new Color32(0x2B, 0x2B, 0x2B, 0xFF);
+                }
+            }
         }
     }
 

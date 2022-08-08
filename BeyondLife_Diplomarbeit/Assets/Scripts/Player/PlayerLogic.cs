@@ -20,9 +20,9 @@ public class PlayerLogic : MonoBehaviour
 
     [Header("Weapons")]
     public WeaponLogic[] weapons;
+    public bool shootingAllowed = true;
     public WeaponLogic startWeapon;
     public bool weaponSwitchingAllowed = true;
-    private bool switched = false;
     public WeaponLogic weapon{ get; private set; }
     public InputAction weaponSelect{ get; private set; }
 
@@ -91,7 +91,7 @@ public class PlayerLogic : MonoBehaviour
 
     private void Update()
     {
-        if (this.InputAllowed)
+        if (this.InputAllowed && this.shootingAllowed)
         {
             //Check for weapon switch ('-1' --> keine Vorgabe)
             SwitchWeapon(-1);
@@ -238,12 +238,14 @@ public class PlayerLogic : MonoBehaviour
                     4: Rocket Launcher
                 */
 
+                //Read value
                 float weaponSelection = this.weaponSelect.ReadValue<float>();
                 if (weaponType != -1)
                 {
                     weaponSelection = -1f;
                 }
                 
+                //Deaktivate all weapons
                 foreach (Transform t in this.GetComponentsInChildren<Transform>())
                 {
                     if (t.CompareTag("weapon")) 
@@ -251,6 +253,8 @@ public class PlayerLogic : MonoBehaviour
                         t.gameObject.SetActive(false);
                     }
                 }
+
+                //Activate new weapon
                 if (weaponSelection == 1f || weaponType == 1)
                 {
                     this.weapon = this.weapons[0];
@@ -278,7 +282,10 @@ public class PlayerLogic : MonoBehaviour
                     weapon.gameObject.SetActive(true);
                 }
 
-                this.nextFire = Time.time + 0.2f;
+                this.manager.updateToolbar(weaponSelection);
+
+                //Set delay
+                this.nextFire = Time.time + this.weapon.fireRate;
             }
         }
     }
@@ -297,6 +304,12 @@ public class PlayerLogic : MonoBehaviour
         this.look.Enable();
         this.dash.Enable();
         this.weaponSelect.Enable();
+    }
+
+    public void enablePlayerControls()
+    {
+        this.InputAllowed = true;
+        this.shootingAllowed = true;
     }
 
     private void OnDisable()
