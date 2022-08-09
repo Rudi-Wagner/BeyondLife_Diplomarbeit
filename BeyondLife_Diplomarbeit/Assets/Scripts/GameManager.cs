@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
             this.nextAction = Time.time + 0.2f;
             ShowPauseMenue();
         }
+
+        updateToolbar(this.player.currentSelected);
     }
 
     public void StartLevel()
@@ -124,11 +126,13 @@ public class GameManager : MonoBehaviour
 
     public void updateToolbar(float selection)
     {
+        int cnt = 0;
         //Set the color of each toolbar Weapon
         foreach (Transform t in this.toolbar.GetComponentsInChildren<Transform>())
         {
             if (t.gameObject.name.StartsWith("Weapon_")) 
             {
+                //Draw normal Higlight
                 if (t.gameObject.name == "Weapon_" + selection)
                 {
                     t.gameObject.GetComponent<Image>().color = new Color32(0x41, 0x41, 0x41, 0xFF);
@@ -137,6 +141,32 @@ public class GameManager : MonoBehaviour
                 {
                     t.gameObject.GetComponent<Image>().color = new Color32(0x2B, 0x2B, 0x2B, 0xFF);
                 }
+
+                //Draw ammunition count
+                Transform ammo = t.GetChild(2);
+                TextMeshProUGUI tmpAmmunitionCnt = ammo.GetComponent<TextMeshProUGUI>();
+                int remainingBullets = this.player.weapons[cnt].ammunition;
+                if(remainingBullets == 360)
+                {
+                    tmpAmmunitionCnt.text = "∞";
+                }
+                else
+                {
+                    tmpAmmunitionCnt.text = remainingBullets.ToString();
+                    if (remainingBullets <= 0)
+                    {
+                        //Draw empty Magazine Highlight
+                        if (t.gameObject.name == "Weapon_" + selection)
+                        {
+                            t.gameObject.GetComponent<Image>().color = new Color32(0x96, 0x41, 0x41, 0xFF);
+                        }
+                        else
+                        {
+                            t.gameObject.GetComponent<Image>().color = new Color32(0x72, 0x1E, 0x1E, 0xFF);
+                        }
+                    }
+                }
+                cnt++;
             }
         }
     }
@@ -155,6 +185,17 @@ public class GameManager : MonoBehaviour
 
         //Reset player
         this.player.ResetState();
+
+        //Reset Weapons
+        for (int i = 0; i < this.player.weapons.Length; i++)
+        {
+            int resetTo = this.player.weapons[i].maxAmmunition;
+            if (resetTo <= 0)
+            {
+                resetTo = 360;
+            }
+            this.player.weapons[i].ammunition = resetTo;
+        }
     }
 
 

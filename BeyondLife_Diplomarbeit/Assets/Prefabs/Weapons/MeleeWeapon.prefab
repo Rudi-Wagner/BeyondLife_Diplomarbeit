@@ -130,7 +130,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6536c2ceab45c2645b34251afd227501, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireRate: 0.5
+  fireRate: 0.2
+  ammunition: 0
+  maxAmmunition: -1
   Bullet: {fileID: 9169911938534704593}
   BulletSpawn: {fileID: 2536784384486975272}
   aoeDamageSphere: {fileID: 9169911938534704593}
@@ -164,7 +166,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3965644949631645829, guid: 5f9ceb58b92bc6c43863c23bb9b1671d, type: 3}
       propertyPath: m_Radius
-      value: 0.5
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 5017227547054362685, guid: 5f9ceb58b92bc6c43863c23bb9b1671d, type: 3}
       propertyPath: m_RootOrder

@@ -6,6 +6,8 @@ public class WeaponLogic : MonoBehaviour
 {
     [Header("Stats")]
     public float fireRate;
+    public int ammunition;
+    public int maxAmmunition;
     private BulletLogic bulletLogic;
     private RocketLogic rocketLogic;
 
@@ -33,10 +35,24 @@ public class WeaponLogic : MonoBehaviour
     {
         bulletLogic = Bullet.GetComponent<BulletLogic>();
         rocketLogic = Bullet.GetComponent<RocketLogic>();
+        if(this.maxAmmunition > 0)
+        {
+            this.ammunition = this.maxAmmunition;
+        }
+        else
+        {
+            this.ammunition = 360;
+        }
+        this.gameObject.SetActive(false);
     }
     
     public void ShootBullet()
     {
+        if(this.ammunition <= 0)
+        {
+            return;
+        }
+
         switch (this.gameObject.name)
         {
             case "PistolWeapon": 
@@ -69,20 +85,25 @@ public class WeaponLogic : MonoBehaviour
                 StartCoroutine(doMelee());
                 break;
         }
-        
+
+        if(this.maxAmmunition > 0)
+        {
+            this.ammunition--;
+
+        }
     }
 
     public IEnumerator doMelee()
     {
         //Start Stabbing
-        yield return new WaitForSeconds(0.2f);
+        //yield return new WaitForSeconds(0.2f);
 
-        //Spawn Damage Sphere
-        GameObject sphere = Instantiate(this.aoeDamageSphere, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
+        //Spawn Damage Sphere                                                                                                           Child of the BulletSpawn Point
+        GameObject sphere = Instantiate(this.aoeDamageSphere, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation, this.BulletSpawn.transform);
         sphere.SetActive(true);
 
         //End Stabbing
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0f);
     }
 
     public IEnumerator doRifle()

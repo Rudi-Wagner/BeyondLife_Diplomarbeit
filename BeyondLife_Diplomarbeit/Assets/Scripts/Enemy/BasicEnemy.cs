@@ -26,6 +26,11 @@ public class BasicEnemy : EnemyLogic
         }
     }
 
+    private void Update()
+    {
+        this.weapon.gameObject.SetActive(true);
+    }
+
     private void FixedUpdate()
     {
         //Check Health Status
@@ -89,5 +94,6 @@ public class BasicEnemy : EnemyLogic
     {
         this.health = this.maxHealth;
         this.transform.position = this.startPos;
+        this.transform.rotation = Quaternion.Euler(Vector3.zero);
     }
 }

@@ -130,6 +130,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 1
+  ammunition: 0
+  maxAmmunition: 100
   Bullet: {fileID: 7540261990294607220, guid: aecf8526a21a8c644a0522a3ecc4f556, type: 3}
   BulletSpawn: {fileID: 2536784384486975272}
   aoeDamageSphere: {fileID: 0}

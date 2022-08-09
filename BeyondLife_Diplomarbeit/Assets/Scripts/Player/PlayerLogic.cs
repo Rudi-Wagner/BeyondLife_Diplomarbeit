@@ -20,9 +20,10 @@ public class PlayerLogic : MonoBehaviour
 
     [Header("Weapons")]
     public WeaponLogic[] weapons;
-    public bool shootingAllowed = true;
     public WeaponLogic startWeapon;
+    public bool shootingAllowed = true;
     public bool weaponSwitchingAllowed = true;
+    public float currentSelected { get; private set; }
     public WeaponLogic weapon{ get; private set; }
     public InputAction weaponSelect{ get; private set; }
 
@@ -87,12 +88,15 @@ public class PlayerLogic : MonoBehaviour
         this.inputControls = new PlayerControls();
 
         this.weapon = this.startWeapon;
+        this.weapon.gameObject.SetActive(true);
     }
 
     private void Update()
     {
         if (this.InputAllowed && this.shootingAllowed)
         {
+            this.weapon.gameObject.SetActive(true);
+
             //Check for weapon switch ('-1' --> keine Vorgabe)
             SwitchWeapon(-1);
 
@@ -282,7 +286,7 @@ public class PlayerLogic : MonoBehaviour
                     weapon.gameObject.SetActive(true);
                 }
 
-                this.manager.updateToolbar(weaponSelection);
+                this.currentSelected = weaponSelection;
 
                 //Set delay
                 this.nextFire = Time.time + this.weapon.fireRate;
