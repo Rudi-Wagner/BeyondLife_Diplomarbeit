@@ -10,13 +10,7 @@ public class PlayerLogic : MonoBehaviour
     public GameManager manager;
     public PlayerControls inputControls;
 
-    public SpriteRenderer spriteRenderer { get; private set; }
-    [Header("Sprites")]
-    public Sprite standing;
-    public Sprite crouching;
-    public Sprite jumping;
-    public Sprite dashing;
-    public Sprite sliding;
+    public Animator animate { get; private set; }
 
     [Header("Weapons")]
     public WeaponLogic[] weapons;
@@ -26,6 +20,7 @@ public class PlayerLogic : MonoBehaviour
     public float currentSelected { get; private set; }
     public WeaponLogic weapon{ get; private set; }
     public InputAction weaponSelect{ get; private set; }
+    public GameObject WeaponPos;
 
     [Header("Other")]
     public LayerMask wallLayer;
@@ -83,7 +78,7 @@ public class PlayerLogic : MonoBehaviour
 
     private void Awake()
     {
-        this.spriteRenderer = GetComponent<SpriteRenderer>();
+        this.animate = GetComponent<Animator>();
         this.boxCollider = GetComponent<BoxCollider2D>();
         this.inputControls = new PlayerControls();
 
@@ -120,6 +115,10 @@ public class PlayerLogic : MonoBehaviour
     {
         if (this.InputAllowed)
         {
+            //Set Position of weapon
+            this.weapon.transform.position = new Vector3(this.WeaponPos.transform.position.x, this.WeaponPos.transform.position.y, -1);
+            this.weapon.transform.rotation = this.WeaponPos.transform.rotation;
+
             //Get angle from mouse position and player positiont
             Vector2 mousePos = this.look.ReadValue<Vector2>();
             Vector3 weaponPos = this.weapon.transform.position;
@@ -153,7 +152,7 @@ public class PlayerLogic : MonoBehaviour
             }
             
 
-            //Rotate the wapon
+            //Rotate the weapon and arm
             this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward); 
         }
         

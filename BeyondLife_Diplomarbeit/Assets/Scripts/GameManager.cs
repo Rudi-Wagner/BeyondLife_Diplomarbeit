@@ -13,9 +13,11 @@ public class GameManager : MonoBehaviour
 
     [Header("Level Stats")]
     public GameObject[] enemys;
+    public GameObject[] collectibles;
     public PlayerLogic player;
     public Vector2 playerSpawn;
     private bool paused = false;
+    private Scene scene;
 
     [Header("UI Input")]
     public UIControls inputControls;
@@ -25,6 +27,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        this.scene = SceneManager.GetActiveScene();
         this.ResetState();
         this.inputControls = new UIControls();
         this.pauseMenue = this.inputControls.UI.PauseMenue;
@@ -195,6 +198,23 @@ public class GameManager : MonoBehaviour
                 resetTo = 360;
             }
             this.player.weapons[i].ammunition = resetTo;
+        }
+
+        //Spawn Collectibles
+        for (int i = 0; i < this.collectibles.Length; i++)
+        {
+            //TO:DO  Needs to be set in advance (at game start?)
+            int collectibleState = PlayerPrefs.GetInt(scene.name + "CollectibleID" + i);
+            if (collectibleState == 1)
+            {
+                this.collectibles[i].SetActive(true);
+                PlayerPrefs.SetInt(scene.name + "CollectibleID" + i, collectibleState);
+            }
+            else
+            {
+                this.collectibles[i].SetActive(false);
+                PlayerPrefs.SetInt(scene.name + "CollectibleID" + i, collectibleState);
+            }
         }
     }
 

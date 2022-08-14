@@ -13,10 +13,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (this.playerlogic.InputAllowed)
         {
-
             // Movement and round the Vector to the nearest Int
             this.playerlogic.moveDirection = this.playerlogic.move.ReadValue<Vector2>();
             this.playerlogic.moveDirection = new Vector2Int((int) Math.Round(this.playerlogic.moveDirection.x, 0), (int) Math.Round(this.playerlogic.moveDirection.y, 0));
+            this.playerlogic.animate.SetFloat("Movement", Mathf.Abs(this.playerlogic.moveDirection.x));
+
             if (this.playerlogic.moveDirection.x != 0)
             {
                 //Horizontal Movement
@@ -137,8 +138,6 @@ public class PlayerMovement : MonoBehaviour
                 1. The player presses the jump Button
                 2. The player is touching the ground or an enemy*/
 
-            //Change to Jump Sprite
-            this.playerlogic.spriteRenderer.sprite = this.playerlogic.jumping;
             //Do normal jump
             this.playerlogic.rigidBody.velocity = new Vector2(this.playerlogic.moveDirection.x * this.playerlogic.speed, this.playerlogic.jumpStrength);    
             //Set WallJumpDelay so that the player doesn't do a walljump immidiatly after the normal jump
@@ -152,8 +151,6 @@ public class PlayerMovement : MonoBehaviour
         {//Dash
             this.playerlogic.InputAllowed = false;
             this.playerlogic.alreadyDashed = true;
-            //Change to Dash Sprite
-            this.playerlogic.spriteRenderer.sprite = this.playerlogic.dashing;
             //Caluclate dash-direction
             Vector2 mousePos = this.playerlogic.look.ReadValue<Vector2>();
             var dir = Camera.main.ScreenToWorldPoint(mousePos) - this.playerlogic.transform.position;
@@ -166,8 +163,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void doCrouch()
     {//Crouching
-        //Change to crouch sprite
-        this.playerlogic.spriteRenderer.sprite = this.playerlogic.crouching;
         //Crouch
         this.sprintMult = this.playerlogic.sneakMultValue;
         this.playerlogic.boxCollider.size = new Vector2(3, 1.9f);
@@ -182,8 +177,6 @@ public class PlayerMovement : MonoBehaviour
             //Set state
             this.playerlogic.isSliding = true;
             this.playerlogic.InputAllowed = false;
-            //Change to crouch sprite
-            this.playerlogic.spriteRenderer.sprite = this.playerlogic.sliding;
             //Slide
             float slideDirection = -1; //set left
             if (this.playerlogic.faceRight)
@@ -205,7 +198,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void doStand()
     {
-        this.playerlogic.spriteRenderer.sprite = this.playerlogic.standing;
         this.playerlogic.boxCollider.size = new Vector2(3, 3.8f);
         this.playerlogic.boxCollider.offset = new Vector2(0, -0.1f);
     }
