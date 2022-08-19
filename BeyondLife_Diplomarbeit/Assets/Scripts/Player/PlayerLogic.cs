@@ -21,6 +21,7 @@ public class PlayerLogic : MonoBehaviour
     public WeaponLogic weapon{ get; private set; }
     public InputAction weaponSelect{ get; private set; }
     public GameObject WeaponPos;
+    public GameObject weaponArm;
 
     [Header("Other")]
     public LayerMask wallLayer;
@@ -116,7 +117,7 @@ public class PlayerLogic : MonoBehaviour
         if (this.InputAllowed)
         {
             //Set Position of weapon
-            this.weapon.transform.position = new Vector3(this.WeaponPos.transform.position.x, this.WeaponPos.transform.position.y, -1);
+            this.weapon.transform.position = new Vector3(this.WeaponPos.transform.position.x, this.WeaponPos.transform.position.y, -2);
             this.weapon.transform.rotation = this.WeaponPos.transform.rotation;
 
             //Get angle from mouse position and player positiont
@@ -153,7 +154,8 @@ public class PlayerLogic : MonoBehaviour
             
 
             //Rotate the weapon and arm
-            this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward); 
+            this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            this.weaponArm.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
         
     }
@@ -163,6 +165,7 @@ public class PlayerLogic : MonoBehaviour
         //Flip the player
         this.faceRight = !this.faceRight;
         this.transform.Rotate(0f, 180f, 0f);
+        this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, -1);
     }
 
     public bool checkIfGrounded(float length)

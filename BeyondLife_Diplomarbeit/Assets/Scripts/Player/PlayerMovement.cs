@@ -36,10 +36,12 @@ public class PlayerMovement : MonoBehaviour
             if (this.playerlogic.sprint.ReadValue<float>() == 1)
             {
                 this.sprintMult = this.playerlogic.sprintMultValue;
+                this.playerlogic.animate.speed = 2;
             }
             else if(this.playerlogic.sprint.ReadValue<float>() == 0)
             {
                 this.sprintMult = 1;
+                this.playerlogic.animate.speed = 1;
             }
 
             //Face direction
