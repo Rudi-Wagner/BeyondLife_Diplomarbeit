@@ -127,6 +127,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void MoveToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
     public void updateToolbar(float selection)
     {
         int cnt = 0;
