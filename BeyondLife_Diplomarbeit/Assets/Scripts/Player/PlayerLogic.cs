@@ -9,8 +9,9 @@ public class PlayerLogic : MonoBehaviour
     [Header("Player")]
     public GameManager manager;
     public PlayerControls inputControls;
-
     public Animator animate { get; private set; }
+    public Vector2 collierSize { get; private set; }
+    public Vector2 collierOffset { get; private set; }
 
     [Header("Weapons")]
     public WeaponLogic[] weapons;
@@ -20,8 +21,12 @@ public class PlayerLogic : MonoBehaviour
     public float currentSelected { get; private set; }
     public WeaponLogic weapon{ get; private set; }
     public InputAction weaponSelect{ get; private set; }
+
+    [Header("WeaponArm")]
     public GameObject WeaponPos;
-    public GameObject weaponArm;
+    public GameObject weaponArmSolver;
+    public GameObject weaponArmShoulder;
+    public float distanceFromShoulder;
 
     [Header("Other")]
     public LayerMask wallLayer;
@@ -85,6 +90,9 @@ public class PlayerLogic : MonoBehaviour
 
         this.weapon = this.startWeapon;
         this.weapon.gameObject.SetActive(true);
+
+        this.collierSize = this.boxCollider.size;
+        this.collierOffset = this.boxCollider.offset;
     }
 
     private void Update()
@@ -122,16 +130,16 @@ public class PlayerLogic : MonoBehaviour
 
             //Get angle from mouse position and player positiont
             Vector2 mousePos = this.look.ReadValue<Vector2>();
-            Vector3 weaponPos = this.weapon.transform.position;
+            Vector3 startPos = this.weaponArmShoulder.transform.position;
 
             //Caluclate the angle
-            var dir = Camera.main.ScreenToWorldPoint(mousePos) - weaponPos;
+            var dir = Camera.main.ScreenToWorldPoint(mousePos) - startPos;
             var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
             //Lock angle
             //Dont allow the weapon to move above a certain angle (to prevent shooting yourself)
 
-            if (this.faceRight)
+            /*if (this.faceRight)
             {
                 if (angle >= 45.0f)
                 {
@@ -150,12 +158,14 @@ public class PlayerLogic : MonoBehaviour
                 {
                     angle = -135.0f;
                 }
-            }
+            }*/
             
 
-            //Rotate the weapon and arm
-            this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-            this.weaponArm.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            //Rotate the weapon
+            //this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+            //Rotate WeaponArm                        Start Position                              Direction        Distance
+            this.weaponArmSolver.transform.position = this.weaponArmShoulder.transform.position + dir.normalized * this.distanceFromShoulder;
         }
         
     }
@@ -171,18 +181,18 @@ public class PlayerLogic : MonoBehaviour
     public bool checkIfGrounded(float length)
     {
         //Check if the player is on the ground
-        return Physics2D.BoxCast(this.transform.position, new Vector2(3, 0.5f), 0f, Vector2.down, length, this.wallLayer);
+        return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, length, this.wallLayer);
     }
 
     public bool checkIfEnemyBelow(float length)
     {
         //Check if the player is on an enemy to allow a jump
-        return Physics2D.BoxCast(this.transform.position, new Vector2(3, 0.5f), 0f, Vector2.down, length, this.enemyLayer);
+        return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, length, this.enemyLayer);
     }
 
     public bool checkIfWall(float length, Vector2 direction)
     {
-        return Physics2D.BoxCast(this.transform.position, new Vector2(3, 0.5f), 0f, direction, length, this.wallLayer);
+        return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, direction, length, this.wallLayer);
     }
 
     private void OnTriggerEnter2D(Collider2D other)

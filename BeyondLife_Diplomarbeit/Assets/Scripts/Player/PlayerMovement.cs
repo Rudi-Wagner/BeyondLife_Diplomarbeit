@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     public PlayerLogic playerlogic;
 
     private float sprintMult = 1;
+    private float BoxCastLength = 5; 
 
     private void FixedUpdate()
     {
@@ -57,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
             //Spezial Movement
             if(this.playerlogic.moveDirection.y >= 0.5f)
             {//Start JumpLogic
+                Debug.Log("seas");
                 doJump();
             }
 
@@ -77,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
             if (this.playerlogic.dash.ReadValue<float>() == 1)
             {//Dash
                 doDash();
-            } else if (this.playerlogic.checkIfGrounded(2))
+            } else if (this.playerlogic.checkIfGrounded(this.BoxCastLength))
             {//Reset dash on grounded
                 this.playerlogic.alreadyDashed = false;
             }
@@ -103,8 +105,8 @@ public class PlayerMovement : MonoBehaviour
             5. There is no wall above the player
         */
         
-        if (!this.playerlogic.checkIfGrounded(3) && this.playerlogic.moveDirection.y >= 0.5f  
-        && Time.time > this.playerlogic.nextWallJump && !this.playerlogic.checkIfWall(2, Vector2.up))
+        if (!this.playerlogic.checkIfGrounded(this.BoxCastLength) && this.playerlogic.moveDirection.y >= 0.5f  
+        && Time.time > this.playerlogic.nextWallJump && !this.playerlogic.checkIfWall(this.BoxCastLength, Vector2.up))
         {
             //Disable player control for 0.2 seconds
             this.playerlogic.InputAllowed = false;
@@ -134,7 +136,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void doJump()
     {
-        if((this.playerlogic.checkIfGrounded(2) || this.playerlogic.checkIfEnemyBelow(2)) && !(this.playerlogic.checkIfWall(1, Vector2.up)))
+        if((this.playerlogic.checkIfGrounded(this.BoxCastLength) || this.playerlogic.checkIfEnemyBelow(this.BoxCastLength)) && !(this.playerlogic.checkIfWall(1, Vector2.up)))
         {//Vertical Movement (only jumping)
             /*Only do a normal jump when:
                 1. The player presses the jump Button
@@ -149,7 +151,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void doDash()
     {
-        if(!this.playerlogic.checkIfGrounded(2) && !this.playerlogic.alreadyDashed)
+        if(!this.playerlogic.checkIfGrounded(this.BoxCastLength) && !this.playerlogic.alreadyDashed)
         {//Dash
             this.playerlogic.InputAllowed = false;
             this.playerlogic.alreadyDashed = true;
@@ -200,7 +202,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void doStand()
     {
-        this.playerlogic.boxCollider.size = new Vector2(3, 3.8f);
-        this.playerlogic.boxCollider.offset = new Vector2(0, -0.1f);
+        this.playerlogic.boxCollider.size = this.playerlogic.collierSize;
+        this.playerlogic.boxCollider.offset = this.playerlogic.collierOffset;
     }
 }
