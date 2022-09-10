@@ -46,7 +46,7 @@ public class WeaponLogic : MonoBehaviour
         this.gameObject.SetActive(false);
     }
     
-    public void ShootBullet()
+    public void ShootBullet(bool damagePlayer)
     {
         if(this.ammunition <= 0)
         {
@@ -57,6 +57,7 @@ public class WeaponLogic : MonoBehaviour
         {
             case "PistolWeapon": 
                 spawnedBullet = Instantiate(this.Bullet, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
+                spawnedBullet.GetComponent<BulletLogic>().damagePlayer = damagePlayer;
                 rigidBody = spawnedBullet.GetComponent<Rigidbody2D>();
                 rigidBody.velocity = BulletSpawn.transform.right * this.bulletLogic.speed;
                 break;
@@ -68,13 +69,14 @@ public class WeaponLogic : MonoBehaviour
                 break;
 
             case "RifleWeapon": 
-                StartCoroutine(doRifle());
+                StartCoroutine(doRifle(damagePlayer));
                 break;
             
             case "ShotgunWeapon": 
                 for (int i = 0; i < pelletAmount; i++)
                 {
                     spawnedBullet = Instantiate(this.Bullet, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
+                    spawnedBullet.GetComponent<BulletLogic>().damagePlayer = damagePlayer;
                     float angle = Random.Range(-spreadAngle, spreadAngle);
                     rigidBody = spawnedBullet.GetComponent<Rigidbody2D>();
                     rigidBody.velocity = BulletSpawn.transform.right * this.bulletLogic.speed + new Vector3(0, angle, 0);
@@ -89,7 +91,6 @@ public class WeaponLogic : MonoBehaviour
         if(this.maxAmmunition > 0)
         {
             this.ammunition--;
-
         }
     }
 
@@ -106,11 +107,12 @@ public class WeaponLogic : MonoBehaviour
         yield return new WaitForSeconds(0f);
     }
 
-    public IEnumerator doRifle()
+    public IEnumerator doRifle(bool damagePlayer)
     {
         for (int i = 0; i < burstAmount; i++)
         {
             spawnedBullet = Instantiate(this.Bullet, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
+            spawnedBullet.GetComponent<BulletLogic>().damagePlayer = damagePlayer;
             rigidBody = spawnedBullet.GetComponent<Rigidbody2D>();
             rigidBody.velocity = BulletSpawn.transform.right * this.bulletLogic.speed;
             

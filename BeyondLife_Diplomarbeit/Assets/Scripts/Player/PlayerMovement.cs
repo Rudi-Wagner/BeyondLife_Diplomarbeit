@@ -21,6 +21,15 @@ public class PlayerMovement : MonoBehaviour
 
             if (this.playerlogic.moveDirection.x != 0)
             {
+                //Flip Player on movement
+                if (this.playerlogic.moveDirection.x == 1 && !this.playerlogic.faceRight)
+                {
+                    this.playerlogic.Flip();
+                } 
+                else if (this.playerlogic.moveDirection.x == -1 && this.playerlogic.faceRight)
+                {
+                    this.playerlogic.Flip();
+                }
                 //Horizontal Movement
                 this.playerlogic.rigidBody.velocity = new Vector2(this.playerlogic.moveDirection.x * this.playerlogic.speed * this.sprintMult, this.playerlogic.rigidBody.velocity.y);
             }
@@ -38,14 +47,17 @@ public class PlayerMovement : MonoBehaviour
             {
                 this.sprintMult = this.playerlogic.sprintMultValue;
                 this.playerlogic.animate.speed = 2;
+                this.playerlogic.animate.SetFloat("Sprinting", Mathf.Abs(this.playerlogic.moveDirection.x * 2));
+                this.playerlogic.animate.SetFloat("Movement", 0);
             }
             else if(this.playerlogic.sprint.ReadValue<float>() == 0)
             {
                 this.sprintMult = 1;
-                this.playerlogic.animate.speed = 1;
+                this.playerlogic.animate.speed = 1.35f; //Normal Walk-animation speed
+                this.playerlogic.animate.SetFloat("Sprinting", 0);
             }
 
-            //Face direction
+            /*//Flip player on mouse position
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(this.playerlogic.look.ReadValue<Vector2>()) - this.playerlogic.transform.position;
             if (mousePos.x > 0 && !this.playerlogic.faceRight)
             {
@@ -53,22 +65,23 @@ public class PlayerMovement : MonoBehaviour
             } else if (mousePos.x < 0 && this.playerlogic.faceRight)
             {
                 this.playerlogic.Flip();
-            }
+            }*/
 
             //Spezial Movement
             if(this.playerlogic.moveDirection.y >= 0.5f)
             {//Start JumpLogic
-                Debug.Log("seas");
                 doJump();
             }
 
             if(this.playerlogic.moveDirection.y <= -0.5f && this.playerlogic.sprint.ReadValue<float>() == 0)
             {//Start CrouchLogic
                 doCrouch();
+                this.playerlogic.animate.SetBool("Crouching", true);
             }
             else if(!(this.playerlogic.checkIfWall(1, Vector2.up)))
             {//Reset to StandLogic
                 doStand();
+                this.playerlogic.animate.SetBool("Crouching", false);
             }
 
             if(this.playerlogic.moveDirection.y <= -0.5f && this.playerlogic.sprint.ReadValue<float>() == 1)
@@ -169,7 +182,8 @@ public class PlayerMovement : MonoBehaviour
     {//Crouching
         //Crouch
         this.sprintMult = this.playerlogic.sneakMultValue;
-        this.playerlogic.boxCollider.size = new Vector2(3, 1.9f);
+        this.playerlogic.boxCollider.size = new Vector2(2, 6.2f);
+        this.playerlogic.boxCollider.offset = new Vector2(0.3f, -1.2f);
     }
 
     public void doSlide()

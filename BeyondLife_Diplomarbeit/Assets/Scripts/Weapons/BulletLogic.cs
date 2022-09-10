@@ -12,6 +12,7 @@ public class BulletLogic : MonoBehaviour
     [Header("Other")]
     public Rigidbody2D rigidBody;
     public GameObject Bullet;
+    public bool damagePlayer = true;
 
     private void Start()
     {

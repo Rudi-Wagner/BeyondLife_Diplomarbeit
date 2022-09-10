@@ -26,6 +26,7 @@ public class PlayerLogic : MonoBehaviour
     public GameObject WeaponPos;
     public GameObject weaponArmSolver;
     public GameObject weaponArmShoulder;
+    public GameObject weaponArmHand;
     public float distanceFromShoulder;
 
     [Header("Other")]
@@ -108,7 +109,7 @@ public class PlayerLogic : MonoBehaviour
             if(this.fire.ReadValue<float>() == 1 && Time.time > this.nextFire)
             {
                 this.nextFire = Time.time + this.weapon.fireRate;
-                this.weapon.ShootBullet();
+                this.weapon.ShootBullet(false);
             }
         }
 
@@ -162,10 +163,11 @@ public class PlayerLogic : MonoBehaviour
             
 
             //Rotate the weapon
-            //this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            this.weaponArmHand.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
             //Rotate WeaponArm                        Start Position                              Direction        Distance
             this.weaponArmSolver.transform.position = this.weaponArmShoulder.transform.position + dir.normalized * this.distanceFromShoulder;
+            Debug.DrawRay(this.weaponArmShoulder.transform.position, dir.normalized * this.distanceFromShoulder * 2f, Color.green);
         }
         
     }
@@ -198,8 +200,14 @@ public class PlayerLogic : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         //Take bullet damage
-        if (other.gameObject.layer == LayerMask.NameToLayer("bullet")) {
-            takeBullet(other.gameObject);
+        if (other.gameObject.layer == LayerMask.NameToLayer("bullet")) 
+        {
+            BulletLogic doDamageToPlayer = other.gameObject.GetComponent<BulletLogic>();
+
+            if (doDamageToPlayer == null || doDamageToPlayer.damagePlayer)
+            {
+                takeBullet(other.gameObject);
+            }
         }
     }
 

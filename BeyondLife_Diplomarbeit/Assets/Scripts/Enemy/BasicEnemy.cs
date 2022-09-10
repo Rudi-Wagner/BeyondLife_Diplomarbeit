@@ -44,7 +44,7 @@ public class BasicEnemy : EnemyLogic
         if (RayCastToPlayer() && Time.time > this.nextFire)
         {
             nextFire = Time.time + this.weapon.fireRate;
-            this.weapon.ShootBullet();
+            this.weapon.ShootBullet(true);
             
         }
     }
