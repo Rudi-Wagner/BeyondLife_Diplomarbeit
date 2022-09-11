@@ -84,9 +84,14 @@ public class PlayerMovement : MonoBehaviour
                 this.playerlogic.animate.SetBool("Crouching", false);
             }
 
-            if(this.playerlogic.moveDirection.y <= -0.5f && this.playerlogic.sprint.ReadValue<float>() == 1)
+            if(this.playerlogic.moveDirection.y <= -0.5f && this.playerlogic.sprint.ReadValue<float>() == 1 && Mathf.Abs(this.playerlogic.moveDirection.x) > 0)
             {//Start SlideLogic
+                this.playerlogic.animate.SetBool("Sliding", true);
                 doSlide();
+            }
+            else
+            {
+                this.playerlogic.animate.SetBool("Sliding", false);
             }
 
             if (this.playerlogic.dash.ReadValue<float>() == 1)
@@ -182,8 +187,6 @@ public class PlayerMovement : MonoBehaviour
     {//Crouching
         //Crouch
         this.sprintMult = this.playerlogic.sneakMultValue;
-        this.playerlogic.boxCollider.size = new Vector2(2, 6.2f);
-        this.playerlogic.boxCollider.offset = new Vector2(0.3f, -1.2f);
     }
 
     public void doSlide()
@@ -202,7 +205,6 @@ public class PlayerMovement : MonoBehaviour
                 slideDirection = 1;    //set right
             }
             this.playerlogic.rigidBody.velocity = new Vector2(this.playerlogic.slideSpeed * slideDirection, 0);
-            this.playerlogic.boxCollider.size = new Vector2(3, 1.9f);
             Invoke(nameof(stopSliding), this.playerlogic.slideDuration);
         }
     }
@@ -211,6 +213,7 @@ public class PlayerMovement : MonoBehaviour
     {
         this.playerlogic.isSliding = false;
         this.playerlogic.InputAllowed = true;
+        this.playerlogic.animate.SetBool("Sliding", false);
         doStand();
     }
 
