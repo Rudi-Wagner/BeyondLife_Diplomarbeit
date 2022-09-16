@@ -32,6 +32,12 @@ public class PlayerMovement : MonoBehaviour
                 }
                 //Horizontal Movement
                 this.playerlogic.rigidBody.velocity = new Vector2(this.playerlogic.moveDirection.x * this.playerlogic.speed * this.sprintMult, this.playerlogic.rigidBody.velocity.y);
+            
+                //Check if falling
+                if (!this.playerlogic.checkIfGrounded(this.BoxCastLength))
+                {
+                    StartCoroutine(fallingAnimation());
+                }
             }
             else
             {
@@ -43,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
             }
 
             //Check if sprinting
-            if (this.playerlogic.sprint.ReadValue<float>() == 1)
+            if (this.playerlogic.sprint.ReadValue<float>() == 1 && !this.playerlogic.animate.GetBool("Crouching"))
             {
                 this.sprintMult = this.playerlogic.sprintMultValue;
                 this.playerlogic.animate.speed = 2;
@@ -78,15 +84,16 @@ public class PlayerMovement : MonoBehaviour
                 doCrouch();
                 this.playerlogic.animate.SetBool("Crouching", true);
             }
-            else if(!(this.playerlogic.checkIfWall(1, Vector2.up)))
+            else if(!(this.playerlogic.checkIfWall(this.BoxCastLength, Vector2.up)))
             {//Reset to StandLogic
                 doStand();
                 this.playerlogic.animate.SetBool("Crouching", false);
             }
 
-            if(this.playerlogic.moveDirection.y <= -0.5f && this.playerlogic.sprint.ReadValue<float>() == 1 && Mathf.Abs(this.playerlogic.moveDirection.x) > 0)
+
+            if(this.playerlogic.moveDirection.y <= -0.5f && this.playerlogic.sprint.ReadValue<float>() == 1 
+            && Mathf.Abs(this.playerlogic.moveDirection.x) > 0 && !this.playerlogic.animate.GetBool("Crouching"))
             {//Start SlideLogic
-                this.playerlogic.animate.SetBool("Sliding", true);
                 doSlide();
             }
             else
@@ -154,17 +161,48 @@ public class PlayerMovement : MonoBehaviour
 
     public void doJump()
     {
-        if((this.playerlogic.checkIfGrounded(this.BoxCastLength) || this.playerlogic.checkIfEnemyBelow(this.BoxCastLength)) && !(this.playerlogic.checkIfWall(1, Vector2.up)))
+        if((this.playerlogic.checkIfGrounded(this.BoxCastLength) || this.playerlogic.checkIfEnemyBelow(this.BoxCastLength)) && !(this.playerlogic.checkIfWall(this.BoxCastLength, Vector2.up)))
         {//Vertical Movement (only jumping)
             /*Only do a normal jump when:
                 1. The player presses the jump Button
                 2. The player is touching the ground or an enemy*/
 
+            StartCoroutine(jumpAnimation());
             //Do normal jump
             this.playerlogic.rigidBody.velocity = new Vector2(this.playerlogic.moveDirection.x * this.playerlogic.speed, this.playerlogic.jumpStrength);    
             //Set WallJumpDelay so that the player doesn't do a walljump immidiatly after the normal jump
             this.playerlogic.nextWallJump = Time.time + this.playerlogic.wallJumpDelay;     
         }
+    }
+
+    private IEnumerator jumpAnimation()
+    {
+        float delayInBetween = 0.2f;
+        this.playerlogic.animate.SetBool("Jumping", true);
+        yield return new WaitForSeconds(delayInBetween);
+        this.playerlogic.animate.SetBool("Jumping", false);
+        yield return new WaitForSeconds(delayInBetween);
+        while(!this.playerlogic.checkIfGrounded(this.BoxCastLength))
+        {
+            yield return null;
+        }
+        this.playerlogic.animate.SetBool("Landing", true);
+        yield return new WaitForSeconds(delayInBetween);
+        this.playerlogic.animate.SetBool("Landing", false);
+    }
+
+    private IEnumerator fallingAnimation()
+    {
+        float delayInBetween = 0.2f;
+        this.playerlogic.animate.SetBool("Falling", true);
+        while(!this.playerlogic.checkIfGrounded(this.BoxCastLength))
+        {
+            yield return null;
+        }
+        this.playerlogic.animate.SetBool("Landing", true);
+        yield return new WaitForSeconds(delayInBetween);
+        this.playerlogic.animate.SetBool("Landing", false);
+        this.playerlogic.animate.SetBool("Falling", false);
     }
 
     public void doDash()
@@ -193,6 +231,7 @@ public class PlayerMovement : MonoBehaviour
     {//Sliding
         if (!this.playerlogic.isSliding && Time.time > this.playerlogic.nextSlide)
         {
+            this.playerlogic.animate.SetBool("Sliding", true);
             //Set the WallJumpDelay to disable another WallJump in a given time
             this.playerlogic.nextSlide = Time.time + this.playerlogic.slideDelay;
             //Set state
@@ -214,7 +253,15 @@ public class PlayerMovement : MonoBehaviour
         this.playerlogic.isSliding = false;
         this.playerlogic.InputAllowed = true;
         this.playerlogic.animate.SetBool("Sliding", false);
-        doStand();
+        if(!(this.playerlogic.checkIfWall(this.BoxCastLength, Vector2.up)))
+        {//Reset to StandLogic
+            doStand();
+        }
+        else
+        {
+            doCrouch();
+            this.playerlogic.animate.SetBool("Crouching", true);
+        }
     }
 
     public void doStand()
