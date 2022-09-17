@@ -133,6 +133,8 @@ public class PlayerMovement : MonoBehaviour
         if (!this.playerlogic.checkIfGrounded(this.BoxCastLength) && this.playerlogic.moveDirection.y >= 0.5f  
         && Time.time > this.playerlogic.nextWallJump && !this.playerlogic.checkIfWall(this.BoxCastLength, Vector2.up))
         {
+            this.playerlogic.animate.SetBool("WallJumping", true);
+
             //Disable player control for 0.2 seconds
             this.playerlogic.InputAllowed = false;
             Invoke(nameof(this.ActivateInput), 0.2f);
@@ -150,13 +152,13 @@ public class PlayerMovement : MonoBehaviour
             //Do a Walljump
             this.playerlogic.rigidBody.velocity = new Vector2(jumpDirection * this.playerlogic.speed * -2, this.playerlogic.jumpStrength);
             this.playerlogic.Flip();
-            return;
         }
     }
 
     public void ActivateInput()
     {
         this.playerlogic.InputAllowed = true;
+        this.playerlogic.animate.SetBool("WallJumping", false);
     }
 
     public void doJump()
