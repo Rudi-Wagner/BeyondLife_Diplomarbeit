@@ -24,7 +24,8 @@ public class PlayerLogic : MonoBehaviour
 
     [Header("WeaponArm")]
     public GameObject WeaponPos;
-    public GameObject weaponArmSolver;
+    public GameObject weaponLimbSolver;
+    public GameObject weaponCCDSolver;
     public GameObject weaponArmShoulder;
     public GameObject weaponArmHand;
     public float distanceFromShoulder;
@@ -121,13 +122,12 @@ public class PlayerLogic : MonoBehaviour
         }
     }
 
-    private void LateUpdate () 
+    private void LateUpdate() 
     {
         if (this.InputAllowed)
         {
             //Set Position of weapon
             this.weapon.transform.position = new Vector3(this.WeaponPos.transform.position.x, this.WeaponPos.transform.position.y, -2);
-            this.weapon.transform.rotation = this.WeaponPos.transform.rotation;
 
             //Get angle from mouse position and player positiont
             Vector2 mousePos = this.look.ReadValue<Vector2>();
@@ -137,36 +137,15 @@ public class PlayerLogic : MonoBehaviour
             var dir = Camera.main.ScreenToWorldPoint(mousePos) - startPos;
             var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-            //Lock angle
-            //Dont allow the weapon to move above a certain angle (to prevent shooting yourself)
-
-            /*if (this.faceRight)
-            {
-                if (angle >= 45.0f)
-                {
-                    angle = 45.0f;
-                } else if (angle <= -45.0f)
-                {
-                    angle = -45.0f;
-                }
-            }
-            else
-            {
-                if (angle <= 135.0f && angle >= 0.0f)  //Needs the extra 'angle >= 0.0f' because the angle isn't measured in 360°, it is in 180° and -180°
-                {
-                    angle = 135.0f;
-                } else if (angle >= -135.0f && angle <= 0.0f)
-                {
-                    angle = -135.0f;
-                }
-            }*/
-            
-
             //Rotate the weapon
-            this.weaponArmHand.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-            //Rotate WeaponArm                        Start Position                              Direction        Distance
-            this.weaponArmSolver.transform.position = this.weaponArmShoulder.transform.position + dir.normalized * this.distanceFromShoulder;
+            //               Direction        Distance
+            var direction = dir.normalized * this.distanceFromShoulder;
+
+            //Rotate WeaponArm                        Start Position
+            this.weaponLimbSolver.transform.position = this.weaponArmShoulder.transform.position + direction;
+            this.weaponCCDSolver.transform.position = this.weaponArmShoulder.transform.position + direction * 2f;
             Debug.DrawRay(this.weaponArmShoulder.transform.position, dir.normalized * this.distanceFromShoulder * 2f, Color.green);
         }
         
