@@ -124,31 +124,32 @@ public class PlayerLogic : MonoBehaviour
 
     private void LateUpdate() 
     {
+        //Set Position of weapon
+        this.weapon.transform.position = new Vector3(this.WeaponPos.transform.position.x, this.WeaponPos.transform.position.y, -2);        
         if (this.InputAllowed)
         {
-            //Set Position of weapon
-            this.weapon.transform.position = new Vector3(this.WeaponPos.transform.position.x, this.WeaponPos.transform.position.y, -2);
+            if (!this.animate.GetBool("Sliding"))
+            {
+                //Get angle from mouse position and player positiont
+                Vector2 mousePos = this.look.ReadValue<Vector2>();
+                Vector3 startPos = this.weaponArmShoulder.transform.position;
 
-            //Get angle from mouse position and player positiont
-            Vector2 mousePos = this.look.ReadValue<Vector2>();
-            Vector3 startPos = this.weaponArmShoulder.transform.position;
+                //Caluclate the angle
+                var dir = Camera.main.ScreenToWorldPoint(mousePos) - startPos;
+                var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
-            //Caluclate the angle
-            var dir = Camera.main.ScreenToWorldPoint(mousePos) - startPos;
-            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                //Rotate the weapon
+                this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-            //Rotate the weapon
-            this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                //               Direction        Distance
+                var direction = dir.normalized * this.distanceFromShoulder;
 
-            //               Direction        Distance
-            var direction = dir.normalized * this.distanceFromShoulder;
-
-            //Rotate WeaponArm                        Start Position
-            this.weaponLimbSolver.transform.position = this.weaponArmShoulder.transform.position + direction;
-            this.weaponCCDSolver.transform.position = this.weaponArmShoulder.transform.position + direction * 2f;
-            Debug.DrawRay(this.weaponArmShoulder.transform.position, dir.normalized * this.distanceFromShoulder * 2f, Color.green);
+                //Rotate WeaponArm                        Start Position
+                this.weaponLimbSolver.transform.position = this.weaponArmShoulder.transform.position + direction;
+                this.weaponCCDSolver.transform.position = this.weaponArmShoulder.transform.position + direction * 2f;
+                Debug.DrawRay(this.weaponArmShoulder.transform.position, dir.normalized * this.distanceFromShoulder * 2f, Color.green);
+            }
         }
-        
     }
 
     public void Flip()
