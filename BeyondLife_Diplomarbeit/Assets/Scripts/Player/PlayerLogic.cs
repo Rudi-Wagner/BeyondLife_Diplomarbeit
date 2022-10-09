@@ -118,7 +118,8 @@ public class PlayerLogic : MonoBehaviour
         if(this.health <= 0 && !this.immortal)
         {
             this.manager.ShowDeathScreen();
-            //Destroy(gameObject);
+            this.animate.Play("Player_Idle");
+            ResetAnimator();
         }
     }
 
@@ -135,19 +136,33 @@ public class PlayerLogic : MonoBehaviour
                 Vector3 startPos = this.weaponArmShoulder.transform.position;
 
                 //Caluclate the angle
-                var dir = Camera.main.ScreenToWorldPoint(mousePos) - startPos;
+                Vector3 dir = Camera.main.ScreenToWorldPoint(mousePos) - startPos;
                 var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
                 //Rotate the weapon
                 this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
-                //               Direction        Distance
-                var direction = dir.normalized * this.distanceFromShoulder;
+                //Vector between Shoulder and Hand
+                //                  Direction        Distance
+                Vector3 direction = dir.normalized * this.distanceFromShoulder;
+
+                //Strecht the Vector if below the minimum
+                var x = direction.x;
+                var y = direction.y;
+                float minLength = 1.5f;
+                while (Mathf.Sqrt(x*x + y*y) < minLength)
+                {
+                    direction = direction * 1.05f;
+                    x = direction.x;
+                    y = direction.y;
+                }
+                //Debug.Log("x: " + x + " ,y: " + y + " ,z: " + z + "         " + Mathf.Sqrt(x*x + y*y));
+                
 
                 //Rotate WeaponArm                        Start Position
                 this.weaponLimbSolver.transform.position = this.weaponArmShoulder.transform.position + direction;
                 this.weaponCCDSolver.transform.position = this.weaponArmShoulder.transform.position + direction * 2f;
-                Debug.DrawRay(this.weaponArmShoulder.transform.position, dir.normalized * this.distanceFromShoulder * 2f, Color.green);
+                //Debug.DrawRay(this.weaponArmShoulder.transform.position, direction, Color.green);
             }
         }
     }
@@ -331,5 +346,17 @@ public class PlayerLogic : MonoBehaviour
         this.gameObject.transform.position = this.manager.playerSpawn;
         this.InputAllowed = true;
         this.health = this.maxHealth;
+    }
+
+    public void ResetAnimator()
+    {
+        this.animate.SetFloat("Movement", 0);
+        this.animate.SetFloat("Sprinting", 0);
+        this.animate.SetBool("Crouching", false);
+        this.animate.SetBool("Sliding", false);
+        this.animate.SetBool("Jumping", false);
+        this.animate.SetBool("Landing", false);
+        this.animate.SetBool("Falling", false);
+        this.animate.SetBool("WallJumping", false);
     }
 }
