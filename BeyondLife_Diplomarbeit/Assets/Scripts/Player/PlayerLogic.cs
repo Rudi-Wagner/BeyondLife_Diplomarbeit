@@ -140,7 +140,17 @@ public class PlayerLogic : MonoBehaviour
                 var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
                 //Rotate the weapon
-                this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                float meleeMin = 0f;
+                if (this.weapon.gameObject.name != "MeleeWeapon")
+                {
+                    this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+                }
+                else if (this.weapon.gameObject.name == "MeleeWeapon")
+                {
+                    this.weapon.transform.rotation = this.weaponArmHand.transform.rotation * Quaternion.Euler(0, 0, 190);
+                    meleeMin = 0.5f;
+                }
+                
 
                 //Vector between Shoulder and Hand
                 //                  Direction        Distance
@@ -149,7 +159,7 @@ public class PlayerLogic : MonoBehaviour
                 //Strecht the Vector if below the minimum
                 var x = direction.x;
                 var y = direction.y;
-                float minLength = 1.5f;
+                float minLength = 1.5f + meleeMin;
                 while (Mathf.Sqrt(x*x + y*y) < minLength)
                 {
                     direction = direction * 1.05f;
