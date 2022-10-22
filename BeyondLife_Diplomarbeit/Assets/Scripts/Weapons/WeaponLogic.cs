@@ -19,6 +19,9 @@ public class WeaponLogic : MonoBehaviour
 
     [Header("Melee Knife")]
     public GameObject aoeDamageSphere;
+    public AnimatorOverrideController overrideControllerStartMelee;
+    public AnimatorOverrideController overrideControllerEndMelee;
+    public AnimatorOverrider overrider;
 
     [Header("Rifle burst")]
     public float burstDelay;
@@ -45,7 +48,7 @@ public class WeaponLogic : MonoBehaviour
         }
         this.gameObject.SetActive(false);
     }
-    
+
     public void ShootBullet(bool damagePlayer)
     {
         if(this.ammunition <= 0)
@@ -85,6 +88,7 @@ public class WeaponLogic : MonoBehaviour
             
             case "MeleeWeapon": 
                 StartCoroutine(doMelee());
+                
                 break;
         }
 
@@ -96,15 +100,25 @@ public class WeaponLogic : MonoBehaviour
 
     public IEnumerator doMelee()
     {
-        //Start Stabbing
-        //yield return new WaitForSeconds(0.2f);
+        //Get Player Script & disable PlayerControl
+        PlayerLogic player = this.gameObject.transform.parent.gameObject.GetComponent<PlayerLogic>();
+        player.InputAllowed = false;
+        player.rigidBody.velocity = Vector2.zero;
+        overrider.SetAnimations(overrideControllerStartMelee);
+        
+        //Get/Reset Arm Position
+        Transform LimbSolver = this.gameObject.transform.parent.gameObject.transform.Find("rightArmLimbSolver2D");
+        LimbSolver.position = player.gameObject.transform.position + new Vector3(-1.458f, -0.638f, 0f);
+        Transform CCDSolver = this.gameObject.transform.parent.gameObject.transform.Find("rightArmCCDSolver2D");
+        CCDSolver.position = player.gameObject.transform.position + new Vector3(-1.066f, -1.358f, 0f);
 
-        //Spawn Damage Sphere                                                                                                           Child of the BulletSpawn Point
-        GameObject sphere = Instantiate(this.aoeDamageSphere, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation, this.BulletSpawn.transform);
-        sphere.SetActive(true);
+        //Start Animation
+        player.animate.Play("Player_Placeholder");
 
         //End Stabbing
-        yield return new WaitForSeconds(0f);
+        yield return new WaitForSeconds(1.4f);
+        overrider.SetAnimations(overrideControllerEndMelee);
+        player.InputAllowed = true;
     }
 
     public IEnumerator doRifle(bool damagePlayer)

@@ -125,33 +125,45 @@ public class PlayerLogic : MonoBehaviour
 
     private void LateUpdate() 
     {
+        //Get angle from mouse position and player positiont
+        Vector2 mousePos = this.look.ReadValue<Vector2>();
+        Vector3 startPos = this.weaponArmShoulder.transform.position;
+
         //Set Position of weapon
         this.weapon.transform.position = new Vector3(this.WeaponPos.transform.position.x, this.WeaponPos.transform.position.y, -2);        
+        //Caluclate the angle
+        Vector3 dir = Camera.main.ScreenToWorldPoint(mousePos) - startPos;
+        var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        //Rotate the weapon
+        float meleeMin = 0f;
+        if (this.weapon.gameObject.name != "MeleeWeapon")
+        {
+            this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        }
+        else if (this.weapon.gameObject.name == "MeleeWeapon")
+        {
+            //Rotate Melee
+            this.weapon.transform.rotation = this.weaponArmHand.transform.rotation * Quaternion.Euler(0, 0, 190);
+            meleeMin = 0.5f;
+
+            //Fix Arm
+            float x1 = -1.458f;
+            float x2 = -1.066f;
+            if (!this.faceRight)
+            {
+                x1 = -x1;
+                x2 = -x2;
+            }
+            weaponLimbSolver.transform.position = this.gameObject.transform.position + new Vector3(x1, -0.638f, 0f);
+            weaponCCDSolver.transform.position = this.gameObject.transform.position + new Vector3(x2, -1.358f, 0f);
+            return; //Arm Movement not allowed --> leave early
+        }
+        
         if (this.InputAllowed)
         {
             if (!this.animate.GetBool("Sliding"))
             {
-                //Get angle from mouse position and player positiont
-                Vector2 mousePos = this.look.ReadValue<Vector2>();
-                Vector3 startPos = this.weaponArmShoulder.transform.position;
-
-                //Caluclate the angle
-                Vector3 dir = Camera.main.ScreenToWorldPoint(mousePos) - startPos;
-                var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-                //Rotate the weapon
-                float meleeMin = 0f;
-                if (this.weapon.gameObject.name != "MeleeWeapon")
-                {
-                    this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-                }
-                else if (this.weapon.gameObject.name == "MeleeWeapon")
-                {
-                    this.weapon.transform.rotation = this.weaponArmHand.transform.rotation * Quaternion.Euler(0, 0, 190);
-                    meleeMin = 0.5f;
-                }
-                
-
                 //Vector between Shoulder and Hand
                 //                  Direction        Distance
                 Vector3 direction = dir.normalized * this.distanceFromShoulder;
@@ -172,7 +184,7 @@ public class PlayerLogic : MonoBehaviour
                 //Rotate WeaponArm                        Start Position
                 this.weaponLimbSolver.transform.position = this.weaponArmShoulder.transform.position + direction;
                 this.weaponCCDSolver.transform.position = this.weaponArmShoulder.transform.position + direction * 2f;
-                //Debug.DrawRay(this.weaponArmShoulder.transform.position, direction, Color.green);
+                Debug.DrawRay(this.weaponArmShoulder.transform.position, direction, Color.green);
             }
         }
     }
