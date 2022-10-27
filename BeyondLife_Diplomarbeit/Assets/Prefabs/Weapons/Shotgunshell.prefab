@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 7540261990294607220}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.74, y: -0.49, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: -1}
+  m_LocalScale: {x: 10, y: 10, z: -1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,8 +76,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: a3a23dc801e10614791d7f86114a3a78, type: 3}
-  m_Color: {r: 0.5849056, g: 0.55083483, b: 0.40005338, a: 1}
+  m_Sprite: {fileID: 21300000, guid: f049a6cf7f7f85241b3b477251758f9d, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -141,3 +141,4 @@ MonoBehaviour:
   lifeSpan: 1
   rigidBody: {fileID: -1499912249613489502}
   Bullet: {fileID: 7540261990294607220}
+  damagePlayer: 1
