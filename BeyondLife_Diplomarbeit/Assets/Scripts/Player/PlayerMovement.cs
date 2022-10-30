@@ -238,7 +238,6 @@ public class PlayerMovement : MonoBehaviour
             this.playerlogic.nextSlide = Time.time + this.playerlogic.slideDelay;
             //Set state
             this.playerlogic.isSliding = true;
-            this.playerlogic.InputAllowed = false;
             //Slide
             float slideDirection = -1; //set left
             if (this.playerlogic.faceRight)

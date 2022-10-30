@@ -17,7 +17,7 @@ public class PlayerLogic : MonoBehaviour
     public WeaponLogic[] weapons;
     public WeaponLogic startWeapon;
     public bool shootingAllowed = true;
-    public bool weaponSwitchingAllowed = true;
+    public bool weaponUpdate = true;
     public float currentSelected { get; private set; }
     public WeaponLogic weapon{ get; private set; }
     public InputAction weaponSelect{ get; private set; }
@@ -29,6 +29,7 @@ public class PlayerLogic : MonoBehaviour
     public GameObject weaponArmShoulder;
     public GameObject weaponArmHand;
     public float distanceFromShoulder;
+    public bool allowArmMovement = true;
 
     [Header("Other")]
     public LayerMask wallLayer;
@@ -125,44 +126,20 @@ public class PlayerLogic : MonoBehaviour
 
     private void LateUpdate() 
     {
-        //Get angle from mouse position and player positiont
-        Vector2 mousePos = this.look.ReadValue<Vector2>();
-        Vector3 startPos = this.weaponArmShoulder.transform.position;
-
-        //Set Position of weapon
-        this.weapon.transform.position = new Vector3(this.WeaponPos.transform.position.x, this.WeaponPos.transform.position.y, -2);        
-        //Caluclate the angle
-        Vector3 dir = Camera.main.ScreenToWorldPoint(mousePos) - startPos;
-        var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-        //Rotate the weapon
-        float meleeMin = 0f;
-        if (this.weapon.gameObject.name != "MeleeWeapon")
+        if (this.InputAllowed && this.weaponUpdate)
         {
-            this.weapon.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        }
-        else if (this.weapon.gameObject.name == "MeleeWeapon")
-        {
-            //Rotate Melee
-            this.weapon.transform.rotation = this.weaponArmHand.transform.rotation * Quaternion.Euler(0, 0, 190);
-            meleeMin = 0.5f;
+            //Get angle from mouse position and player positiont
+            Vector2 mousePos = this.look.ReadValue<Vector2>();
+            Vector3 startPos = this.weaponArmShoulder.transform.position;
 
-            //Fix Arm
-            float x1 = -1.458f;
-            float x2 = -1.066f;
-            if (!this.faceRight)
-            {
-                x1 = -x1;
-                x2 = -x2;
-            }
-            weaponLimbSolver.transform.position = this.gameObject.transform.position + new Vector3(x1, -0.638f, 0f);
-            weaponCCDSolver.transform.position = this.gameObject.transform.position + new Vector3(x2, -1.358f, 0f);
-            return; //Arm Movement not allowed --> leave early
-        }
-        
-        if (this.InputAllowed)
-        {
-            if (!this.animate.GetBool("Sliding"))
+            //Set Position of weapon
+            this.weapon.transform.position = new Vector3(this.WeaponPos.transform.position.x, this.WeaponPos.transform.position.y, -2);        
+            //Caluclate the angle
+            Vector3 dir = Camera.main.ScreenToWorldPoint(mousePos) - startPos;
+            var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+            //Set Rotation/Position for WeaponArm
+            if (this.allowArmMovement)
             {
                 //Vector between Shoulder and Hand
                 //                  Direction        Distance
@@ -171,7 +148,7 @@ public class PlayerLogic : MonoBehaviour
                 //Strecht the Vector if below the minimum
                 var x = direction.x;
                 var y = direction.y;
-                float minLength = 1.5f + meleeMin;
+                float minLength = 1.5f;
                 while (Mathf.Sqrt(x*x + y*y) < minLength)
                 {
                     direction = direction * 1.05f;
@@ -185,6 +162,41 @@ public class PlayerLogic : MonoBehaviour
                 this.weaponLimbSolver.transform.position = this.weaponArmShoulder.transform.position + direction;
                 this.weaponCCDSolver.transform.position = this.weaponArmShoulder.transform.position + direction * 2f;
                 Debug.DrawRay(this.weaponArmShoulder.transform.position, direction, Color.green);
+            }
+
+            //Rotate the weapon
+            if (this.weapon.gameObject.name != "MeleeWeapon")
+            {//Normal Rotation for WeaponArm
+                this.weapon.transform.rotation = Quaternion.Euler(0, 0, angle);
+                if (!this.faceRight)
+                {//Add 180° to Weapon-rotation to fix pointing direction
+                    this.weapon.transform.rotation = this.weapon.transform.rotation * Quaternion.Euler(180, 0, 0);
+                }
+            }
+            else if (this.weapon.gameObject.name == "MeleeWeapon")
+            {//Rotation for the melee Weapon
+                this.weapon.transform.rotation = this.weaponArmHand.transform.rotation * Quaternion.Euler(0, 0, 190);
+
+                //Fix Arm
+                    //Standing
+                float x1 = -1.458f;
+                float x2 = -1.066f;
+                    //Kneeling
+                float xk1 = 0f;
+                float xk2 = 0f;
+
+                if (!this.faceRight)
+                {
+                    if (true)
+                    {
+                        
+                    }
+                    x1 = -x1;
+                    x2 = -x2;
+                }
+                weaponLimbSolver.transform.position = this.gameObject.transform.position + new Vector3(x1, -0.638f, 0f);
+                weaponCCDSolver.transform.position = this.gameObject.transform.position + new Vector3(x2, -1.358f, 0f);
+                return; //Arm Movement not allowed --> leave early
             }
         }
     }
@@ -267,7 +279,7 @@ public class PlayerLogic : MonoBehaviour
 
     public void SwitchWeapon(int weaponType)
     {
-        if (this.weaponSwitchingAllowed)
+        if (this.weaponUpdate)
         {
             if (this.weaponSelect.ReadValue<float>() != 0 || weaponType != -1)
             {

@@ -88,7 +88,6 @@ public class WeaponLogic : MonoBehaviour
             
             case "MeleeWeapon": 
                 StartCoroutine(doMelee());
-                
                 break;
         }
 
@@ -102,7 +101,7 @@ public class WeaponLogic : MonoBehaviour
     {
         //Get Player Script & disable PlayerControl
         PlayerLogic player = this.gameObject.transform.parent.gameObject.GetComponent<PlayerLogic>();
-        player.InputAllowed = false;
+        player.allowArmMovement = false;
         player.rigidBody.velocity = Vector2.zero;
         overrider.SetAnimations(overrideControllerStartMelee);
         
@@ -118,7 +117,7 @@ public class WeaponLogic : MonoBehaviour
         //End Stabbing
         yield return new WaitForSeconds(1.4f);
         overrider.SetAnimations(overrideControllerEndMelee);
-        player.InputAllowed = true;
+        player.allowArmMovement = true;
     }
 
     public IEnumerator doRifle(bool damagePlayer)
