@@ -205,6 +205,17 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(delayInBetween);
         this.playerlogic.animate.SetBool("Landing", false);
         this.playerlogic.animate.SetBool("Falling", false);
+
+        this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.playerlogic.overrideControllerResetOverrider);
+        this.playerlogic.allowArmMovement = true;
+        if (this.playerlogic.faceRight)
+        {
+            this.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
+        }
+        else
+        {
+            this.gameObject.transform.rotation = Quaternion.Euler(0, -180, 0);
+        }
     }
 
     public void doDash()
@@ -220,6 +231,10 @@ public class PlayerMovement : MonoBehaviour
             //Do normal dash
             this.playerlogic.rigidBody.velocity = Vector3.ClampMagnitude(dir, 100f);    
             Invoke(nameof(this.ActivateInput), 0.2f);  
+
+            this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.playerlogic.overrideControllerStartFlip);
+            this.playerlogic.allowArmMovement = false;
+            this.playerlogic.animate.Play("Player_Placeholder");
         }
     }
 

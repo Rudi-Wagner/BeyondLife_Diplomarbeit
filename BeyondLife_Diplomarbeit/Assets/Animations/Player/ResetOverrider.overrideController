@@ -6,6 +6,6 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: EndMeleeAttack
+  m_Name: ResetOverrider
   m_Controller: {fileID: 9100000, guid: 3e2538acc8f97834c9f0af27035ca2a2, type: 2}
   m_Clips: []

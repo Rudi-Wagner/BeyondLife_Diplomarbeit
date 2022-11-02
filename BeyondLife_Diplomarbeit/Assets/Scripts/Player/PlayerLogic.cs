@@ -9,7 +9,6 @@ public class PlayerLogic : MonoBehaviour
     [Header("Player")]
     public GameManager manager;
     public PlayerControls inputControls;
-    public Animator animate { get; private set; }
     public Vector2 collierSize { get; private set; }
     public Vector2 collierOffset { get; private set; }
 
@@ -73,8 +72,14 @@ public class PlayerLogic : MonoBehaviour
     public bool alreadyDashed = false;
     public float dashLength;
 
+    //Animator
+    [Header("Animatior")]
+    public AnimatorOverrideController overrideControllerStartFlip;
+    public AnimatorOverrideController overrideControllerResetOverrider;
+    public Animator animate { get; private set; }
+
     public float nextFire  { get; private set; } = 0f;
-    public bool faceRight { get; private set; }  = true;
+    public bool faceRight = true;
     
     //Input & MoveDirection
     [Header("Direction")]
@@ -178,19 +183,11 @@ public class PlayerLogic : MonoBehaviour
                 this.weapon.transform.rotation = this.weaponArmHand.transform.rotation * Quaternion.Euler(0, 0, 190);
 
                 //Fix Arm
-                    //Standing
                 float x1 = -1.458f;
                 float x2 = -1.066f;
-                    //Kneeling
-                float xk1 = 0f;
-                float xk2 = 0f;
 
                 if (!this.faceRight)
                 {
-                    if (true)
-                    {
-                        
-                    }
                     x1 = -x1;
                     x2 = -x2;
                 }
