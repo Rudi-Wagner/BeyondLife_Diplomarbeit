@@ -260,6 +260,8 @@ public class PlayerMovement : MonoBehaviour
                 slideDirection = 1;    //set right
             }
             this.playerlogic.rigidBody.velocity = new Vector2(this.playerlogic.slideSpeed * slideDirection, 0);
+            this.playerlogic.InputAllowed = false;
+            Debug.Log("seas");
             Invoke(nameof(stopSliding), this.playerlogic.slideDuration);
         }
     }
