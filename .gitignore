@@ -59,4 +59,5 @@ sysinfo.txt
 crashlytics-build.properties
 
 BeyondLife_Diplomarbeit/UserSettings/EditorUserSettings.asset
-BeyondLife_Diplomarbeit/UserSettings/Layouts/default-2021.dwlt
+BeyondLife_Diplomarbeit/UserSettings/Layouts/*
+
