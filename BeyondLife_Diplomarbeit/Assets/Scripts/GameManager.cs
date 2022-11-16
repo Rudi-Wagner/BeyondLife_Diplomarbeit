@@ -100,6 +100,7 @@ public class GameManager : MonoBehaviour
 
             //Disable player movement
             this.player.InputAllowed = false;
+            this.player.weaponUpdate = false;
             this.player.rigidBody.isKinematic = true;
             this.prevMovement = this.player.rigidBody.velocity;
             this.player.rigidBody.velocity = Vector2.zero;
@@ -120,6 +121,7 @@ public class GameManager : MonoBehaviour
 
             //Enable player movement
             this.player.InputAllowed = true;
+            this.player.weaponUpdate = true;
             this.player.rigidBody.isKinematic = false;
             this.player.rigidBody.velocity = this.prevMovement;
 

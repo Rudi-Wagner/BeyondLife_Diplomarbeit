@@ -13,6 +13,7 @@ public class WeaponLogic : MonoBehaviour
 
     [Header("Other")]
     public GameObject Bullet = null;
+    public bool freezeRotation = false;
     public GameObject BulletSpawn = null;
     private GameObject spawnedBullet;
     private Rigidbody2D rigidBody;

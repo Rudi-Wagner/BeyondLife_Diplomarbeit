@@ -131,7 +131,7 @@ public class PlayerLogic : MonoBehaviour
 
     private void LateUpdate() 
     {
-        if (this.InputAllowed && this.weaponUpdate)
+        if (this.InputAllowed || this.weaponUpdate)
         {
             //Get angle from mouse position and player positiont
             Vector2 mousePos = this.look.ReadValue<Vector2>();
@@ -170,18 +170,18 @@ public class PlayerLogic : MonoBehaviour
             }
 
             //Rotate the weapon
-            if (this.weapon.gameObject.name != "MeleeWeapon")
-            {//Normal Rotation for WeaponArm
+            if (this.weapon.gameObject.name != "MeleeWeapon" && !this.weapon.freezeRotation)
+            {//Normal Rotation for Weapon
                 this.weapon.transform.rotation = Quaternion.Euler(0, 0, angle);
                 if (!this.faceRight)
                 {//Add 180° to Weapon-rotation to fix pointing direction
                     this.weapon.transform.rotation = this.weapon.transform.rotation * Quaternion.Euler(180, 0, 0);
                 }
             }
-            else if (this.weapon.gameObject.name == "MeleeWeapon")
+            else if (this.weapon.gameObject.name == "MeleeWeapon" && !this.weapon.freezeRotation)
             {//Rotation for the melee Weapon
                 this.weapon.transform.rotation = this.weaponArmHand.transform.rotation * Quaternion.Euler(0, 0, 190);
-
+                
                 //Fix Arm
                 float x1 = -1.458f;
                 float x2 = -1.066f;

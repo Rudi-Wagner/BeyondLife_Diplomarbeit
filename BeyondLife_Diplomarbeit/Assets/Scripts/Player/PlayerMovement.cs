@@ -63,16 +63,6 @@ public class PlayerMovement : MonoBehaviour
                 this.playerlogic.animate.SetFloat("Sprinting", 0);
             }
 
-            /*//Flip player on mouse position
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(this.playerlogic.look.ReadValue<Vector2>()) - this.playerlogic.transform.position;
-            if (mousePos.x > 0 && !this.playerlogic.faceRight)
-            {
-                this.playerlogic.Flip();
-            } else if (mousePos.x < 0 && this.playerlogic.faceRight)
-            {
-                this.playerlogic.Flip();
-            }*/
-
             //Spezial Movement
             if(this.playerlogic.moveDirection.y >= 0.5f)
             {//Start JumpLogic
@@ -203,11 +193,15 @@ public class PlayerMovement : MonoBehaviour
         }
         this.playerlogic.animate.SetBool("Landing", true);
         yield return new WaitForSeconds(delayInBetween);
+
+        //Reset Variables
         this.playerlogic.animate.SetBool("Landing", false);
         this.playerlogic.animate.SetBool("Falling", false);
-
-        this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.playerlogic.overrideControllerResetOverrider);
         this.playerlogic.allowArmMovement = true;
+        this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.playerlogic.overrideControllerResetOverrider);
+        
+
+        //Set Player face direction
         if (this.playerlogic.faceRight)
         {
             this.gameObject.transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -235,6 +229,7 @@ public class PlayerMovement : MonoBehaviour
             this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.playerlogic.overrideControllerStartFlip);
             this.playerlogic.allowArmMovement = false;
             this.playerlogic.animate.Play("Player_Placeholder");
+            StartCoroutine(fallingAnimation());
         }
     }
 
@@ -253,6 +248,8 @@ public class PlayerMovement : MonoBehaviour
             this.playerlogic.nextSlide = Time.time + this.playerlogic.slideDelay;
             //Set state
             this.playerlogic.isSliding = true;
+            this.playerlogic.allowArmMovement = false;
+            this.playerlogic.weapon.freezeRotation = true;
             //Slide
             float slideDirection = -1; //set left
             if (this.playerlogic.faceRight)
@@ -261,7 +258,6 @@ public class PlayerMovement : MonoBehaviour
             }
             this.playerlogic.rigidBody.velocity = new Vector2(this.playerlogic.slideSpeed * slideDirection, 0);
             this.playerlogic.InputAllowed = false;
-            Debug.Log("seas");
             Invoke(nameof(stopSliding), this.playerlogic.slideDuration);
         }
     }
@@ -271,6 +267,8 @@ public class PlayerMovement : MonoBehaviour
         this.playerlogic.isSliding = false;
         this.playerlogic.InputAllowed = true;
         this.playerlogic.animate.SetBool("Sliding", false);
+        this.playerlogic.allowArmMovement = true;
+        this.playerlogic.weapon.freezeRotation = false;
         if(!(this.playerlogic.checkIfWall(this.BoxCastLength, Vector2.up)))
         {//Reset to StandLogic
             doStand();
