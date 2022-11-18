@@ -56,7 +56,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2536784384917038118}
-  m_LocalRotation: {x: -0, y: -0, z: -0.95953524, w: 0.28158864}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.64, y: -0.11, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_ConstrainProportionsScale: 0
@@ -133,8 +133,12 @@ MonoBehaviour:
   ammunition: 0
   maxAmmunition: 100
   Bullet: {fileID: 7540261990294607220, guid: aecf8526a21a8c644a0522a3ecc4f556, type: 3}
+  freezeRotation: 0
   BulletSpawn: {fileID: 2536784384486975272}
   aoeDamageSphere: {fileID: 0}
+  overrideControllerStartMelee: {fileID: 0}
+  overrideControllerEndMelee: {fileID: 0}
+  overrider: {fileID: 0}
   burstDelay: 0.1
   burstAmount: 3
   pelletAmount: 0

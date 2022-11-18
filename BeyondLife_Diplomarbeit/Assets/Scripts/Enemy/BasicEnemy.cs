@@ -9,21 +9,11 @@ public class BasicEnemy : EnemyLogic
     public float health;
     public float maxHealth;
     private float nextFire = 0f;
-    public Vector2 startPos;
-
-    //Other
-    [Header("Other")]
-    public WeaponLogic weapon;
+    private Vector2 startPos;
 
     private void Awake()
     {
-        foreach (Transform t in GetComponentsInChildren<Transform>())
-        {
-            if (t.CompareTag("weapon")) 
-            {
-                this.weapon = t.gameObject.GetComponent<WeaponLogic>();
-            }
-        }
+        startPos = this.transform.position;
     }
 
     private void Update()

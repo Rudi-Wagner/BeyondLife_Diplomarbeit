@@ -282,7 +282,5 @@ public class PlayerMovement : MonoBehaviour
 
     public void doStand()
     {
-        this.playerlogic.boxCollider.size = this.playerlogic.collierSize;
-        this.playerlogic.boxCollider.offset = this.playerlogic.collierOffset;
     }
 }

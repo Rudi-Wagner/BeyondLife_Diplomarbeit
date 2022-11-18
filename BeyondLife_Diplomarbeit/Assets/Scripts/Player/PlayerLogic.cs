@@ -9,9 +9,6 @@ public class PlayerLogic : MonoBehaviour
     [Header("Player")]
     public GameManager manager;
     public PlayerControls inputControls;
-    public Vector2 collierSize { get; private set; }
-    public Vector2 collierOffset { get; private set; }
-
     [Header("Weapons")]
     public WeaponLogic[] weapons;
     public WeaponLogic startWeapon;
@@ -34,7 +31,6 @@ public class PlayerLogic : MonoBehaviour
     public LayerMask wallLayer;
     public LayerMask enemyLayer;
     public Rigidbody2D rigidBody;
-    public BoxCollider2D boxCollider { get; private set; }
     
     //Player Values
     [Header("Health")]
@@ -93,14 +89,10 @@ public class PlayerLogic : MonoBehaviour
     private void Awake()
     {
         this.animate = GetComponent<Animator>();
-        this.boxCollider = GetComponent<BoxCollider2D>();
         this.inputControls = new PlayerControls();
 
         this.weapon = this.startWeapon;
         this.weapon.gameObject.SetActive(true);
-
-        this.collierSize = this.boxCollider.size;
-        this.collierOffset = this.boxCollider.offset;
     }
 
     private void Update()
