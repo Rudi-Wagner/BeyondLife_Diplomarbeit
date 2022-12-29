@@ -72,6 +72,7 @@ public class PlayerLogic : MonoBehaviour
     [Header("Animatior")]
     public AnimatorOverrideController overrideControllerStartFlip;
     public AnimatorOverrideController overrideControllerResetOverrider;
+    public AnimatorOverrideController overrideControllerStartDeath;
     public Animator animate { get; private set; }
 
     public float nextFire  { get; private set; } = 0f;
@@ -115,10 +116,18 @@ public class PlayerLogic : MonoBehaviour
         //Check Health Status
         if(this.health <= 0 && !this.immortal)
         {
-            this.manager.ShowDeathScreen();
-            this.animate.Play("Player_Idle");
-            ResetAnimator();
+            startDeathProcess();
         }
+    }
+
+    public void startDeathProcess()
+    {
+        this.manager.ShowDeathScreen();
+        this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.overrideControllerStartDeath);
+        this.allowArmMovement = false;
+        this.animate.SetBool("ReleasePlaceholder", false);
+        this.animate.Play("Player_Placeholder");
+        this.weapon.gameObject.SetActive(false);
     }
 
     private void LateUpdate() 
@@ -369,10 +378,12 @@ public class PlayerLogic : MonoBehaviour
         this.gameObject.transform.position = this.manager.playerSpawn;
         this.InputAllowed = true;
         this.health = this.maxHealth;
+        ResetAnimator();
     }
 
     public void ResetAnimator()
     {
+        this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.overrideControllerResetOverrider);
         this.animate.SetFloat("Movement", 0);
         this.animate.SetFloat("Sprinting", 0);
         this.animate.SetBool("Crouching", false);
@@ -381,5 +392,7 @@ public class PlayerLogic : MonoBehaviour
         this.animate.SetBool("Landing", false);
         this.animate.SetBool("Falling", false);
         this.animate.SetBool("WallJumping", false);
+        this.animate.SetBool("ReleasePlaceholder", true);
+        this.animate.Play("Player_Idle");
     }
 }

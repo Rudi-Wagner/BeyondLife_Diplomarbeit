@@ -79,7 +79,6 @@ public class GameManager : MonoBehaviour
         //Disable player movement
         this.player.InputAllowed = false;
         this.player.rigidBody.velocity = Vector2.zero;
-        this.player.animate.speed = 0;
 
         this.DeathCanvas.SetActive(true);
     }
@@ -194,10 +193,13 @@ public class GameManager : MonoBehaviour
         this.DeathCanvas.SetActive(false);
         
         //Enable all enemys
-        for (int i = 0; i < this.enemys.Length; i++)
+        if (this.enemys != null && this.enemys.Length > 0)
         {
-            this.enemys[i].SetActive(true);
-            this.enemys[i].BroadcastMessage("ResetState");      //Reset Enemy without script name
+            for (int i = 0; i < this.enemys.Length; i++)
+            {
+                this.enemys[i].SetActive(true);
+                this.enemys[i].BroadcastMessage("ResetState");      //Reset Enemy without script name
+            }
         }
 
         //Reset player

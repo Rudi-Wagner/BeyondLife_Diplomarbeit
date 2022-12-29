@@ -228,6 +228,7 @@ public class PlayerMovement : MonoBehaviour
 
             this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.playerlogic.overrideControllerStartFlip);
             this.playerlogic.allowArmMovement = false;
+            this.playerlogic.animate.SetBool("ReleasePlaceholder", true);
             this.playerlogic.animate.Play("Player_Placeholder");
             StartCoroutine(fallingAnimation());
         }
