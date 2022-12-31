@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class BasicEnemy : EnemyLogic
 {
+    public Animator animate { get; private set; }
+
     //Stats
     [Header("Stats")]
     public float health;
+    public float testMovement = 0;
     public float maxHealth;
     private float nextFire = 0f;
     private Vector2 startPos;
@@ -14,11 +17,13 @@ public class BasicEnemy : EnemyLogic
     private void Awake()
     {
         startPos = this.transform.position;
+        this.animate = GetComponent<Animator>();
     }
 
     private void Update()
     {
         this.weapon.gameObject.SetActive(true);
+        this.animate.SetFloat("Movement", testMovement);
     }
 
     private void FixedUpdate()
