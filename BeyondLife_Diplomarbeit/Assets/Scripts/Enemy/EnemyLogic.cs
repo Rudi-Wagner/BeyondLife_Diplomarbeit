@@ -47,8 +47,7 @@ public class EnemyLogic : MonoBehaviour
         {
             //Get angle from mouse position and player positiont
             GameObject player = GameObject.FindWithTag("Player");
-            PlayerLogic comp = player.GetComponent<PlayerLogic>();
-            Vector2 aimAtPos = comp.look.ReadValue<Vector2>();
+            Vector2 aimAtPos = player.transform.position;
             Vector3 startPos = this.weaponArmShoulder.transform.position;
 
             //Set Position of weapon

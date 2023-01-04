@@ -140,6 +140,7 @@ public class PlayerLogic : MonoBehaviour
 
             //Set Position of weapon
             this.weapon.transform.position = new Vector3(this.WeaponPos.transform.position.x, this.WeaponPos.transform.position.y, -2);        
+            
             //Caluclate the angle
             Vector3 dir = Camera.main.ScreenToWorldPoint(mousePos) - startPos;
             var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -167,7 +168,8 @@ public class PlayerLogic : MonoBehaviour
                 //Rotate WeaponArm                        Start Position
                 this.weaponLimbSolver.transform.position = this.weaponArmShoulder.transform.position + direction;
                 this.weaponCCDSolver.transform.position = this.weaponArmShoulder.transform.position + direction * 2f;
-                Debug.DrawRay(this.weaponArmShoulder.transform.position, direction, Color.green);
+                Debug.DrawRay(this.weaponArmShoulder.transform.position, direction, Color.red);
+                Debug.DrawRay(this.weaponArmShoulder.transform.position + direction, direction, Color.green);
             }
 
             //Rotate the weapon

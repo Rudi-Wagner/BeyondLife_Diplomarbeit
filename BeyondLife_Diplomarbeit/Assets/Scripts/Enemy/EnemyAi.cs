@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAi : MonoBehaviour
 {
     // Reference to the player's position
     public Transform player;
@@ -10,20 +10,17 @@ public class EnemyAI : MonoBehaviour
     // Reference to the enemy's navmesh agent
     public UnityEngine.AI.NavMeshAgent nav;
 
-    // Reference to the enemy's animator component
-    public Animator anim;
-
     // Reference to the enemy's shooting component
     public WeaponLogic shooter;
 
     // The maximum distance at which the enemy will start chasing the player
-    public float chaseDistance = 10.0f;
+    public float chaseDistance = 100.0f;
 
     // The maximum distance at which the enemy will start shooting at the player
-    public float shootDistance = 5.0f;
+    public float shootDistance = 50.0f;
 
     // The distance at which the enemy will start running away from the player
-    public float fleeDistance = 2.0f;
+    public float fleeDistance = 5.0f;
 
     // The patrol waypoints for the enemy
     public Transform[] patrolWaypoints;
@@ -41,7 +38,7 @@ public class EnemyAI : MonoBehaviour
         if (distance < chaseDistance)
         {
             // Set the enemy's destination to the player's position
-            nav.SetDestination(player.position);
+            //nav.SetDestination(player.position);
 
             // If the distance between the enemy and the player is less than the shoot distance
             if (distance < shootDistance)
@@ -53,14 +50,14 @@ public class EnemyAI : MonoBehaviour
             else if (distance < fleeDistance)
             {
                 // Make the enemy run away from the player
-                nav.SetDestination(transform.position - player.position);
+                //nav.SetDestination(transform.position - player.position);
             }
         }
         // If the distance between the enemy and the player is greater than the chase distance
         else
         {
             // Make the enemy patrol
-            Patrol();
+            //Patrol();
         }
     }
 

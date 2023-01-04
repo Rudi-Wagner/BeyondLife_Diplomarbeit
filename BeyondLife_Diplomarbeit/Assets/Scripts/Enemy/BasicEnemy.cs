@@ -36,15 +36,15 @@ public class BasicEnemy : EnemyLogic
         }
 
         //Firing
-        if (RayCastToPlayer() && Time.time > this.nextFire)
+        /*if (RayCastToPlayer() && Time.time > this.nextFire)
         {
             nextFire = Time.time + this.weapon.fireRate;
             this.weapon.ShootBullet(true);
             
-        }
+        }*/
     }
 
-    private bool RayCastToPlayer()
+    /*private bool RayCastToPlayer()
     {
         //Debug.DrawRay(this.weapon.BulletSpawn.transform.position, Vector2.right * 50f, Color.green);
         RaycastHit2D hit = Physics2D.Raycast(this.weapon.BulletSpawn.transform.position, this.weapon.BulletSpawn.transform.right, 50f);
@@ -56,7 +56,7 @@ public class BasicEnemy : EnemyLogic
             }
 	    }
         return false;
-    }
+    }*/
 
     protected override void destroySelf(GameObject other)
     {
