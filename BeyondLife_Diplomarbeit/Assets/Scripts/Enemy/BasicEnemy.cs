@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BasicEnemy : EnemyLogic
 {
+    [SerializeField] Transform target;
+    UnityEngine.AI.NavMeshAgent agent;
+
     public Animator animate { get; private set; }
 
     //Stats
@@ -18,14 +21,25 @@ public class BasicEnemy : EnemyLogic
     {
         startPos = this.transform.position;
         this.animate = GetComponent<Animator>();
+        // Paul working here
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        agent.updateRotation= false;
+        agent.updateUpAxis= false;
+
+
+
     }
 
     private void Update()
     {
         this.weapon.gameObject.SetActive(true);
         this.animate.SetFloat("Movement", testMovement);
-    }
 
+        agent.SetDestination(target.position);
+    }
+  
+    
+   
     private void FixedUpdate()
     {
         //Check Health Status
