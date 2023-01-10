@@ -1632,8 +1632,7 @@ MonoBehaviour:
   DeathCanvas: {fileID: 1856709023}
   PauseCanvas: {fileID: 1621245573}
   toolbar: {fileID: 1079123153}
-  enemys:
-  - {fileID: 1656731048}
+  enemys: []
   collectibles: []
   player: {fileID: 297395244}
   playerSpawn: {x: 0, y: -2}
@@ -9001,11 +9000,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!1 &1656731048 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1024552363358317333, guid: c2da2a02a3abea0479550987bca4ccd3, type: 3}
-  m_PrefabInstance: {fileID: 1024552363857141437}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1676139987
 GameObject:
   m_ObjectHideFlags: 0
@@ -15984,15 +15978,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1024552362501539127, guid: c2da2a02a3abea0479550987bca4ccd3, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.13261987
+      value: 0.13261922
       objectReference: {fileID: 0}
     - target: {fileID: 1024552362501539127, guid: c2da2a02a3abea0479550987bca4ccd3, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.991167
+      value: 0.99116707
       objectReference: {fileID: 0}
     - target: {fileID: 1024552362732468355, guid: c2da2a02a3abea0479550987bca4ccd3, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.11601114
+      value: -0.116010815
       objectReference: {fileID: 0}
     - target: {fileID: 1024552362732468355, guid: c2da2a02a3abea0479550987bca4ccd3, type: 3}
       propertyPath: m_LocalRotation.z
@@ -16061,6 +16055,10 @@ PrefabInstance:
     - target: {fileID: 1024552363358317333, guid: c2da2a02a3abea0479550987bca4ccd3, type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 1024552363358317333, guid: c2da2a02a3abea0479550987bca4ccd3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1024552363697983407, guid: c2da2a02a3abea0479550987bca4ccd3, type: 3}
       propertyPath: m_LocalRotation.w
@@ -16297,11 +16295,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6304328748100637748, guid: 67632bd77c622dc48a45304f29195e15, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.21176106
+      value: -0.21176155
       objectReference: {fileID: 0}
     - target: {fileID: 6304328748100637748, guid: 67632bd77c622dc48a45304f29195e15, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.97732145
+      value: 0.9773214
       objectReference: {fileID: 0}
     - target: {fileID: 6304328748100637748, guid: 67632bd77c622dc48a45304f29195e15, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

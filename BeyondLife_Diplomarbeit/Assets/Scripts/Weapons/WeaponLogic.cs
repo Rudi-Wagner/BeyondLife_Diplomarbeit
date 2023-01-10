@@ -103,6 +103,7 @@ public class WeaponLogic : MonoBehaviour
         //Get Player Script & disable PlayerControl
         PlayerLogic player = this.gameObject.transform.parent.gameObject.GetComponent<PlayerLogic>();
         player.allowArmMovement = false;
+        player.InputAllowed = false;
         player.rigidBody.velocity = Vector2.zero;
         overrider.SetAnimations(overrideControllerStartMelee);
         
@@ -116,9 +117,10 @@ public class WeaponLogic : MonoBehaviour
         player.animate.Play("Player_Placeholder");
 
         //End Stabbing
-        yield return new WaitForSeconds(1.4f);
+        yield return new WaitForSeconds(1f);
         overrider.SetAnimations(overrideControllerEndMelee);
         player.allowArmMovement = true;
+        player.InputAllowed = true;
     }
 
     public IEnumerator doRifle(bool damagePlayer)
