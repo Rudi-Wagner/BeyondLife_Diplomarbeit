@@ -76,7 +76,6 @@ public class PlayerMovement : MonoBehaviour
             }
             else if(!(this.playerlogic.checkIfWall(this.BoxCastLength, Vector2.up)))
             {//Reset to StandLogic
-                doStand();
                 this.playerlogic.animate.SetBool("Crouching", false);
             }
 
@@ -88,7 +87,8 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                this.playerlogic.animate.SetBool("Sliding", false);
+                this.playerlogic.animate.SetBool("SlidingEnd", false);
+                this.playerlogic.animate.SetBool("SlidingStart", false);
             }
 
             if (this.playerlogic.dash.ReadValue<float>() == 1)
@@ -244,14 +244,13 @@ public class PlayerMovement : MonoBehaviour
     {//Sliding
         if (!this.playerlogic.isSliding && Time.time > this.playerlogic.nextSlide)
         {
-            this.playerlogic.animate.SetBool("Sliding", true);
-            //Set the WallJumpDelay to disable another WallJump in a given time
+            this.playerlogic.animate.SetBool("SlidingStart", true);
+
             this.playerlogic.nextSlide = Time.time + this.playerlogic.slideDelay;
             //Set state
             this.playerlogic.isSliding = true;
             this.playerlogic.allowArmMovement = false;
             this.playerlogic.weapon.freezeRotation = true;
-            //Slide
             float slideDirection = -1; //set left
             if (this.playerlogic.faceRight)
             {
@@ -259,18 +258,37 @@ public class PlayerMovement : MonoBehaviour
             }
             this.playerlogic.rigidBody.velocity = new Vector2(this.playerlogic.slideSpeed * slideDirection, 0);
             this.playerlogic.InputAllowed = false;
-            Invoke(nameof(stopSliding), this.playerlogic.slideDuration);
+            StartCoroutine(slidingMid());
         }
+    }
+
+    private IEnumerator slidingMid()
+    {
+        bool slidingFlag = true;
+        float endTime = Time.time + this.playerlogic.slideDuration;
+        while(slidingFlag)
+        {
+            if(!(this.playerlogic.checkIfWall(2, Vector2.up)) && Time.time > endTime)
+            {
+                slidingFlag = false;
+            }
+            yield return null;
+        }
+
+        stopSliding();
     }
 
     private void stopSliding()
     {
+        
         this.playerlogic.isSliding = false;
         this.playerlogic.InputAllowed = true;
-        this.playerlogic.animate.SetBool("Sliding", false);
+        this.playerlogic.animate.SetBool("SlidingEnd", true);
+        this.playerlogic.animate.SetBool("SlidingStart", false);
+        Debug.Log(this.playerlogic.animate.GetBool("SlidingEnd"));
         this.playerlogic.allowArmMovement = true;
         this.playerlogic.weapon.freezeRotation = false;
-        if(!(this.playerlogic.checkIfWall(this.BoxCastLength, Vector2.up)))
+        /*if(!(this.playerlogic.checkIfWall(this.BoxCastLength, Vector2.up)))
         {//Reset to StandLogic
             doStand();
         }
@@ -278,10 +296,6 @@ public class PlayerMovement : MonoBehaviour
         {
             doCrouch();
             this.playerlogic.animate.SetBool("Crouching", true);
-        }
-    }
-
-    public void doStand()
-    {
+        }*/
     }
 }

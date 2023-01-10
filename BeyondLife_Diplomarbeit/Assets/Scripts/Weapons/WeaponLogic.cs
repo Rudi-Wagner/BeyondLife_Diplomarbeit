@@ -100,7 +100,6 @@ public class WeaponLogic : MonoBehaviour
 
     public IEnumerator doMelee()
     {
-        Debug.Log("Atak");
         //Get Player Script & disable PlayerControl
         PlayerLogic player = this.gameObject.transform.parent.gameObject.GetComponent<PlayerLogic>();
         player.allowArmMovement = false;
