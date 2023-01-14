@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.h8man.2d.navmeshplus": "file:d:/Users/Paul/Desktop/Diploma_Bilder/NavMesh/NavMeshPlus-master/NavMeshPlus-master",
     "com.unity.collab-proxy": "1.17.2",
     "com.unity.feature.2d": "1.0.0",
     "com.unity.ide.rider": "3.0.15",

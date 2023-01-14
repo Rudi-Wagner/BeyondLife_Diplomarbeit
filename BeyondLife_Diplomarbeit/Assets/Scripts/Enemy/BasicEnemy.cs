@@ -13,6 +13,7 @@ public class BasicEnemy : EnemyLogic
     [Header("Stats")]
     public float health;
     public float testMovement = 0;
+    public float testSprinting = 0;
     public float maxHealth;
     private float nextFire = 0f;
     private Vector2 startPos;
@@ -25,16 +26,13 @@ public class BasicEnemy : EnemyLogic
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
         agent.updateRotation= false;
         agent.updateUpAxis= false;
-
-
-
     }
 
     private void Update()
     {
         this.weapon.gameObject.SetActive(true);
         this.animate.SetFloat("Movement", testMovement);
-
+        this.animate.SetFloat("Sprinting", testSprinting);   
         agent.SetDestination(target.position);
     }
   
