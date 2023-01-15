@@ -47,14 +47,14 @@ public class EnemyLogic : MonoBehaviour
         {
             //Get angle from mouse position and player positiont
             GameObject player = GameObject.FindWithTag("Player");
-            Vector2 aimAtPos = player.transform.position;
+            Vector3 aimAtPos = player.transform.position;
             Vector3 startPos = this.weaponArmShoulder.transform.position;
 
             //Set Position of weapon
             this.weapon.transform.position = new Vector3(this.WeaponPos.transform.position.x, this.WeaponPos.transform.position.y, -2);     
 
             //Caluclate the angle
-            Vector3 dir = Camera.main.ScreenToWorldPoint(aimAtPos) - startPos;
+            Vector3 dir = aimAtPos - startPos;
             var angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
 
             //Set Rotation/Position for WeaponArm
@@ -80,34 +80,18 @@ public class EnemyLogic : MonoBehaviour
                 //Rotate WeaponArm                        Start Position
                 this.weaponLimbSolver.transform.position = this.weaponArmShoulder.transform.position + direction;
                 this.weaponCCDSolver.transform.position = this.weaponArmShoulder.transform.position + direction * 2f;
-                Debug.DrawRay(this.weaponArmShoulder.transform.position, direction, Color.green);
+                Debug.DrawRay(this.weaponArmShoulder.transform.position, direction, Color.red);
+                Debug.DrawRay(this.weaponArmShoulder.transform.position + direction, direction, Color.green);
             }
 
             //Rotate the weapon
-            if (this.weapon.gameObject.name != "MeleeWeapon" && !this.weapon.freezeRotation)
-            {//Normal Rotation for Weapon
+            if (!this.weapon.freezeRotation)
+            {
                 this.weapon.transform.rotation = Quaternion.Euler(0, 0, angle);
                 if (!this.faceRight)
                 {//Add 180° to Weapon-rotation to fix pointing direction
                     this.weapon.transform.rotation = this.weapon.transform.rotation * Quaternion.Euler(180, 0, 0);
                 }
-            }
-            else if (this.weapon.gameObject.name == "MeleeWeapon" && !this.weapon.freezeRotation)
-            {//Rotation for the melee Weapon
-                this.weapon.transform.rotation = this.weaponArmHand.transform.rotation * Quaternion.Euler(0, 0, 190);
-                
-                //Fix Arm
-                float x1 = -1.458f;
-                float x2 = -1.066f;
-
-                if (!this.faceRight)
-                {
-                    x1 = -x1;
-                    x2 = -x2;
-                }
-                weaponLimbSolver.transform.position = this.gameObject.transform.position + new Vector3(x1, -0.638f, 0f);
-                weaponCCDSolver.transform.position = this.gameObject.transform.position + new Vector3(x2, -1.358f, 0f);
-                return; //Arm Movement not allowed --> leave early
             }
         }
     }

@@ -153,7 +153,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void doJump()
     {
-        if((this.playerlogic.checkIfGrounded(this.BoxCastLength) || this.playerlogic.checkIfEnemyBelow(this.BoxCastLength)) && !(this.playerlogic.checkIfWall(this.BoxCastLength, Vector2.up)))
+        if(this.playerlogic.checkIfGrounded(this.BoxCastLength) && !(this.playerlogic.checkIfWall(this.BoxCastLength, Vector2.up)))
         {//Vertical Movement (only jumping)
             /*Only do a normal jump when:
                 1. The player presses the jump Button

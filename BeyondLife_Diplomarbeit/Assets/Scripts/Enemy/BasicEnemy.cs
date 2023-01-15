@@ -43,11 +43,13 @@ public class BasicEnemy : EnemyLogic
         //Paul
         if(aiPath.desiredVelocity.x >= 0.1f)
         {
-            transform.localScale = new Vector3 (1.5f , 1.5f , 1f);
+            Flip();
+            //transform.localScale = new Vector3 (1.5f , 1.5f , 1f);
         } 
         else if (aiPath.desiredVelocity.x <= 0.1f)
         {
-            transform.localScale = new Vector3 (-1.5f , 1.5f , 1f);
+            Flip();
+            //transform.localScale = new Vector3 (-1.5f , 1.5f , 1f);
         }
         // Wenn der Charakter innerhalb der Reichweite ist und es Zeit ist, wieder zu feuern
         if (Vector3.Distance(transform.position, player.position) <= range && Time.time > nextFire)

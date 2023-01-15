@@ -29,6 +29,7 @@ public class PlayerLogic : MonoBehaviour
 
     [Header("Other")]
     public LayerMask wallLayer;
+    public LayerMask obstacleLayer;
     public LayerMask enemyLayer;
     public Rigidbody2D rigidBody;
     
@@ -211,14 +212,8 @@ public class PlayerLogic : MonoBehaviour
 
     public bool checkIfGrounded(float length)
     {
-        //Check if the player is on the ground
-        return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, length, this.wallLayer);
-    }
-
-    public bool checkIfEnemyBelow(float length)
-    {
-        //Check if the player is on an enemy to allow a jump
-        return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, length, this.enemyLayer);
+        //Check if the player is on the ground/obstacle
+        return Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, length, this.wallLayer) || Physics2D.BoxCast(this.transform.position, new Vector2(1, 0.5f), 0f, Vector2.down, length, this.obstacleLayer);
     }
 
     public bool checkIfWall(float length, Vector2 direction)
