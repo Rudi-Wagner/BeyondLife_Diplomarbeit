@@ -7,6 +7,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 323088155113345257, guid: cf17fa7853066294dab16334351b86ca, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.11601064
+      objectReference: {fileID: 0}
+    - target: {fileID: 323088155113345257, guid: cf17fa7853066294dab16334351b86ca, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.99324805
+      objectReference: {fileID: 0}
     - target: {fileID: 323088155590525823, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Name
       value: Sniper
@@ -17,19 +25,19 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 93631fd51e5299544b5bc262131b2545, type: 3}
     - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Bounds.m_Center.x
-      value: -0.01573646
+      value: -0.015732646
       objectReference: {fileID: 0}
     - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Bounds.m_Center.y
-      value: 0.7511997
+      value: 0.7511995
       objectReference: {fileID: 0}
     - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Bounds.m_Extent.x
-      value: 1.8267776
+      value: 1.826775
       objectReference: {fileID: 0}
     - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Bounds.m_Extent.y
-      value: 3.5858717
+      value: 3.5858722
       objectReference: {fileID: 0}
     - target: {fileID: 3164196304393966908, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_RootOrder
@@ -87,7 +95,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 130637195917114451, guid: cf17fa7853066294dab16334351b86ca, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cf17fa7853066294dab16334351b86ca, type: 3}
 --- !u!114 &4405045084343760211 stripped
 MonoBehaviour:

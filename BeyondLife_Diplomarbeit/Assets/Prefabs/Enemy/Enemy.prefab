@@ -7,6 +7,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 323088155113345257, guid: cf17fa7853066294dab16334351b86ca, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.116010785
+      objectReference: {fileID: 0}
+    - target: {fileID: 323088155113345257, guid: cf17fa7853066294dab16334351b86ca, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.993248
+      objectReference: {fileID: 0}
     - target: {fileID: 323088155590525823, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Name
       value: Enemy
@@ -14,6 +22,18 @@ PrefabInstance:
     - target: {fileID: 373320464054722020, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 436625161946202765, guid: cf17fa7853066294dab16334351b86ca, type: 3}
+      propertyPath: data.dataString
+      value: UEsDBBQAAAgIAAAIIeyiNXIUNQAAAD4AAAAJACQAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0Bq1YqSy0qzszPU7JSMNEz0jM011FQSi9KLMgoBooYgDilmSkgdnQskFNSWZDql5ibChGoBQBQSwECLQAUAAAICAAACCHsojVyFDUAAAA+AAAACQAkAAAAAAAAAAAAAAAAAAAAbWV0YS5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsFBgAAAAABAAEAWwAAAIAAAAAAAA==
+      objectReference: {fileID: 0}
+    - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
+      propertyPath: m_Bounds.m_Center.x
+      value: -0.06078422
+      objectReference: {fileID: 0}
+    - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
+      propertyPath: m_Bounds.m_Extent.x
+      value: 1.851834
       objectReference: {fileID: 0}
     - target: {fileID: 3164196304393966908, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_RootOrder

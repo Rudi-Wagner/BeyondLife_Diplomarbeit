@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
 public class BasicEnemy : EnemyLogic
 {
-    [SerializeField] Transform target;
-    UnityEngine.AI.NavMeshAgent agent;
-
     public Animator animate { get; private set; }
 
     //Stats
@@ -22,18 +20,26 @@ public class BasicEnemy : EnemyLogic
     {
         startPos = this.transform.position;
         this.animate = GetComponent<Animator>();
-        // Paul working here
-        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
-        agent.updateRotation= false;
-        agent.updateUpAxis= false;
+        
+        
     }
+    public AIPath aiPath;
 
     private void Update()
     {
         this.weapon.gameObject.SetActive(true);
         this.animate.SetFloat("Movement", testMovement);
         this.animate.SetFloat("Sprinting", testSprinting);   
-        agent.SetDestination(target.position);
+
+        if(aiPath.desiredVelocity.x >= 0.1f)
+        {
+            transform.localScale = new Vector3 (1.5f , 1.5f , 1f);
+        } 
+        else if (aiPath.desiredVelocity.x <= 0.1f)
+        {
+            transform.localScale = new Vector3 (-1.5f , 1.5f , 1f);
+        }
+
     }
   
     

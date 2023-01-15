@@ -2,162 +2,79 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAi : MonoBehaviour
 {
-    [Header("Movement")]
-    public float moveSpeed;
-    public float followDistance;
-    public float attackDistance;
-    public float retreatDistance;
-    public bool faceRight;
-    private bool followingPlayer;
-    private bool attackingPlayer;
-    private Vector2 moveDirection;
-
-    [Header("Patrol")]
-    public Transform[] patrolPoints;
-    public int currentPatrolPoint;
-    public float patrolWaitTime;
-    private float patrolTimer;
-    private bool patrolling;
-
-    [Header("References")]
-    public Rigidbody2D rb;
-    public WeaponLogic weapon;
+    // Reference to the player's position
     public Transform player;
 
-    void Start()
-    {
-        // Initialize movement variables
-        followingPlayer = false;
-        attackingPlayer = false;
-        moveDirection = Vector2.zero;
+    // Reference to the enemy's navmesh agent
+    public UnityEngine.AI.NavMeshAgent nav;
 
-        // Initialize patrol variables
-        patrolTimer = 0f;
-        patrolling = true;
-    }
+    // Reference to the enemy's shooting component
+    public WeaponLogic shooter;
 
+    // The maximum distance at which the enemy will start chasing the player
+    public float chaseDistance = 100.0f;
+
+    // The maximum distance at which the enemy will start shooting at the player
+    public float shootDistance = 50.0f;
+
+    // The distance at which the enemy will start running away from the player
+    public float fleeDistance = 5.0f;
+
+    // The patrol waypoints for the enemy
+    public Transform[] patrolWaypoints;
+
+    // The current index of the patrol waypoint that the enemy is heading towards
+    private int waypointIndex = 0;
+
+    // Update is called once per frame
     void Update()
     {
-        // Calculate distance to player
-        float distanceToPlayer = Vector2.Distance(transform.position, player.position);
+        // Calculate the distance between the enemy and the player
+        float distance = Vector3.Distance(transform.position, player.position);
 
-        // If the enemy is within follow distance, start following the player
-        if (distanceToPlayer <= followDistance)
+        // If the distance between the enemy and the player is less than the chase distance
+        if (distance < chaseDistance)
         {
-            followingPlayer = true;
-        }
-        else
-        {
-            followingPlayer = false;
-        }
+            // Set the enemy's destination to the player's position
+            //nav.SetDestination(player.position);
 
-        // If the enemy is within attack distance, start attacking the player
-        if (distanceToPlayer <= attackDistance)
-        {
-            attackingPlayer = true;
-        }
-        else
-        {
-            attackingPlayer = false;
-        }
-
-        // If the enemy is following the player, face the player and move towards them
-        if (followingPlayer)
-        {
-            // Face the player
-            if (player.position.x > transform.position.x)
+            // If the distance between the enemy and the player is less than the shoot distance
+            if (distance < shootDistance)
             {
-                faceRight = true;
+                // Make the enemy shoot at the player
+                shooter.ShootBullet(true);
             }
-            else
+            // If the distance between the enemy and the player is less than the flee distance
+            else if (distance < fleeDistance)
             {
-                faceRight = false;
-            }
-            Flip();
-
-            // Move towards the player
-            moveDirection = (player.position - transform.position).normalized;
-            rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
-
-            // If the enemy is within retreat distance, run away from the player
-            if (distanceToPlayer <= retreatDistance)
-            {
-                moveDirection *= -1;
-                rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
+                // Make the enemy run away from the player
+                //nav.SetDestination(transform.position - player.position);
             }
         }
-        // If the enemy is not following the player, patrol
+        // If the distance between the enemy and the player is greater than the chase distance
         else
         {
-            Patrol();
-        }
-
-        // If the enemy is attacking the player, shoot at them
-        if (attackingPlayer)
-        {
-            weapon.ShootBullet(true);
+            // Make the enemy patrol
+            //Patrol();
         }
     }
+
+    // Function to make the enemy patrol between the specified waypoints
     void Patrol()
-{
-    // If the enemy has reached their patrol point, stop and wait
-    if (Vector2.Distance(transform.position, patrolPoints[currentPatrolPoint].position) < 0.1f)
     {
-        patrolling = false;
-        patrolTimer = patrolWaitTime;
-    }
-    // If the enemy is waiting at a patrol point, count down the timer
-    else if (!patrolling)
-    {
-        patrolTimer -= Time.deltaTime;
+        // Set the enemy's destination to the current patrol waypoint
+        nav.SetDestination(patrolWaypoints[waypointIndex].position);
 
-        // If the timer has reached zero, start moving to the next patrol point
-        if (patrolTimer <= 0f)
+        // Calculate the distance between the enemy and the current patrol waypoint
+        float distance = Vector3.Distance(transform.position, patrolWaypoints[waypointIndex].position);
+
+        // If the enemy has reached the current patrol waypoint
+        if (distance < nav.stoppingDistance)
         {
-            patrolling = true;
-
-            // Increment the current patrol point index, or reset it if it has reached the end of the array
-            if (currentPatrolPoint + 1 < patrolPoints.Length)
-            {
-                currentPatrolPoint++;
-            }
-            else
-            {
-                currentPatrolPoint = 0;
-            }
+            // Increment the waypoint index
+            waypointIndex = (waypointIndex + 1) % patrolWaypoints.Length;
         }
     }
-    // If the enemy is patrolling, move towards the current patrol point
-    else
-    {
-        // Face the patrol point
-        if (patrolPoints[currentPatrolPoint].position.x > transform.position.x)
-        {
-            faceRight = true;
-        }
-        else
-        {
-            faceRight = false;
-        }
-        Flip();
-
-        // Move towards the patrol point
-        moveDirection = (patrolPoints[currentPatrolPoint].position - transform.position).normalized;
-        rb.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
-    }
-}
-
-void Flip()
-{
-    if (faceRight)
-    {
-        transform.eulerAngles = new Vector3(0, 0, 0);
-    }
-    else
-    {
-        transform.eulerAngles = new Vector3(0, 180, 0);
-    }
-}
 }
