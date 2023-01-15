@@ -15,22 +15,32 @@ public class BasicEnemy : EnemyLogic
     public float maxHealth;
     private float nextFire = 0f;
     private Vector2 startPos;
+    public GameObject projectilePrefab; // Prefab für das Projektil
+    public float fireRate = 1f; // Feuerrate der Waffe
+    public float range = 10f; // Reichweite der Waffe
+    private Transform player; // Transform des Charakters
+    public AIPath aiPath;
+    
 
     private void Awake()
     {
         startPos = this.transform.position;
         this.animate = GetComponent<Animator>();
-        
-        
+         
     }
-    public AIPath aiPath;
+    //Paul
+    void Start()
+    {
+        player = GameObject.FindWithTag("Player").transform; // Charakter Transform finden
+    }
+    
 
     private void Update()
     {
         this.weapon.gameObject.SetActive(true);
         this.animate.SetFloat("Movement", testMovement);
         this.animate.SetFloat("Sprinting", testSprinting);   
-
+        //Paul
         if(aiPath.desiredVelocity.x >= 0.1f)
         {
             transform.localScale = new Vector3 (1.5f , 1.5f , 1f);
@@ -39,10 +49,14 @@ public class BasicEnemy : EnemyLogic
         {
             transform.localScale = new Vector3 (-1.5f , 1.5f , 1f);
         }
-
+        // Wenn der Charakter innerhalb der Reichweite ist und es Zeit ist, wieder zu feuern
+        if (Vector3.Distance(transform.position, player.position) <= range && Time.time > nextFire)
+        {
+            nextFire = Time.time + fireRate; // Zeitpunkt für nächsten Schuss setzen
+           this.weapon.ShootBullet(true); //Schießen
+        }
+        
     }
-  
-    
    
     private void FixedUpdate()
     {
