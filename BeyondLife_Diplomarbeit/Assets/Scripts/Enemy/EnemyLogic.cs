@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class EnemyLogic : MonoBehaviour
 {
-    public bool faceRight = true;
-
     [Header("WeaponArm")]
     public bool weaponUpdate = true;
     public GameObject WeaponPos;
@@ -15,10 +13,13 @@ public class EnemyLogic : MonoBehaviour
     public GameObject weaponArmHand;
     public float distanceFromShoulder;
     public bool allowArmMovement = true;
+    public GameObject patrolAimPoint;
 
     //Other
     [Header("Other")]
     public WeaponLogic weapon;
+    public bool disableAiming;
+    public bool faceRight = true;
 
     public void Flip()
     {
@@ -48,6 +49,12 @@ public class EnemyLogic : MonoBehaviour
             //Get angle from mouse position and player positiont
             GameObject player = GameObject.FindWithTag("Player");
             Vector3 aimAtPos = player.transform.position;
+
+            if(this.disableAiming)
+            {
+                aimAtPos = this.patrolAimPoint.transform.position;
+            }
+
             Vector3 startPos = this.weaponArmShoulder.transform.position;
 
             //Set Position of weapon

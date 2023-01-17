@@ -2144,7 +2144,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1024552362732468355, guid: c2da2a02a3abea0479550987bca4ccd3, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.116010666
+      value: -0.11601052
       objectReference: {fileID: 0}
     - target: {fileID: 1024552362732468355, guid: c2da2a02a3abea0479550987bca4ccd3, type: 3}
       propertyPath: m_LocalRotation.z
@@ -2402,6 +2402,14 @@ PrefabInstance:
       propertyPath: testMovement
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4204796443519567019, guid: c2da2a02a3abea0479550987bca4ccd3, type: 3}
+      propertyPath: disableAiming
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4204796443519567019, guid: c2da2a02a3abea0479550987bca4ccd3, type: 3}
+      propertyPath: patrolAimPoint
+      value: 
+      objectReference: {fileID: 842260430}
     - target: {fileID: 4204796443519567019, guid: c2da2a02a3abea0479550987bca4ccd3, type: 3}
       propertyPath: projectilePrefab
       value: 
@@ -2956,7 +2964,7 @@ GameObject:
   m_Component:
   - component: {fileID: 842260431}
   m_Layer: 7
-  m_Name: pfusch
+  m_Name: PatrolAimPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78255,11 +78263,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6304328748100637748, guid: 67632bd77c622dc48a45304f29195e15, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.21176015
+      value: -0.21175955
       objectReference: {fileID: 0}
     - target: {fileID: 6304328748100637748, guid: 67632bd77c622dc48a45304f29195e15, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.9773216
+      value: 0.9773218
       objectReference: {fileID: 0}
     - target: {fileID: 6304328748232879829, guid: 67632bd77c622dc48a45304f29195e15, type: 3}
       propertyPath: m_LocalRotation.w
