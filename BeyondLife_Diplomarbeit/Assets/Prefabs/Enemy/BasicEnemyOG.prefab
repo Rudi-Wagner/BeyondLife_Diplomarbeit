@@ -153,7 +153,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 323088154807463262}
-  m_LocalRotation: {x: 0, y: 0, z: 0.9911671, w: 0.132619}
+  m_LocalRotation: {x: 0, y: 0, z: 0.99116707, w: 0.13261932}
   m_LocalPosition: {x: 0.7400439, y: 1.2949474, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -282,7 +282,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 323088155113345258}
-  m_LocalRotation: {x: 0, y: 0, z: 0.993248, w: -0.116010636}
+  m_LocalRotation: {x: 0, y: 0, z: 0.9932479, w: -0.11601095}
   m_LocalPosition: {x: 0.74009705, y: -1.1923068, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -437,6 +437,7 @@ GameObject:
   - component: {fileID: 8387628683984512174}
   - component: {fileID: 5987571483461949142}
   - component: {fileID: 5710751124931309575}
+  - component: {fileID: 1194353671368442815}
   m_Layer: 7
   m_Name: BasicEnemyOG
   m_TagString: enemy
@@ -466,6 +467,7 @@ Transform:
   - {fileID: 8949211179845186041}
   - {fileID: 4504495797115862741}
   - {fileID: 1998443507152261516}
+  - {fileID: 879372931882318449}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -481,10 +483,10 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 30
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 15
+  m_GravityScale: 30
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -554,8 +556,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63f18092dca114e49b4c40559538a7eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  faceRight: 1
+  weapon: {fileID: 0}
   weaponUpdate: 1
+  shootingAllowed: 1
   WeaponPos: {fileID: 7188799028545084302}
   weaponLimbSolver: {fileID: 202423893701030051}
   weaponCCDSolver: {fileID: 7553777680609521726}
@@ -563,12 +566,17 @@ MonoBehaviour:
   weaponArmHand: {fileID: 323088155754309574}
   distanceFromShoulder: 3
   allowArmMovement: 1
-  weapon: {fileID: 0}
+  patrolAimPoint: {fileID: 2850364739081335675}
+  disableAiming: 0
+  overrideControllerResetOverrider: {fileID: 22100000, guid: ffa908eddde99e4428690ff2afe1299d, type: 2}
+  overrideControllerStartDeath: {fileID: 22100000, guid: 2ac59c8f14c39e641b268f6c8ce426a2, type: 2}
+  faceRight: 1
+  aiPath: {fileID: 5710751124931309575}
   health: 0
   testMovement: 0
   testSprinting: 0
   maxHealth: 50
-  aiPath: {fileID: 0}
+  range: 10
 --- !u!70 &4357213924779919862
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -582,7 +590,7 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.2}
+  m_Offset: {x: 0, y: 0.3}
   m_Size: {x: 2, y: 6}
   m_Direction: 0
 --- !u!114 &3164196304393966907
@@ -617,8 +625,8 @@ MonoBehaviour:
   - {fileID: 323088156121078529}
   - {fileID: 323088155061412402}
   m_Bounds:
-    m_Center: {x: -0.06078422, y: 0.75667644, z: 0}
-    m_Extent: {x: 1.851834, y: 3.5813506, z: 0}
+    m_Center: {x: -0.060786366, y: 0.75667644, z: 0}
+    m_Extent: {x: 1.8518362, y: 3.5813506, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
@@ -727,10 +735,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 5
-  radius: 6
+  radius: 4
   height: 2
   canMove: 1
-  maxSpeed: 3
+  maxSpeed: 6
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2
@@ -750,12 +758,24 @@ MonoBehaviour:
   maxAcceleration: -2.5
   rotationSpeed: 360
   slowdownDistance: 0.6
-  pickNextWaypointDist: 1.2
+  pickNextWaypointDist: 6.2
   endReachedDistance: 0.2
   alwaysDrawGizmos: 0
   slowWhenNotFacingTarget: 1
   whenCloseToDestination: 0
   constrainInsideGraph: 0
+--- !u!114 &1194353671368442815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 323088155590525823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51a146c87c64a9b439808edfba129962, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &323088155598667186
 GameObject:
   m_ObjectHideFlags: 0
@@ -907,7 +927,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 323088156232942434}
-  m_LocalRotation: {x: 0, y: 0, z: -0.21962075, w: 0.9755854}
+  m_LocalRotation: {x: 0, y: 0, z: -0.21961981, w: 0.9755856}
   m_LocalPosition: {x: 1.3014914, y: -0.00000000858894, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1003,7 +1023,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 323088156533361307}
-  m_LocalRotation: {x: 0, y: 0, z: 0.19710964, w: 0.9803815}
+  m_LocalRotation: {x: 0, y: 0, z: 0.19710852, w: 0.9803817}
   m_LocalPosition: {x: 1.2616789, y: -0.00000029084234, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1203,6 +1223,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5899877481679299082}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2850364739081335675
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 879372931882318449}
+  m_Layer: 7
+  m_Name: DefaultAimPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &879372931882318449
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2850364739081335675}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.7, y: 2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3164196304393966908}
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3958941976134170032
 GameObject:

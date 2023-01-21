@@ -136,8 +136,8 @@ public class GameManager : MonoBehaviour
 
     public void ReloadScene()
     {
-        Scene scene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(scene.name);
+        ShowPauseMenue();
+        ResetState();
     }
 
     public void updateToolbar(float selection)

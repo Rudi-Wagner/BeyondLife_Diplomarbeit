@@ -5,8 +5,6 @@ using Pathfinding;
 
 public class BasicEnemy : EnemyLogic
 {
-    public Animator animate { get; private set; }
-
     //Stats
     [Header("Stats")]
     public float health;
@@ -15,32 +13,27 @@ public class BasicEnemy : EnemyLogic
     public float maxHealth;
     private float nextFire = 0f;
     private Vector2 startPos;
-    public GameObject projectilePrefab; // Prefab für das Projektil
-    public float fireRate = 1f; // Feuerrate der Waffe
-    public float range = 10f; // Reichweite der Waffe
     private Transform player; // Transform des Charakters
-    public AIPath aiPath;
-    
+
+
+    public float range = 10f; // Reichweite der Waffe
+    public Animator animate { get; private set; }
 
     private void Awake()
     {
         startPos = this.transform.position;
         this.animate = GetComponent<Animator>();
-         
     }
     //Paul
     void Start()
     {
-        player = GameObject.FindWithTag("Player").transform; // Charakter Transform finden
+        this.player = GameObject.FindWithTag("Player").transform; // Charakter Transform finden
     }
     
 
     private void Update()
     {
-        this.weapon.gameObject.SetActive(true);
-        this.animate.SetFloat("Movement", testMovement);
-        this.animate.SetFloat("Sprinting", testSprinting);   
-        //Paul
+        animate.SetFloat("Movement", Mathf.Abs(aiPath.desiredVelocity.x * 10));
         if (aiPath.desiredVelocity.x >= 0.1f && !this.faceRight)
         {
             Flip();
@@ -49,14 +42,6 @@ public class BasicEnemy : EnemyLogic
         {
             Flip();
         }
-
-        // Wenn der Charakter innerhalb der Reichweite ist und es Zeit ist, wieder zu feuern
-        if (Vector3.Distance(transform.position, player.position) <= range && Time.time > nextFire)
-        {
-            nextFire = Time.time + fireRate; // Zeitpunkt für nächsten Schuss setzen
-           this.weapon.ShootBullet(true); //Schießen
-        }
-        
     }
    
     private void FixedUpdate()
@@ -64,17 +49,15 @@ public class BasicEnemy : EnemyLogic
         //Check Health Status
         if(this.health <= 0)
         {
-            //Destroy(gameObject);  //Fürs erste später wsl wieder sinnvoll
-            this.gameObject.SetActive(false);
+            startDeathProcess();
         }
-
-        //Firing
-        /*if (RayCastToPlayer() && Time.time > this.nextFire)
+        
+        // Wenn der Charakter innerhalb der Reichweite ist und es Zeit ist, wieder zu feuern
+        if (Vector3.Distance(transform.position, player.position) <= range && Time.time > nextFire  && this.shootingAllowed)
         {
-            nextFire = Time.time + this.weapon.fireRate;
-            this.weapon.ShootBullet(true);
-            
-        }*/
+            nextFire = Time.time + this.weapon.fireRate; // Zeitpunkt für nächsten Schuss setzen
+            this.weapon.ShootBullet(true); //Schießen
+        }
     }
 
     /*private bool RayCastToPlayer()
@@ -118,10 +101,55 @@ public class BasicEnemy : EnemyLogic
         }
     }
 
+    public void startDeathProcess()
+    {
+        //Disable Gravity
+        this.gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
+        this.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+
+        //Disable AI
+        this.gameObject.GetComponent<AIPath>().enabled = false;
+        this.gameObject.GetComponent<AIDestinationSetter>().enabled = false;
+        this.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+        this.shootingAllowed = false;
+        this.weapon.gameObject.SetActive(false);
+
+        //Start animation
+        this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(overrideControllerStartDeath);
+        this.allowArmMovement = false;
+        this.animate.SetBool("ReleasePlaceholder", false);
+        this.animate.Play("Enemy_Placeholder");
+    }
+
     public void ResetState()
     {
         this.health = this.maxHealth;
         this.transform.position = this.startPos;
         this.transform.rotation = Quaternion.Euler(Vector3.zero);
+        this.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
+        this.gameObject.GetComponent<AIPath>().enabled = true;
+        this.gameObject.GetComponent<AIDestinationSetter>().enabled = true;
+        this.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+        this.weapon.gameObject.SetActive(true);
+        this.shootingAllowed = true;
+        this.allowArmMovement = true;
+        ResetAnimator();
+
+
+        if (!this.faceRight)
+        {
+            Flip();
+            this.faceRight = true;
+        }
+    }
+
+    public void ResetAnimator()
+    {
+        this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.overrideControllerResetOverrider);
+        
+        this.animate.SetFloat("Movement", 0);
+        this.animate.SetFloat("Sprinting", 0);
+        this.animate.SetBool("ReleasePlaceholder", false);
+        this.animate.Play("Enemy_Idle");
     }
 }

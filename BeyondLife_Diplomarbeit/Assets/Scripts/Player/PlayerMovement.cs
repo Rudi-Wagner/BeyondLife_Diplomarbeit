@@ -285,17 +285,7 @@ public class PlayerMovement : MonoBehaviour
         this.playerlogic.InputAllowed = true;
         this.playerlogic.animate.SetBool("SlidingEnd", true);
         this.playerlogic.animate.SetBool("SlidingStart", false);
-        Debug.Log(this.playerlogic.animate.GetBool("SlidingEnd"));
         this.playerlogic.allowArmMovement = true;
         this.playerlogic.weapon.freezeRotation = false;
-        /*if(!(this.playerlogic.checkIfWall(this.BoxCastLength, Vector2.up)))
-        {//Reset to StandLogic
-            doStand();
-        }
-        else
-        {
-            doCrouch();
-            this.playerlogic.animate.SetBool("Crouching", true);
-        }*/
     }
 }

@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
 public class EnemyLogic : MonoBehaviour
 {
-    [Header("WeaponArm")]
+    [Header("Weapon")]
+    public WeaponLogic weapon;
     public bool weaponUpdate = true;
+    public bool shootingAllowed = true;
+
+
+    [Header("WeaponArm")]
     public GameObject WeaponPos;
     public GameObject weaponLimbSolver;
     public GameObject weaponCCDSolver;
@@ -14,12 +20,22 @@ public class EnemyLogic : MonoBehaviour
     public float distanceFromShoulder;
     public bool allowArmMovement = true;
     public GameObject patrolAimPoint;
+    public bool disableAiming;
+
+    //Animation
+    [Header("Animation")]
+    public AnimatorOverrideController overrideControllerResetOverrider;
+    public AnimatorOverrideController overrideControllerStartDeath;
 
     //Other
     [Header("Other")]
-    public WeaponLogic weapon;
-    public bool disableAiming;
     public bool faceRight = true;
+    public AIPath aiPath;
+
+    private void OnEnable()
+    {
+        this.weapon.gameObject.SetActive(true);
+    }
 
     public void Flip()
     {
@@ -36,11 +52,8 @@ public class EnemyLogic : MonoBehaviour
         }
     }
 
-    protected virtual void destroySelf(GameObject other)
-    {
-        //Destroy(gameObject);  //Fürs erste später wsl wieder sinnvoll
-        this.gameObject.SetActive(false);
-    }
+    protected virtual void destroySelf(GameObject other){}
+
 
     private void LateUpdate() 
     {

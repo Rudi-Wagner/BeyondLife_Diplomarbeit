@@ -374,6 +374,7 @@ public class PlayerLogic : MonoBehaviour
     {
         this.gameObject.transform.position = this.manager.playerSpawn;
         this.InputAllowed = true;
+        this.allowArmMovement = true;
         this.health = this.maxHealth;
         ResetAnimator();
     }
@@ -381,6 +382,7 @@ public class PlayerLogic : MonoBehaviour
     public void ResetAnimator()
     {
         this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.overrideControllerResetOverrider);
+        
         this.animate.SetFloat("Movement", 0);
         this.animate.SetFloat("Sprinting", 0);
         this.animate.SetBool("Crouching", false);
@@ -389,7 +391,7 @@ public class PlayerLogic : MonoBehaviour
         this.animate.SetBool("Landing", false);
         this.animate.SetBool("Falling", false);
         this.animate.SetBool("WallJumping", false);
-        this.animate.SetBool("ReleasePlaceholder", true);
+        this.animate.SetBool("ReleasePlaceholder", false);
         this.animate.Play("Player_Idle");
     }
 }
