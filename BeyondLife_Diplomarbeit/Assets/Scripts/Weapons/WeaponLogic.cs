@@ -115,6 +115,7 @@ public class WeaponLogic : MonoBehaviour
 
         //Start Animation
         player.animate.Play("Player_Placeholder");
+        player.animate.SetBool("ReleasePlaceholder", true);
 
         //End Stabbing
         yield return new WaitForSeconds(1f);

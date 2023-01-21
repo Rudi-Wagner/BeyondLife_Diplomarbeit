@@ -72,6 +72,7 @@ public class PlayerLogic : MonoBehaviour
     //Animator
     [Header("Animatior")]
     public AnimatorOverrideController overrideControllerStartFlip;
+    public AnimatorOverrideController overrideControllerStartSlide;
     public AnimatorOverrideController overrideControllerResetOverrider;
     public AnimatorOverrideController overrideControllerStartDeath;
     public Animator animate { get; private set; }
@@ -197,7 +198,7 @@ public class PlayerLogic : MonoBehaviour
                 }
                 weaponLimbSolver.transform.position = this.gameObject.transform.position + new Vector3(x1, -0.638f, 0f);
                 weaponCCDSolver.transform.position = this.gameObject.transform.position + new Vector3(x2, -1.358f, 0f);
-                return; //Arm Movement not allowed --> leave early
+                return;
             }
         }
     }
@@ -372,6 +373,7 @@ public class PlayerLogic : MonoBehaviour
 
     public void ResetState()
     {
+        this.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
         this.gameObject.transform.position = this.manager.playerSpawn;
         this.InputAllowed = true;
         this.allowArmMovement = true;

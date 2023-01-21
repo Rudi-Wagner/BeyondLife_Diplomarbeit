@@ -123,19 +123,26 @@ public class BasicEnemy : EnemyLogic
 
     public void ResetState()
     {
-        this.health = this.maxHealth;
-        this.transform.position = this.startPos;
-        this.transform.rotation = Quaternion.Euler(Vector3.zero);
+        //Enable Gravity
         this.gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
+        this.gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0, 0);
+
+        //Enable AI
         this.gameObject.GetComponent<AIPath>().enabled = true;
         this.gameObject.GetComponent<AIDestinationSetter>().enabled = true;
         this.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
-        this.weapon.gameObject.SetActive(true);
         this.shootingAllowed = true;
+        this.weapon.gameObject.SetActive(true);
+
+        //Other
         this.allowArmMovement = true;
+        this.health = this.maxHealth;
+        this.transform.position = this.startPos;
+
+        //Reset Animations
         ResetAnimator();
 
-
+        //Rotate
         if (!this.faceRight)
         {
             Flip();

@@ -88,7 +88,6 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 this.playerlogic.animate.SetBool("SlidingEnd", false);
-                this.playerlogic.animate.SetBool("SlidingStart", false);
             }
 
             if (this.playerlogic.dash.ReadValue<float>() == 1)
@@ -244,8 +243,8 @@ public class PlayerMovement : MonoBehaviour
     {//Sliding
         if (!this.playerlogic.isSliding && Time.time > this.playerlogic.nextSlide)
         {
-            this.playerlogic.animate.SetBool("SlidingStart", true);
-
+            this.playerlogic.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.playerlogic.overrideControllerStartSlide);
+            this.playerlogic.animate.Play("Player_SlidingStart");
             this.playerlogic.nextSlide = Time.time + this.playerlogic.slideDelay;
             //Set state
             this.playerlogic.isSliding = true;
@@ -259,6 +258,10 @@ public class PlayerMovement : MonoBehaviour
             this.playerlogic.rigidBody.velocity = new Vector2(this.playerlogic.slideSpeed * slideDirection, 0);
             this.playerlogic.InputAllowed = false;
             StartCoroutine(slidingMid());
+        }
+        else
+        {
+            this.playerlogic.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.playerlogic.overrideControllerResetOverrider);
         }
     }
 
@@ -280,11 +283,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void stopSliding()
     {
-        
         this.playerlogic.isSliding = false;
         this.playerlogic.InputAllowed = true;
         this.playerlogic.animate.SetBool("SlidingEnd", true);
-        this.playerlogic.animate.SetBool("SlidingStart", false);
         this.playerlogic.allowArmMovement = true;
         this.playerlogic.weapon.freezeRotation = false;
     }

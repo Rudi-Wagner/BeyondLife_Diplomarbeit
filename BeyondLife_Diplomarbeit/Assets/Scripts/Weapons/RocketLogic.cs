@@ -51,6 +51,7 @@ public class RocketLogic : MonoBehaviour
             other.gameObject.layer == LayerMask.NameToLayer("player") ||
             other.gameObject.layer == LayerMask.NameToLayer("enemy"))
         {
+            camShake = Camera.main.GetComponent<ScreenShaker>();
             camShake.start = true;
             StopAllCoroutines();
             StartCoroutine(destroySelf());
