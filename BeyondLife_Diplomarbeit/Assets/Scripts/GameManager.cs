@@ -65,6 +65,23 @@ public class GameManager : MonoBehaviour
         this.player.InputAllowed = true;
     }
 
+    public void loadNectLevel()
+    {
+        Debug.Log("Current: " + this.scene.name);
+        int code = int.Parse(this.scene.name.Substring(this.scene.name.Length - 1));
+        code++;
+        Debug.Log("Next: " + "Level " + code);
+        
+        if (SceneManager.GetSceneByName("Level " + code).IsValid())
+        {
+            SceneManager.LoadScene("Level " + code, LoadSceneMode.Single);
+        }
+        else
+        {
+            SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        }
+    }
+
     public void ShowDeathScreen()
     {
         //Disable all enemys

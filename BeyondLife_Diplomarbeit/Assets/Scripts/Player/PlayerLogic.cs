@@ -235,6 +235,11 @@ public class PlayerLogic : MonoBehaviour
                 takeBullet(other.gameObject);
             }
         }
+        else if (other.gameObject.tag == "Finish")
+        {
+            Debug.Log("Level is FINISHED");
+            this.manager.loadNectLevel();
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D other)
