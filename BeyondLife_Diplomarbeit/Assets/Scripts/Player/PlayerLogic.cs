@@ -38,6 +38,7 @@ public class PlayerLogic : MonoBehaviour
     public float health;
     public float maxHealth;
     public bool immortal;
+    public PlayerHealthbar healthbar;
 
     //Movement Values
     [Header("Movement")]
@@ -251,25 +252,22 @@ public class PlayerLogic : MonoBehaviour
         if (this.health >= 0)
         {
             BulletLogic bullet = other.gameObject.GetComponent<BulletLogic>();
+            RocketLogic rocket = other.gameObject.GetComponent<RocketLogic>();
+            AOEDamage aoeDamage = other.gameObject.GetComponent<AOEDamage>();
             if (bullet != null)
             {
                 this.health -= bullet.damage;
-                return;
-            }
-            
-            RocketLogic rocket = other.gameObject.GetComponent<RocketLogic>();
-            if (rocket != null)
+            } 
+            else if (rocket != null)
             {
                 this.health -= rocket.damage;
-                return;
-            }
-
-            AOEDamage aoeDamage = other.gameObject.GetComponent<AOEDamage>();
-            if (aoeDamage != null)
+            } 
+            else if (aoeDamage != null)
             {
                 this.health -= aoeDamage.damage;
-                return;
             }
+
+            this.healthbar.handle(this.health);
         }
     }
 
@@ -378,6 +376,7 @@ public class PlayerLogic : MonoBehaviour
         this.InputAllowed = true;
         this.allowArmMovement = true;
         this.health = this.maxHealth;
+        this.healthbar.handle(this.maxHealth);
         ResetAnimator();
     }
 
