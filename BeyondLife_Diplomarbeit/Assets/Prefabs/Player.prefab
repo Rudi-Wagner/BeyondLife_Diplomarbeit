@@ -504,7 +504,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6304328748100637751}
-  m_LocalRotation: {x: 0, y: 0, z: 0.9773215, w: -0.2117612}
+  m_LocalRotation: {x: 0, y: 0, z: 0.9773215, w: -0.21176106}
   m_LocalPosition: {x: 0.5894257, y: -0.83774745, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -974,8 +974,8 @@ MonoBehaviour:
   - {fileID: 6304328747491757236}
   - {fileID: 6304328748428028668}
   m_Bounds:
-    m_Center: {x: 0.0982821, y: -0.037133694, z: 5.1335647e-10}
-    m_Extent: {x: 2.0056555, y: 4.4223294, z: 0.000000022107205}
+    m_Center: {x: 0.09828234, y: -0.037133694, z: 5.1335647e-10}
+    m_Extent: {x: 2.0056558, y: 4.4223294, z: 0.000000022107205}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
@@ -1059,8 +1059,9 @@ MonoBehaviour:
     m_Bits: 128
   rigidBody: {fileID: 6304328748849069784}
   health: 0
-  maxHealth: 100
+  maxHealth: 5
   immortal: 0
+  healthbar: {fileID: 0}
   InputAllowed: 1
   speed: 15
   isSliding: 0
@@ -1074,6 +1075,7 @@ MonoBehaviour:
   alreadyDashed: 0
   dashLength: 5
   overrideControllerStartFlip: {fileID: 22100000, guid: 3b1ac27855c23354ca95bcd450763505, type: 2}
+  overrideControllerStartSlide: {fileID: 22100000, guid: 5e32ea58f31d164448c616b1f9082303, type: 2}
   overrideControllerResetOverrider: {fileID: 22100000, guid: 4a06a46b31ca0ff459832e9b9ac70275, type: 2}
   overrideControllerStartDeath: {fileID: 22100000, guid: 2a3fdfadda1794a4b8ae73359ec55978, type: 2}
   faceRight: 1

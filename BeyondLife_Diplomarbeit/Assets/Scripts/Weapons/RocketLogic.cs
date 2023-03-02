@@ -24,6 +24,7 @@ public class RocketLogic : MonoBehaviour
     {
         camShake = Camera.main.GetComponent<ScreenShaker>();
         StartCoroutine(destroySelfAfterDelay());
+        this.aoeDamageSphere.GetComponent<AOEDamage>().damage = 2;
     }
 
     private IEnumerator destroySelfAfterDelay()

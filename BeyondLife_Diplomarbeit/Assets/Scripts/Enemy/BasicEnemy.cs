@@ -14,10 +14,15 @@ public class BasicEnemy : EnemyLogic
     private float nextFire = 0f;
     private Vector2 startPos;
     private Transform player; // Transform des Charakters
-
-
     public float range = 10f; // Reichweite der Waffe
     public Animator animate { get; private set; }
+
+    [Header("Death Fadeout")]
+    public float fadeStrength = 0.1f;
+    public float fadeTime = 1f;
+
+
+    
 
     private void Awake()
     {
@@ -59,20 +64,6 @@ public class BasicEnemy : EnemyLogic
             this.weapon.ShootBullet(true); //Schießen
         }
     }
-
-    /*private bool RayCastToPlayer()
-    {
-        //Debug.DrawRay(this.weapon.BulletSpawn.transform.position, Vector2.right * 50f, Color.green);
-        RaycastHit2D hit = Physics2D.Raycast(this.weapon.BulletSpawn.transform.position, this.weapon.BulletSpawn.transform.right, 50f);
-        if (hit.collider != null)
-	    {
-            if(hit.collider.gameObject.CompareTag("Player"))
-            {
-		        return true;
-            }
-	    }
-        return false;
-    }*/
 
     protected override void destroySelf(GameObject other)
     {
@@ -119,6 +110,21 @@ public class BasicEnemy : EnemyLogic
         this.allowArmMovement = false;
         this.animate.SetBool("ReleasePlaceholder", false);
         this.animate.Play("Enemy_Placeholder");
+
+        StartCoroutine(fadeProcess());
+    }
+
+    private IEnumerator fadeProcess()
+    {
+        Color col = this.gameObject.GetComponent<Renderer>().material.color;
+        for (float i = 1; i > 0; i -= fadeStrength)
+        {
+            col.a = i;
+            this.gameObject.GetComponent<Renderer>().material.color = col;
+            yield return new WaitForSeconds(fadeTime);
+        }
+        yield return new WaitForSeconds(fadeTime * 3);
+        Destroy(gameObject);
     }
 
     public void ResetState()
