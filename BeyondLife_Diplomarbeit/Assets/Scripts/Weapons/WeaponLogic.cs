@@ -11,6 +11,10 @@ public class WeaponLogic : MonoBehaviour
     private BulletLogic bulletLogic;
     private RocketLogic rocketLogic;
 
+    [Header("Muzzleflash")]
+    public bool muzzleflashActivated = true;
+    public GameObject Flash;
+
     [Header("Other")]
     public GameObject Bullet = null;
     public bool freezeRotation = false;
@@ -61,6 +65,7 @@ public class WeaponLogic : MonoBehaviour
         {
             case "PistolWeapon": 
                 spawnedBullet = Instantiate(this.Bullet, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
+                if(muzzleflashActivated) Instantiate(this.Flash, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
                 spawnedBullet.GetComponent<BulletLogic>().damagePlayer = damagePlayer;
                 rigidBody = spawnedBullet.GetComponent<Rigidbody2D>();
                 rigidBody.velocity = BulletSpawn.transform.right * this.bulletLogic.speed;
@@ -68,6 +73,7 @@ public class WeaponLogic : MonoBehaviour
 
             case "RocketLauncherWeapon": 
                 spawnedBullet = Instantiate(this.Bullet, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
+                if(muzzleflashActivated) Instantiate(this.Flash, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
                 rigidBody = spawnedBullet.GetComponent<Rigidbody2D>();
                 rigidBody.velocity = BulletSpawn.transform.right * this.rocketLogic.speed;
                 break;
@@ -77,6 +83,7 @@ public class WeaponLogic : MonoBehaviour
                 break;
             
             case "ShotgunWeapon": 
+                if(muzzleflashActivated) Instantiate(this.Flash, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
                 for (int i = 0; i < pelletAmount; i++)
                 {
                     spawnedBullet = Instantiate(this.Bullet, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
@@ -129,6 +136,7 @@ public class WeaponLogic : MonoBehaviour
         for (int i = 0; i < burstAmount; i++)
         {
             spawnedBullet = Instantiate(this.Bullet, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
+            if(muzzleflashActivated) Instantiate(this.Flash, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
             spawnedBullet.GetComponent<BulletLogic>().damagePlayer = damagePlayer;
             rigidBody = spawnedBullet.GetComponent<Rigidbody2D>();
             rigidBody.velocity = BulletSpawn.transform.right * this.bulletLogic.speed;

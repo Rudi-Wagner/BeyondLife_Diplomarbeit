@@ -132,6 +132,8 @@ MonoBehaviour:
   fireRate: 0.5
   ammunition: 0
   maxAmmunition: 50
+  muzzleflashActivated: 1
+  Flash: {fileID: 4835977767314420299, guid: 8f36731b3d1e041459da013f9c75d18e, type: 3}
   Bullet: {fileID: 7540261990294607220, guid: 2c6b2076bd09edb4ca268ecfb0a442a4, type: 3}
   freezeRotation: 0
   BulletSpawn: {fileID: 2536784384486975272}

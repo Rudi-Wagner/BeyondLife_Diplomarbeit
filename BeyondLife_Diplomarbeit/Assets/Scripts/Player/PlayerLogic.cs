@@ -44,6 +44,8 @@ public class PlayerLogic : MonoBehaviour
     [Header("Movement")]
     public bool InputAllowed = true;
     public float speed = 5f;
+    public bool particlesActive = true;
+    public GameObject particleEffect;
 
     //Sliding
     [Header("Sliding")]
