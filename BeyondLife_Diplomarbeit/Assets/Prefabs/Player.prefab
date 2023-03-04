@@ -504,7 +504,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6304328748100637751}
-  m_LocalRotation: {x: 0, y: 0, z: 0.9773215, w: -0.2117612}
+  m_LocalRotation: {x: 0, y: 0, z: 0.9773215, w: -0.21176106}
   m_LocalPosition: {x: 0.5894257, y: -0.83774745, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -850,6 +850,7 @@ Transform:
   - {fileID: 6304328747647696605}
   - {fileID: 6304328747167973944}
   - {fileID: 6304328747928453961}
+  - {fileID: 6646310788099213972}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -922,7 +923,7 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 15
   m_Material: {fileID: 6200000, guid: 509330e9cb493884b80ebceb5796274d, type: 2}
-  m_Interpolate: 0
+  m_Interpolate: 2
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
@@ -1064,6 +1065,11 @@ MonoBehaviour:
   healthbar: {fileID: 0}
   InputAllowed: 1
   speed: 15
+  particlesActive: 1
+  minDelay: 0.1
+  maxDelay: 1
+  particleSpawn: {fileID: 7943692102584340670}
+  particleEffect: {fileID: 1444837012502489262, guid: 95059037766600b44b41b0c0a7059951, type: 3}
   isSliding: 0
   slideSpeed: 35
   slideDuration: 1
@@ -1074,7 +1080,8 @@ MonoBehaviour:
   jumpStrength: 70
   alreadyDashed: 0
   dashLength: 5
-  overrideControllerStartFlip: {fileID: 22100000, guid: 3b1ac27855c23354ca95bcd450763505, type: 2}
+  overrideControllerStartFlipRight: {fileID: 22100000, guid: 3b1ac27855c23354ca95bcd450763505, type: 2}
+  overrideControllerStartFlipLeft: {fileID: 22100000, guid: 5bf452efbc510e14bab162fe1598bf6d, type: 2}
   overrideControllerStartSlide: {fileID: 22100000, guid: 5e32ea58f31d164448c616b1f9082303, type: 2}
   overrideControllerResetOverrider: {fileID: 22100000, guid: 4a06a46b31ca0ff459832e9b9ac70275, type: 2}
   overrideControllerStartDeath: {fileID: 22100000, guid: 2a3fdfadda1794a4b8ae73359ec55978, type: 2}
@@ -1407,6 +1414,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6304328747167973944}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7943692102584340670
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6646310788099213972}
+  m_Layer: 6
+  m_Name: particleSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6646310788099213972
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7943692102584340670}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1, y: -4.4, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6304328748849069786}
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &6304328747166428493
 PrefabInstance:

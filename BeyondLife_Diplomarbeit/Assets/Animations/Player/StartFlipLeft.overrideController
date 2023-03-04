@@ -6,8 +6,8 @@ AnimatorOverrideController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: StartFlip
+  m_Name: StartFlipLeft
   m_Controller: {fileID: 9100000, guid: 3e2538acc8f97834c9f0af27035ca2a2, type: 2}
   m_Clips:
   - m_OriginalClip: {fileID: 7400000, guid: 95c0dd7e4c7793249964bff503e498d5, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: 4c4d27c485fad4342b56b8bf19e2826a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 9477fe1dec595b844ab75769b4f52811, type: 2}

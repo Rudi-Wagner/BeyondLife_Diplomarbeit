@@ -45,6 +45,9 @@ public class PlayerLogic : MonoBehaviour
     public bool InputAllowed = true;
     public float speed = 5f;
     public bool particlesActive = true;
+    public float minDelay = .2f;
+    public float maxDelay = 1f;
+    public GameObject particleSpawn;
     public GameObject particleEffect;
 
     //Sliding
@@ -74,7 +77,8 @@ public class PlayerLogic : MonoBehaviour
 
     //Animator
     [Header("Animatior")]
-    public AnimatorOverrideController overrideControllerStartFlip;
+    public AnimatorOverrideController overrideControllerStartFlipRight;
+    public AnimatorOverrideController overrideControllerStartFlipLeft;
     public AnimatorOverrideController overrideControllerStartSlide;
     public AnimatorOverrideController overrideControllerResetOverrider;
     public AnimatorOverrideController overrideControllerStartDeath;

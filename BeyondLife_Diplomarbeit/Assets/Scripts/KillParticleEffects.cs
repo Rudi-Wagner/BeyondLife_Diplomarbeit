@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MuzzleFlashLogic : MonoBehaviour
+public class KillParticleEffects : MonoBehaviour
 {
     public float lifeSpan = 0.5f;
 
@@ -14,6 +14,6 @@ public class MuzzleFlashLogic : MonoBehaviour
     private IEnumerator destroySelfAfterDelay()
     {
         yield return new WaitForSeconds(lifeSpan);
-        Destroy(this);
+        Destroy(this.gameObject);
     }
 }

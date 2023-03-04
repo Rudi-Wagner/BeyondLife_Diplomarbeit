@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
 
     private float sprintMult = 1;
     private float BoxCastLength = 5; 
+    private float nextParticleSpawn;
 
     private void FixedUpdate()
     {
@@ -38,6 +39,10 @@ public class PlayerMovement : MonoBehaviour
                 {
                     StartCoroutine(fallingAnimation());
                 }
+                else
+                {//Spawn Walking particle effect
+                    dealWithParticles();
+                }
             }
             else
             {
@@ -63,7 +68,7 @@ public class PlayerMovement : MonoBehaviour
                 this.playerlogic.animate.SetFloat("Sprinting", 0);
             }
 
-            //Spezial Movement
+            ////Spezial Movement
             if(this.playerlogic.moveDirection.y >= 0.5f)
             {//Start JumpLogic
                 doJump();
@@ -108,6 +113,18 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void dealWithParticles()
+    {
+        if (!this.playerlogic.particlesActive || this.nextParticleSpawn > Time.time)
+        {
+            return;
+        }
+
+        this.nextParticleSpawn = Time.time + UnityEngine.Random.Range(this.playerlogic.minDelay, this.playerlogic.maxDelay);
+
+        GameObject particles = Instantiate(this.playerlogic.particleEffect, this.playerlogic.particleSpawn.transform.position, this.playerlogic.particleSpawn.transform.rotation);
+    }
+
     public void doWallJump()
     {
         //Walljump
@@ -123,7 +140,7 @@ public class PlayerMovement : MonoBehaviour
         && Time.time > this.playerlogic.nextWallJump && !this.playerlogic.checkIfWall(this.BoxCastLength, Vector2.up))
         {
             this.playerlogic.animate.SetBool("WallJumping", true);
-
+            dealWithParticles();
             //Disable player control for 0.2 seconds
             this.playerlogic.InputAllowed = false;
             Invoke(nameof(this.ActivateInput), 0.2f);
@@ -191,6 +208,7 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
         this.playerlogic.animate.SetBool("Landing", true);
+        dealWithParticles();
         yield return new WaitForSeconds(delayInBetween);
 
         //Reset Variables
@@ -225,7 +243,16 @@ public class PlayerMovement : MonoBehaviour
             this.playerlogic.rigidBody.velocity = Vector3.ClampMagnitude(dir, 100f);    
             Invoke(nameof(this.ActivateInput), 0.2f);  
 
-            this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.playerlogic.overrideControllerStartFlip);
+            if (this.playerlogic.faceRight)
+            {
+                this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.playerlogic.overrideControllerStartFlipRight);
+            }
+            else
+            {
+                this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.playerlogic.overrideControllerStartFlipLeft);
+            }
+            
+
             this.playerlogic.allowArmMovement = false;
             this.playerlogic.animate.SetBool("ReleasePlaceholder", true);
             this.playerlogic.animate.Play("Player_Placeholder");
@@ -288,5 +315,6 @@ public class PlayerMovement : MonoBehaviour
         this.playerlogic.animate.SetBool("SlidingEnd", true);
         this.playerlogic.allowArmMovement = true;
         this.playerlogic.weapon.freezeRotation = false;
+        this.playerlogic.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.playerlogic.overrideControllerResetOverrider);
     }
 }
