@@ -9,11 +9,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 323088154807463261, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.13261965
+      value: 0.13261999
       objectReference: {fileID: 0}
     - target: {fileID: 323088154807463261, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.991167
+      value: 0.99116695
       objectReference: {fileID: 0}
     - target: {fileID: 323088155113345257, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_LocalRotation.w
@@ -33,7 +33,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 93631fd51e5299544b5bc262131b2545, type: 3}
     - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Bounds.m_Center.x
-      value: -0.015734553
+      value: -0.015735269
       objectReference: {fileID: 0}
     - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Bounds.m_Center.y
@@ -41,7 +41,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Bounds.m_Extent.x
-      value: 1.826777
+      value: 1.8267777
       objectReference: {fileID: 0}
     - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Bounds.m_Extent.y
@@ -98,6 +98,14 @@ PrefabInstance:
     - target: {fileID: 3465051604759162049, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: maxHealth
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710751124931309575, guid: cf17fa7853066294dab16334351b86ca, type: 3}
+      propertyPath: height
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5710751124931309575, guid: cf17fa7853066294dab16334351b86ca, type: 3}
+      propertyPath: radius
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 6092748340187818139, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_IsActive
