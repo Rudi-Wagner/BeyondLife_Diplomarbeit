@@ -975,8 +975,8 @@ MonoBehaviour:
   - {fileID: 6304328747491757236}
   - {fileID: 6304328748428028668}
   m_Bounds:
-    m_Center: {x: 0.09828234, y: -0.037133694, z: 5.1335647e-10}
-    m_Extent: {x: 2.0056558, y: 4.4223294, z: 0.000000022107205}
+    m_Center: {x: 0.0982821, y: -0.037133694, z: 5.1335647e-10}
+    m_Extent: {x: 2.0056555, y: 4.4223294, z: 0.000000022107205}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
@@ -1074,7 +1074,7 @@ MonoBehaviour:
   slideSpeed: 35
   slideDuration: 1
   nextSlide: 0
-  slideDelay: 1
+  slideDelay: 1.5
   wallJumpDelay: 0.5
   nextWallJump: 0
   jumpStrength: 70

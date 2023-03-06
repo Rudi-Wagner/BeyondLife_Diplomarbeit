@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraMovementLogix : MonoBehaviour
 {
     public GameObject player;
-    public float smoothness = 8f;
+    public float smoothness = 0.1f;
     private Vector3 velocity = Vector3.zero;
     public Vector3 offset;
 

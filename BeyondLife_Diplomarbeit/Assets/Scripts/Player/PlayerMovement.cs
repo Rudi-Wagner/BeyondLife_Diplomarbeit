@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     private float sprintMult = 1;
     private float BoxCastLength = 5; 
     private float nextParticleSpawn;
+    private Coroutine fallingRoutine;
 
     private void FixedUpdate()
     {
@@ -35,9 +36,9 @@ public class PlayerMovement : MonoBehaviour
                 this.playerlogic.rigidBody.velocity = new Vector2(this.playerlogic.moveDirection.x * this.playerlogic.speed * this.sprintMult, this.playerlogic.rigidBody.velocity.y);
             
                 //Check if falling
-                if (!this.playerlogic.checkIfGrounded(this.BoxCastLength))
+                if (!this.playerlogic.checkIfGrounded(this.BoxCastLength) && !this.playerlogic.isSliding)
                 {
-                    StartCoroutine(fallingAnimation());
+                    StartCoroutine("fallingAnimation");
                 }
                 else
                 {//Spawn Walking particle effect
@@ -270,8 +271,13 @@ public class PlayerMovement : MonoBehaviour
     {//Sliding
         if (!this.playerlogic.isSliding && Time.time > this.playerlogic.nextSlide)
         {
+            StopCoroutine("fallingAnimation");
+
             this.playerlogic.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.playerlogic.overrideControllerStartSlide);
             this.playerlogic.animate.Play("Player_SlidingStart");
+            this.playerlogic.animate.SetBool("SlidingEnd", false);
+            this.playerlogic.animate.SetBool("Falling", false);
+            
             this.playerlogic.nextSlide = Time.time + this.playerlogic.slideDelay;
             //Set state
             this.playerlogic.isSliding = true;
@@ -298,10 +304,12 @@ public class PlayerMovement : MonoBehaviour
         float endTime = Time.time + this.playerlogic.slideDuration;
         while(slidingFlag)
         {
+            Debug.DrawRay(this.playerlogic.gameObject.transform.position, Vector2.up, Color.green);
             if(!(this.playerlogic.checkIfWall(2, Vector2.up)) && Time.time > endTime)
             {
                 slidingFlag = false;
             }
+            Debug.Log("gatcha");
             yield return null;
         }
 

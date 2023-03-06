@@ -124,7 +124,7 @@ public class BasicEnemy : EnemyLogic
             yield return new WaitForSeconds(fadeTime);
         }
         yield return new WaitForSeconds(fadeTime * 3);
-        Destroy(gameObject);
+        this.gameObject.SetActive(false);
     }
 
     public void ResetState()
