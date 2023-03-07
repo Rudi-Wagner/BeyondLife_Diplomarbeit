@@ -6,18 +6,12 @@ public class SideKickLogic : MonoBehaviour
 {
     public GameObject particleEffect;
 
-    public float maxHeight;
-    public float minHeight;
-    public float hoverSpeed;
+    public float amplitude = 1;
+    public float frequenzy = 1;
 
 
     void Update()
     {
-        //Hovering
-        float hoverHeight = (maxHeight + minHeight) / 2.0f;
-        float hoverRange = maxHeight - minHeight;
-        float hoverSpeed = 10.0f;
-        
-        //this.transform.position = Vector3.up * hoverHeight + Mathf.cos(Time.time * hoverSpeed) * hoverRange;
+        this.transform.position = new Vector3(this.transform.position.x, Mathf.Sin(Time.time * frequenzy) * amplitude, this.transform.position.z);
     }
 }
