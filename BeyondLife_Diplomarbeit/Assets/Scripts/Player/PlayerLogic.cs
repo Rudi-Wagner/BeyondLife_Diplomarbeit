@@ -73,6 +73,7 @@ public class PlayerLogic : MonoBehaviour
     //Dash
     [Header("Dashing")]
     public bool alreadyDashed = false;
+    public bool isDashing = false;
     public float dashLength;
 
     //Animator

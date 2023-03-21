@@ -87,7 +87,8 @@ public class PlayerMovement : MonoBehaviour
 
 
             if(this.playerlogic.moveDirection.y <= -0.5f && this.playerlogic.sprint.ReadValue<float>() == 1 
-            && Mathf.Abs(this.playerlogic.moveDirection.x) > 0 && !this.playerlogic.animate.GetBool("Crouching"))
+            && Mathf.Abs(this.playerlogic.moveDirection.x) > 0 && !this.playerlogic.animate.GetBool("Crouching")
+            && this.playerlogic.checkIfGrounded(this.BoxCastLength))
             {//Start SlideLogic
                 doSlide();
             }
@@ -234,6 +235,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if(!this.playerlogic.checkIfGrounded(this.BoxCastLength) && !this.playerlogic.alreadyDashed)
         {//Dash
+            this.playerlogic.isDashing = true;
             this.playerlogic.InputAllowed = false;
             this.playerlogic.alreadyDashed = true;
             //Caluclate dash-direction
@@ -253,11 +255,11 @@ public class PlayerMovement : MonoBehaviour
                 this.gameObject.GetComponent<AnimatorOverrider>().SetAnimations(this.playerlogic.overrideControllerStartFlipLeft);
             }
             
-
             this.playerlogic.allowArmMovement = false;
             this.playerlogic.animate.SetBool("ReleasePlaceholder", true);
             this.playerlogic.animate.Play("Player_Placeholder");
-            StartCoroutine(fallingAnimation());
+            this.playerlogic.isDashing = false;
+            StartCoroutine("fallingAnimation");
         }
     }
 
