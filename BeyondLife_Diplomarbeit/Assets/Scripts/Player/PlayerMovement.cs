@@ -309,7 +309,6 @@ public class PlayerMovement : MonoBehaviour
             {
                 slidingFlag = false;
             }
-            Debug.Log("gatcha");
             yield return null;
         }
 

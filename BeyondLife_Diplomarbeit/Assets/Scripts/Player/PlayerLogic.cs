@@ -244,7 +244,7 @@ public class PlayerLogic : MonoBehaviour
         else if (other.gameObject.tag == "Finish")
         {
             Debug.Log("Level is FINISHED");
-            this.manager.loadNectLevel();
+            this.manager.loadNextLevel();
         }
     }
 

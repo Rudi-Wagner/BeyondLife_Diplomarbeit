@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
@@ -65,19 +66,20 @@ public class GameManager : MonoBehaviour
         this.player.InputAllowed = true;
     }
 
-    public void loadNectLevel()
+    public void loadNextLevel()
     {
-        Debug.Log("Current: " + this.scene.name);
+        Debug.Log("Current: #" + this.scene.name  + "#");
         int code = int.Parse(this.scene.name.Substring(this.scene.name.Length - 1));
         code++;
-        Debug.Log("Next: " + "Level " + code);
+        Debug.Log("Next: #" + "Level " + code + "#");
         
-        if (SceneManager.GetSceneByName("Level " + code).IsValid())
+        if(Application.CanStreamedLevelBeLoaded("Level " + code))
         {
             SceneManager.LoadScene("Level " + code, LoadSceneMode.Single);
         }
         else
         {
+            Debug.Log("Next Level not found! Loading Menue");
             SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
         }
     }
