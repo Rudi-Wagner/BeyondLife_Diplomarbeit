@@ -368,8 +368,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281010948
-  m_fontColor: {r: 0.015686275, g: 0.043137256, b: 0.16862746, a: 1}
+    rgba: 4294574068
+  m_fontColor: {r: 0.9575472, g: 1, b: 0.9748274, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1406,7 +1406,7 @@ VideoPlayer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1638454028}
   m_Enabled: 1
-  m_VideoClip: {fileID: 32900000, guid: eefdaecec37842a46bb86a84b41dbdf5, type: 3}
+  m_VideoClip: {fileID: 32900000, guid: f57f88b57873b3648a4bb73e6284ff12, type: 3}
   m_TargetCameraAlpha: 1
   m_TargetCamera3DLayout: 0
   m_TargetCamera: {fileID: 1526901038}
