@@ -56,12 +56,31 @@ public class BasicEnemy : EnemyLogic
         {
             startDeathProcess();
         }
+
         
+
         // Wenn der Charakter innerhalb der Reichweite ist und es Zeit ist, wieder zu feuern
-        if (Vector3.Distance(transform.position, player.position) <= range && Time.time > nextFire  && this.shootingAllowed)
+        if (Vector3.Distance(transform.position, player.position) <= range && Time.time > nextFire && this.shootingAllowed)
         {
-            nextFire = Time.time + this.weapon.fireRate; // Zeitpunkt für nächsten Schuss setzen
-            this.weapon.ShootBullet(true); //Schießen
+            RaycastHit2D hit;
+            Vector3 direction = this.player.position - this.weapon.transform.position;
+            
+            if (this.faceRight)
+            {
+                Debug.DrawRay(this.weapon.transform.position, direction, Color.yellow);
+                hit = Physics2D.Raycast(this.weapon.transform.position, direction, range);
+            }
+            else
+            {
+                Debug.DrawRay(this.weapon.transform.position, direction, Color.yellow);
+                hit = Physics2D.Raycast(this.weapon.transform.position, direction, range);
+            }
+            
+            if (hit.collider != null && hit.collider.gameObject.name == "Player")
+            {
+                nextFire = Time.time + this.weapon.fireRate; // Zeitpunkt für nächsten Schuss setzen
+                this.weapon.ShootBullet(true); //Schießen
+            }
         }
     }
 
@@ -103,6 +122,7 @@ public class BasicEnemy : EnemyLogic
         this.gameObject.GetComponent<AIDestinationSetter>().enabled = false;
         this.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
         this.shootingAllowed = false;
+        this.weaponUpdate = false;
         this.weapon.gameObject.SetActive(false);
 
         //Start animation
@@ -138,6 +158,7 @@ public class BasicEnemy : EnemyLogic
         this.gameObject.GetComponent<AIDestinationSetter>().enabled = true;
         this.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
         this.shootingAllowed = true;
+        this.weaponUpdate = true;
         this.weapon.gameObject.SetActive(true);
 
         //Other
@@ -164,5 +185,9 @@ public class BasicEnemy : EnemyLogic
         this.animate.SetFloat("Sprinting", 0);
         this.animate.SetBool("ReleasePlaceholder", false);
         this.animate.Play("Enemy_Idle");
+
+        Color col = this.gameObject.GetComponent<Renderer>().material.color;
+        col.a = 1;
+        this.gameObject.GetComponent<Renderer>().material.color = col;
     }
 }
