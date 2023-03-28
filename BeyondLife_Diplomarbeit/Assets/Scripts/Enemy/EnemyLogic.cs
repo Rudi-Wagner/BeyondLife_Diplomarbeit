@@ -47,7 +47,9 @@ public class EnemyLogic : MonoBehaviour
 
     protected void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("bullet")) {
+        if (other.gameObject.layer == LayerMask.NameToLayer("bullet")
+        && !other.gameObject.GetComponent<BulletLogic>().damagePlayer) 
+        {
             destroySelf(other.gameObject);
         }
     }
@@ -59,6 +61,8 @@ public class EnemyLogic : MonoBehaviour
     {
         if (this.weaponUpdate)
         {
+            this.weapon.gameObject.SetActive(true);
+
             //Get angle from mouse position and player positiont
             GameObject player = GameObject.FindWithTag("Player");
             Vector3 aimAtPos = player.transform.position;
