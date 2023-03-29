@@ -9,7 +9,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 323088154807463261, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.1326193
+      value: 0.13261932
       objectReference: {fileID: 0}
     - target: {fileID: 323088154807463261, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_LocalRotation.z
@@ -41,7 +41,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Bounds.m_Extent.x
-      value: 1.8267763
+      value: 1.8267765
       objectReference: {fileID: 0}
     - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Bounds.m_Extent.y
@@ -94,10 +94,14 @@ PrefabInstance:
     - target: {fileID: 3465051604759162049, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: weapon
       value: 
-      objectReference: {fileID: 4405045084343760211}
+      objectReference: {fileID: 3117404935076996481}
     - target: {fileID: 3465051604759162049, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: maxHealth
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4823117957474121801, guid: cf17fa7853066294dab16334351b86ca, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5710751124931309575, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: height
@@ -113,14 +117,14 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: e4fde3cb2684e4c4495fe812829522d4, type: 3}
     - target: {fileID: 6092748340187818139, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 130637195917114451, guid: cf17fa7853066294dab16334351b86ca, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: cf17fa7853066294dab16334351b86ca, type: 3}
---- !u!114 &4405045084343760211 stripped
+--- !u!114 &3117404935076996481 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3506271724650105918, guid: cf17fa7853066294dab16334351b86ca, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2795088169827540204, guid: cf17fa7853066294dab16334351b86ca, type: 3}
   m_PrefabInstance: {fileID: 975340086887971181}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

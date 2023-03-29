@@ -71,6 +71,14 @@ public class WeaponLogic : MonoBehaviour
                 rigidBody.velocity = BulletSpawn.transform.right * this.bulletLogic.speed;
                 break;
 
+            case "SniperWeapon":
+                spawnedBullet = Instantiate(this.Bullet, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
+                if(muzzleflashActivated) Instantiate(this.Flash, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
+                spawnedBullet.GetComponent<BulletLogic>().damagePlayer = damagePlayer;
+                rigidBody = spawnedBullet.GetComponent<Rigidbody2D>();
+                rigidBody.velocity = BulletSpawn.transform.right * this.bulletLogic.speed;
+                break;
+
             case "RocketLauncherWeapon": 
                 spawnedBullet = Instantiate(this.Bullet, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
                 if(muzzleflashActivated) Instantiate(this.Flash, this.BulletSpawn.transform.position, this.BulletSpawn.transform.rotation);
