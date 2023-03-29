@@ -9,11 +9,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 323088154807463261, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.1326193
+      value: 0.13261965
       objectReference: {fileID: 0}
     - target: {fileID: 323088154807463261, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.99116707
+      value: 0.991167
       objectReference: {fileID: 0}
     - target: {fileID: 323088155590525823, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Name
@@ -25,7 +25,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 1888b03e0c6fef146bd5892da6da2935, type: 3}
     - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Bounds.m_Center.x
-      value: -0.009130001
+      value: -0.009130955
       objectReference: {fileID: 0}
     - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Bounds.m_Center.y
@@ -33,7 +33,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Bounds.m_Extent.x
-      value: 1.8829573
+      value: 1.8829582
       objectReference: {fileID: 0}
     - target: {fileID: 3164196304393966907, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_Bounds.m_Extent.y
@@ -82,6 +82,10 @@ PrefabInstance:
     - target: {fileID: 3164196304393966908, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3465051604759162049, guid: cf17fa7853066294dab16334351b86ca, type: 3}
+      propertyPath: range
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 3465051604759162049, guid: cf17fa7853066294dab16334351b86ca, type: 3}
       propertyPath: weapon

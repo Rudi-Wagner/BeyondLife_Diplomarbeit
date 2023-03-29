@@ -153,7 +153,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 323088154807463262}
-  m_LocalRotation: {x: 0, y: 0, z: 0.99116707, w: 0.13261949}
+  m_LocalRotation: {x: 0, y: 0, z: 0.99116707, w: 0.13261932}
   m_LocalPosition: {x: 0.7400439, y: 1.2949474, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -577,7 +577,7 @@ MonoBehaviour:
   testMovement: 0
   testSprinting: 0
   maxHealth: 50
-  range: 50
+  range: 30
   fadeStrength: 0.2
   fadeTime: 0.2
 --- !u!70 &4357213924779919862
@@ -628,8 +628,8 @@ MonoBehaviour:
   - {fileID: 323088156121078529}
   - {fileID: 323088155061412402}
   m_Bounds:
-    m_Center: {x: -0.06078589, y: 0.75667644, z: 0}
-    m_Extent: {x: 1.851836, y: 3.5813506, z: 0}
+    m_Center: {x: -0.06078565, y: 0.75667644, z: 0}
+    m_Extent: {x: 1.8518357, y: 3.5813506, z: 0}
   m_UseBatching: 1
   m_AlwaysUpdate: 1
   m_AutoRebind: 0
