@@ -25,12 +25,9 @@ public class HeartContainer : MonoBehaviour
         if (other.gameObject.layer == LayerMask.NameToLayer("player")) 
         {
             PlayerLogic player = other.gameObject.GetComponent<PlayerLogic>();
-            player.health += this.health;
-            if (player.health > player.maxHealth)
-            {
-                player.health = player.maxHealth;
-            }
-            Destroy(gameObject);
+            player.health = player.maxHealth;
+            player.healthbar.handle(this.health);
+            this.gameObject.SetActive(false);
         }
     }
 }

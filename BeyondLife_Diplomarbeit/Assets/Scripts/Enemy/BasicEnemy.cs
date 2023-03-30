@@ -67,13 +67,13 @@ public class BasicEnemy : EnemyLogic
             
             if (this.faceRight)
             {
-                Debug.DrawRay(this.weapon.transform.position, direction, Color.yellow);
-                hit = Physics2D.Raycast(this.weapon.transform.position, direction, range);
+                Debug.DrawRay(this.WeaponPos.transform.position, direction, Color.yellow);
+                hit = Physics2D.Raycast(this.WeaponPos.transform.position, direction, range);
             }
             else
             {
-                Debug.DrawRay(this.weapon.transform.position, direction, Color.yellow);
-                hit = Physics2D.Raycast(this.weapon.transform.position, direction, range);
+                Debug.DrawRay(this.WeaponPos.transform.position, direction, Color.yellow);
+                hit = Physics2D.Raycast(this.WeaponPos.transform.position, direction, range);
             }
             
             if (hit.collider != null && hit.collider.gameObject.name == "Player")
