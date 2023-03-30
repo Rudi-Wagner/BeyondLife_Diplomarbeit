@@ -19,7 +19,7 @@ public class HeartContainer : MonoBehaviour
     {
         this.transform.position = new Vector3(this.transform.position.x, Mathf.Sin(Time.time * frequenzy) * amplitude + this.startY, this.transform.position.z);
     }
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         //Take bullet damage
         if (other.gameObject.layer == LayerMask.NameToLayer("player")) 
