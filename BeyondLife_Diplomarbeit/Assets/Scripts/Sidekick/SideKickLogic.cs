@@ -9,9 +9,15 @@ public class SideKickLogic : MonoBehaviour
     public float amplitude = 1;
     public float frequenzy = 1;
 
+    private float startY;
+
+    void Start()
+    {
+        this.startY = this.transform.position.y;
+    }
 
     void Update()
     {
-        this.transform.position = new Vector3(this.transform.position.x, Mathf.Sin(Time.time * frequenzy) * amplitude, this.transform.position.z);
+        this.transform.position = new Vector3(this.transform.position.x, Mathf.Sin(Time.time * frequenzy) * amplitude + this.startY, this.transform.position.z);
     }
 }

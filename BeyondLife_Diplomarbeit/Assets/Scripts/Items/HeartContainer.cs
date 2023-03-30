@@ -5,7 +5,20 @@ using UnityEngine;
 public class HeartContainer : MonoBehaviour
 {
     public float health;
+    private float startY;
 
+    public float amplitude = 1;
+    public float frequenzy = 1;
+
+    void Start()
+    {
+        this.startY = this.transform.position.y;
+    }
+
+    void Update()
+    {
+        this.transform.position = new Vector3(this.transform.position.x, Mathf.Sin(Time.time * frequenzy) * amplitude + this.startY, this.transform.position.z);
+    }
     private void OnCollisionEnter2D(Collision2D other)
     {
         //Take bullet damage

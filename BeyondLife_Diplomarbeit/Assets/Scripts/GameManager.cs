@@ -221,6 +221,15 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        //Enable all enemys
+        if (this.collectibles != null && this.collectibles.Length > 0)
+        {
+            for (int i = 0; i < this.collectibles.Length; i++)
+            {
+                this.collectibles[i].SetActive(true);
+            }
+        }
+
         //Reset player
         this.player.ResetState();
 
@@ -235,22 +244,6 @@ public class GameManager : MonoBehaviour
             this.player.weapons[i].ammunition = resetTo;
         }
 
-        //Spawn Collectibles
-        for (int i = 0; i < this.collectibles.Length; i++)
-        {
-            //TO:DO  Needs to be set in advance (at game start?)
-            int collectibleState = PlayerPrefs.GetInt(scene.name + "CollectibleID" + i);
-            if (collectibleState == 1)
-            {
-                this.collectibles[i].SetActive(true);
-                PlayerPrefs.SetInt(scene.name + "CollectibleID" + i, collectibleState);
-            }
-            else
-            {
-                this.collectibles[i].SetActive(false);
-                PlayerPrefs.SetInt(scene.name + "CollectibleID" + i, collectibleState);
-            }
-        }
     }
 
 
