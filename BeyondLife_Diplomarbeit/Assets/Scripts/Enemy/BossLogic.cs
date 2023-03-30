@@ -5,8 +5,18 @@ using UnityEngine.SceneManagement;
 
 public class BossLogic : MonoBehaviour
 {
-    void OnDisable()
+    public BasicEnemy main;
+
+    void Update()
     {
-        SceneManager.LoadScene("MainMenu");
+        if (this.main.health <= 0)
+        {
+            Invoke("startCredits", 2.0f);
+        }
+    }
+
+    private void startCredits()
+    {
+        SceneManager.LoadScene("Settings");
     }
 }
