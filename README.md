@@ -1,5 +1,8 @@
 # BeyondLife Videogame
 
+***Nicht kompatibel mit den neuesten Nvidia-Treibern!***
+***Letzte stabile/getestete Version: 536.23***
+
 ## Screenshot:
 ![Screenshot](https://raw.githubusercontent.com/Rudi-Wagner/BeyondLife_Diplomarbeit/main/BeyondLife_Diplomarbeit/Assets/Sprites/Ingame_screenshots/Bild1.png)
 ![Screenshot](https://raw.githubusercontent.com/Rudi-Wagner/BeyondLife_Diplomarbeit/main/BeyondLife_Diplomarbeit/Assets/Sprites/Ingame_screenshots/Bild2.png)
